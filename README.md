@@ -1,8 +1,10 @@
 # WELCOME TO HEMOLYNC
 
 prerequisites for running the project locally
-[Node js v20+](https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi)
-Node package Manager (NPM) installed together with node
+-[Node js v20+](https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi)
+
+
+-Node package Manager (NPM) installed together with node
 
 ## Getting Started
 
