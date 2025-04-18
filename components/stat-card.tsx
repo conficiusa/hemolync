@@ -21,8 +21,8 @@ export function StatCard({
 	return (
 		<div className='bg-white rounded-lg p-6 flex justify-between items-start'>
 			<div>
-				<h3 className='text-sm font-medium text-gray-500 mb-1'>{title}</h3>
-				<p className='text-2xl font-bold text-gray-900 mb-2'>{value}</p>
+				<h3 className='text-xs font-medium text-muted-foreground mb-1'>{title}</h3>
+				<p className='text-xl font-bold  mb-2'>{value}</p>
 				<div className='flex items-center gap-1'>
 					{changeType === "increase" ? (
 						<TrendingUp
@@ -45,11 +45,11 @@ export function StatCard({
 					>
 						{change}%
 					</span>
-					<span className='text-sm text-gray-500'>{changeText}</span>
+					<span className='text-xs text-muted-foreground'>{changeText}</span>
 				</div>
 			</div>
 			<div className='w-10 h-10 rounded-full bg-[#f7e1e7] flex items-center justify-center'>
-				<Users2 size={20} className='text-[#991742]' />
+				<Users2 size={20} className='text-primary-accent-foreground' />
 			</div>
 		</div>
 	);

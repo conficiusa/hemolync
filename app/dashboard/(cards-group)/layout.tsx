@@ -6,15 +6,15 @@ const OverviewCardsLayout = ({ children }: { children: React.ReactNode }) => {
 		<main>
 			<div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
 				<StatCard
-					title='Total Blood'
-					value='40,689Lt'
+					title='Total Blood In Stock'
+					value='200 Units'
 					change={8.5}
 					changeType='increase'
 					changeText='Up from yesterday'
 				/>
 				<StatCard
 					title='Total Transferred'
-					value='40,689Lt'
+					value='80 Units'
 					change={4}
 					changeType='decrease'
 					changeText='Down from yesterday'
@@ -22,8 +22,8 @@ const OverviewCardsLayout = ({ children }: { children: React.ReactNode }) => {
 				/>
 				<StatCard
 					title='Total Request'
-					value='40,689Lt'
-					change={8.5}
+					value='50 Units'
+					change={10}
 					changeType='increase'
 					changeText='Up from yesterday'
 					changeColor='success'
