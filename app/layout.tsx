@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import { inter } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
 	title: "HymoLync",
@@ -15,8 +15,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en'>
-			<body className={cn(inter.className)}>{children}</body>
+		<html lang='en' suppressHydrationWarning className={cn(inter.className)}>
+			<head>
+				{/* <script
+					crossOrigin='anonymous'
+					src='//unpkg.com/react-scan/dist/auto.global.js'
+				/> */}
+			</head>
+			<body>{children}</body>
 		</html>
 	);
 }

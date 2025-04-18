@@ -24,6 +24,12 @@
 	--color-ring: var(--ring);
 	--color-input: var(--input);
 	--color-border: var(--border);
+	--color-primary-accent-foreground: var(--primary-accent-foreground);
+	--color-primary-accent: var(--primary-accent);
+	--color-success-foreground: var(--success-foreground);
+	--color-success: var(--success);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-warning: var(--warning);
 	--color-destructive: var(--destructive);
 	--color-accent-foreground: var(--accent-foreground);
 	--color-accent: var(--accent);
@@ -48,6 +54,7 @@
 		from {
 			height: 0;
 		}
+
 		to {
 			height: var(--radix-accordion-content-height);
 		}
@@ -57,6 +64,7 @@
 		from {
 			height: var(--radix-accordion-content-height);
 		}
+
 		to {
 			height: 0;
 		}
@@ -64,14 +72,20 @@
 }
 
 :root {
-	--radius: 1rem;
+	--radius: 0.8rem;
 	--background: hsl(0 0% 100%);
 	--foreground: hsl(0 0% 3.9%);
+	--primary-accent: hsl(346, 61%, 93%);
+	--primary-accent-foreground: hsl(340, 74%, 35%);
+	--success: hsl(120 100% 40%);
+	--success-foreground: hsl(0 0% 98%);
+	--warning: hsl(40 100% 50%);
+	--warning-foreground: hsl(0 0% 98%);
 	--card: hsl(0 0% 100%);
 	--card-foreground: hsl(0 0% 3.9%);
 	--popover: hsl(0 0% 100%);
 	--popover-foreground: hsl(0 0% 3.9%);
-	--primary: hsl(0 0% 9%);
+	--primary: hsla(338, 74%, 30%, 1);
 	--primary-foreground: hsl(0 0% 98%);
 	--secondary: hsl(0 0% 96.1%);
 	--secondary-foreground: hsl(0 0% 9%);
@@ -103,10 +117,16 @@
 	--background: hsl(0 0% 3.9%);
 	--foreground: hsl(0 0% 98%);
 	--card: hsl(0 0% 3.9%);
+	--success: hsl(120 100% 40%);
+	--success-foreground: hsl(0 0% 98%);
+	--warning: hsl(40 100% 50%);
+	--warning-foreground: hsl(0 0% 98%);
 	--card-foreground: hsl(0 0% 98%);
 	--popover: hsl(0 0% 3.9%);
 	--popover-foreground: hsl(0 0% 98%);
-	--primary: hsl(0 0% 98%);
+	--primary: hsla(338, 74%, 30%, 1);
+	--primary-accent: hsl(346, 60%, 93%);
+	--primary-accent-foreground: hsl(340, 74%, 35%);
 	--primary-foreground: hsl(0 0% 9%);
 	--secondary: hsl(0 0% 14.9%);
 	--secondary-foreground: hsl(0 0% 98%);
@@ -138,6 +158,7 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
+
 	body {
 		@apply bg-background text-foreground;
 	}
