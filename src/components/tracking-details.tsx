@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ArrowLeft } from 'lucide-react'
-import { cn, getRequestStatusBadgeClass } from '@/lib/utils'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { cn, getRequestStatusBadgeClass } from '@/lib/utils'
 
 interface TrackingItemDetails {
   id: string

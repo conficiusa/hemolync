@@ -1,11 +1,11 @@
+import { Eye } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { TooltipBuilder } from './tooltip-builder'
 import {
   cn,
   getRequestStatusBadgeClass,
   getRequestStatusBadgeClassComplementary,
 } from '@/lib/utils'
-import { Eye } from 'lucide-react'
-import { TooltipBuilder } from './tooltip-builder'
-import { Link } from '@tanstack/react-router'
 
 type TrackingStatus = 'Accepted' | 'Rejected' | 'Pending'
 interface TrackingItem {
@@ -21,7 +21,7 @@ interface TrackingItem {
   status: TrackingStatus
 }
 
-const trackingItems: TrackingItem[] = [
+const trackingItems: Array<TrackingItem> = [
   {
     id: 1,
     acceptedBy: {

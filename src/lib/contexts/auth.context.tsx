@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useAuthService } from '@/lib/services/auth.service'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import type { LoginFormData } from '@/components/loginForm'
 import type { AuthContextType } from '@/lib/types/system-types'
+import { useAuthService } from '@/lib/services/auth.service'
+
 export interface User {
   id: string
   name: string

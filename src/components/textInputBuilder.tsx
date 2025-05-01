@@ -1,6 +1,7 @@
+import {  Controller  } from 'react-hook-form'
+import type {Control, Path} from 'react-hook-form';
+import type { ZodSchema, z } from 'zod'
 import { cn } from '@/lib/utils'
-import { type Control, Controller, type Path } from 'react-hook-form'
-import { z, ZodSchema } from 'zod'
 
 export const TextInputBuilder = <T extends ZodSchema<any, any, any>>({
   control,

@@ -9,7 +9,7 @@ import {
 import { cn } from '@/lib/utils'
 
 type SelectDropdownProps = {
-  items?: { value: string; label: string }[]
+  items?: Array<{ value: string; label: string }>
   selected: string | null
   setSelected: (value: string) => void
   placeholder?: string

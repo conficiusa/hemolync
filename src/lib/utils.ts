@@ -1,14 +1,16 @@
-import { clsx, type ClassValue } from 'clsx'
+import {  clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import type { AuthContextType } from './types/system-types'
 import { toast } from 'sonner'
 import {
-  redirect,
-  type NavigateOptions,
-  type ParsedLocation,
+  
+  
+  redirect
 } from '@tanstack/react-router'
+import type {NavigateOptions, ParsedLocation} from '@tanstack/react-router';
+import type {ClassValue} from 'clsx';
+import type { AuthContextType } from './types/system-types'
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
 }
 
@@ -105,8 +107,8 @@ export const handleRedirectNavigation = (
   const params = new URLSearchParams(location.searchStr)
   const redirectPath = params.get('redirect')
 
-navigate({
+  navigate({
     to: (redirectPath ? redirectPath : to) as any,
     replace: true,
-})
+  })
 }

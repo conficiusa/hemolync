@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils'
 import { Link, useLocation } from '@tanstack/react-router'
 import { useMemo } from 'react'
+import { cn } from '@/lib/utils'
 
 interface NavItemProps {
   href: string

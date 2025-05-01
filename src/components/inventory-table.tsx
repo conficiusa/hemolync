@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Pencil, Trash2 } from 'lucide-react'
+import { Checkbox } from '@/components/ui/checkbox'
 import { getStatusBadgeClass } from '@/lib/utils'
 
 interface BloodProduct {
@@ -12,7 +12,7 @@ interface BloodProduct {
   status: 'In Stock' | 'Limited' | 'Out of Stock' | 'Expired'
 }
 
-const bloodProducts: BloodProduct[] = [
+const bloodProducts: Array<BloodProduct> = [
   {
     id: 1,
     batchNumber: '14637',

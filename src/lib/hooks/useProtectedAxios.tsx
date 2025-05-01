@@ -1,5 +1,5 @@
-import { protectedApi } from '@/lib/server/api'
 import { useEffect } from 'react'
+import { protectedApi } from '@/lib/server/api'
 import useRefreshToken from '@/lib/hooks/useRefreshToken'
 
 const useProtectedAxios = () => {

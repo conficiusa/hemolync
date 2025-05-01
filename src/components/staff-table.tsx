@@ -1,7 +1,7 @@
 import { memo } from 'react'
+import type { Role } from '@/lib/types/system-types'
 import { DeleteUserDialog } from '@/components/delete-user'
 import { EditUserDialog } from '@/components/edit-user'
-import type { Role } from '@/lib/types/system-types'
 
 interface User {
   id: number
@@ -12,7 +12,7 @@ interface User {
   avatar: string
 }
 
-const users: User[] = [
+const users: Array<User> = [
   {
     id: 1,
     name: 'Olivia Rhye',

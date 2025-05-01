@@ -1,13 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { z } from 'zod'
-import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TextInputBuilder } from './textInputBuilder'
-import { useAuth } from '@/lib/contexts/auth.context'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { TextInputBuilder } from './textInputBuilder'
+import type { z } from 'zod'
+import { useAuth } from '@/lib/contexts/auth.context'
+import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
+import { Button } from '@/components/ui/button'
 import { handleRedirectNavigation } from '@/lib/utils'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
@@ -35,7 +35,7 @@ export default function LoginForm() {
         handleRedirectNavigation(location, navigate, '/')
         return 'Logged in successfully!'
       },
-      error: (err: Error) => err?.message || 'Login failed',
+      error: (err: Error) => err.message || 'Login failed',
     })
     await promise
   })
