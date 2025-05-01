@@ -82,8 +82,7 @@ export const checkAuth = (
   location: ParsedLocation,
   preload: boolean,
 ) => {
-  if (auth.isAuthenticated) {
-    //TODO: check if token is expired.
+  if (!auth.isAuthenticated) {
     if (!preload) {
       toast.warning('Session Expired!', {
         description: 'please login again',
@@ -106,12 +105,8 @@ export const handleRedirectNavigation = (
   const params = new URLSearchParams(location.searchStr)
   const redirectPath = params.get('redirect')
 
-  if (redirectPath) {
-    navigate({
-      to: redirectPath as any,
-    })
-  } else {
-    // Default navigation if no redirect path is specified
-    navigate({ to: to as any })
-  }
+navigate({
+    to: (redirectPath ? redirectPath : to) as any,
+    replace: true,
+})
 }
