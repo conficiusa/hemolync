@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { TextInputBuilder } from './textInputBuilder'
+import { TextInput } from './textInputBuilder'
 import type { z } from 'zod'
 import { useAuth } from '@/lib/contexts/auth.context'
 import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
@@ -43,7 +43,7 @@ export default function LoginForm() {
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div className="space-y-2">
-        <TextInputBuilder
+        <TextInput
           control={control}
           name="email"
           label="Email"
@@ -54,7 +54,7 @@ export default function LoginForm() {
       </div>
 
       <div className="space-y-2">
-        <TextInputBuilder
+        <TextInput
           control={control}
           name="password"
           label="Password"

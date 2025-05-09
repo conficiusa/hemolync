@@ -1,9 +1,9 @@
-import {  Controller  } from 'react-hook-form'
-import type {Control, Path} from 'react-hook-form';
+import { Controller } from 'react-hook-form'
+import type { Control, Path } from 'react-hook-form'
 import type { ZodSchema, z } from 'zod'
 import { cn } from '@/lib/utils'
 
-export const TextInputBuilder = <T extends ZodSchema<any, any, any>>({
+export const TextInput = <T extends ZodSchema<any, any, any>>({
   control,
   type = 'text',
   placeholder,
@@ -48,7 +48,10 @@ export const TextInputBuilder = <T extends ZodSchema<any, any, any>>({
               value={value}
               id={name}
               placeholder={placeholder}
-              className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className={cn(
+                'w-full px-3 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2',
+                error && 'ring-2 ring-destructive',
+              )}
               required={required}
             />
           </div>

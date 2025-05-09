@@ -15,7 +15,7 @@ import {
 import { Label } from '@/components/ui/label'
 import SelectDropdown from '@/components/selectDropdown'
 import { UserEditSchema } from '@/lib/schemas/user-schemas/user-edit.schema'
-import { TextInputBuilder } from '@/components/textInputBuilder'
+import { TextInput } from '@/components/textInputBuilder'
 
 type FormData = z.infer<typeof UserEditSchema>
 export function EditUserDialog({ user }: { user: User }) {
@@ -59,14 +59,14 @@ export function EditUserDialog({ user }: { user: User }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="p-4 space-y-4">
             <div className="grid grid-cols-2 gap-3">
-              <TextInputBuilder
+              <TextInput
                 control={control}
                 name="first_name"
                 label="First Name"
                 placeholder="Enter first name"
                 error={errors.first_name?.message}
               />
-              <TextInputBuilder
+              <TextInput
                 control={control}
                 name="last_name"
                 label="Last Name"
@@ -74,7 +74,7 @@ export function EditUserDialog({ user }: { user: User }) {
                 error={errors.last_name?.message}
               />
             </div>
-            <TextInputBuilder
+            <TextInput
               control={control}
               name="email"
               type="email"

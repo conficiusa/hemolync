@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { z } from 'zod'
 import type React from 'react'
-import { TextInputBuilder } from '@/components/textInputBuilder'
+import { TextInput } from '@/components/textInputBuilder'
 import {
   Dialog,
   DialogClose,
@@ -51,7 +51,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="p-4 space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <TextInputBuilder
+                <TextInput
                   control={control}
                   name="batch_number"
                   label="Batch Number"
@@ -59,7 +59,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                   error={errors.batch_number?.message}
                 />
 
-                <TextInputBuilder
+                <TextInput
                   control={control}
                   name="collection_date"
                   label="Collection Date"
@@ -76,7 +76,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                   control={control}
                   error={errors.blood_product?.message}
                 />
-                <TextInputBuilder
+                <TextInput
                   control={control}
                   name="type"
                   label="Blood Group"
@@ -85,14 +85,14 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                 />
               </div>
 
-              <TextInputBuilder
+              <TextInput
                 control={control}
                 name="expiration_date"
                 label="Expiration Date"
                 placeholder="expiration date"
                 error={errors.expiration_date?.message}
               />
-              <TextInputBuilder
+              <TextInput
                 control={control}
                 name="added_by"
                 label="Added by"

@@ -6,14 +6,13 @@ export const useAuthService = () => {
   const protectedApi = useProtectedAxios()
 
   const login = async (data: LoginFormData) => {
-    const response = await api.post('users/auth/login/', {
-      data,
-    })
+    console.log
+    const response = await api.post('users/auth/login/', data)
     return response.data
   }
 
-  const getProfile = async (id: string) => {
-    const response = await protectedApi.get(`/users/${id}`)
+  const getProfile = async () => {
+    const response = await protectedApi.get(`/users/me`)
     return response.data
   }
 
