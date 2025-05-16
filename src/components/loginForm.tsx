@@ -12,7 +12,7 @@ import { handleRedirectNavigation } from '@/lib/utils'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
 export default function LoginForm() {
-  const { login } = useAuth()
+  const { login, error } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const {
@@ -32,10 +32,10 @@ export default function LoginForm() {
     toast.promise(promise, {
       loading: 'Logging in...',
       success: () => {
-        handleRedirectNavigation(location, navigate, '/')
+        handleRedirectNavigation(location, navigate, '/dashboard')
         return 'Logged in successfully!'
       },
-      error: (err: Error) => err.message || 'Login failed',
+      error: (err: any) => err.detail || 'Login failed',
     })
     await promise
   })

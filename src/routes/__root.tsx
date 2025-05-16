@@ -14,6 +14,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
+      
       <Outlet />
       <TanStackRouterDevtools />
 

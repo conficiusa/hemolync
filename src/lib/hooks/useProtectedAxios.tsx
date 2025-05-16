@@ -2,10 +2,8 @@ import { useEffect } from 'react'
 import { protectedApi } from '@/lib/server/api'
 import useRefreshToken from '@/lib/hooks/useRefreshToken'
 
-const useProtectedAxios = () => {
+const useProtectedAxios = (token: string | null) => {
   const refresh = useRefreshToken()
-  const token = '123' // Hardcoded token for now
-
   useEffect(() => {
     let isRefreshing = false
     let failedQueue: Array<{

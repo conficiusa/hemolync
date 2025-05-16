@@ -84,7 +84,7 @@ export const checkAuth = (
   location: ParsedLocation,
   preload: boolean,
 ) => {
-  if (!auth.isAuthenticated) {
+  if (auth.isAuthenticated) {
     if (!preload) {
       toast.warning('Session Expired!', {
         description: 'please login again',
@@ -111,4 +111,16 @@ export const handleRedirectNavigation = (
     to: (redirectPath ? redirectPath : to) as any,
     replace: true,
   })
+}
+
+
+export const getReadableRole = (role: string) => { 
+  switch (role) { 
+    case 'staff':
+      return 'Staff'
+    case 'facility_administrator':
+      return 'Admin'
+    default:
+      return 'Unknown'
+  }
 }

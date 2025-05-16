@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { Controller } from 'react-hook-form'
 import type { Control, Path } from 'react-hook-form'
 import type { ZodSchema, z } from 'zod'
@@ -12,16 +14,28 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
   required = false,
   label,
   labelClassName,
+  ...rest
 }: {
   control: Control<z.infer<T>>
-  type?: 'text' | 'password' | 'email'
+  type?: 'text' | 'password' | 'email' | 'tel'
   placeholder?: string
   required?: boolean
   label?: string
   error?: string
   name: Path<z.infer<T>>
   labelClassName?: string
+  [key: string]: any
 }) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev)
+  }
+
+  const inputType = () => {
+    if (type === 'password' && showPassword) return 'text'
+    return type
+  }
   return (
     <Controller
       control={control}
@@ -40,26 +54,54 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
                 {label}
               </label>
             )}
-            <input
-              aria-invalid={!!error}
-              type={type}
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
-              id={name}
-              placeholder={placeholder}
-              className={cn(
-                'w-full px-3 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2',
-                error && 'ring-2 ring-destructive',
+
+            <div className="relative">
+              <input
+                aria-invalid={!!error}
+                type={inputType()}
+                onBlur={onBlur}
+                onChange={onChange}
+                {...rest}
+                value={value}
+                id={name}
+                placeholder={placeholder}
+                className={cn(
+                  'w-full rounded-lg border border-input bg-background px-3 py-3  text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+                  error && 'border-2 border-destructive',
+                  type === 'password' && 'pr-10',
+                )}
+                required={required}
+              />
+              {type === 'password' && (
+                <WhichEye
+                  showPassword={showPassword}
+                  togglePassword={togglePassword}
+                />
               )}
-              required={required}
-            />
+            </div>
           </div>
           {error && (
-            <p className="text-sm text-destructive pt-0.5 px-2]">{error}</p>
+            <p className="text-sm text-destructive pt-0.5 px-2">{error}</p>
           )}
         </div>
       )}
     />
+  )
+}
+
+type WhichEyeProps = {
+  showPassword: boolean
+  togglePassword: () => void
+}
+const WhichEye = ({ showPassword, togglePassword }: WhichEyeProps) => {
+  if (showPassword)
+    return (
+      <EyeOff
+        className="absolute top-3 right-4"
+        onClick={() => togglePassword()}
+      />
+    )
+  return (
+    <Eye className="absolute top-3 right-4" onClick={() => togglePassword()} />
   )
 }

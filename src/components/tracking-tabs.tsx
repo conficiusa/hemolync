@@ -22,13 +22,13 @@ const TrackingTabsContent = [
   { tab: 'Incoming Requests', content: <TrackingTable /> },
 ]
 const TrackingTabs = memo(() => {
-  const [active, setActive] = useState<TrackingTab>('My Requests')
+  const [active, setActive] = useState<TrackingTab>('Incoming Requests')
 
   const handleTabChange = (value: string) => {
     setActive(value as TrackingTab)
   }
   return (
-    <Tabs defaultValue="Requested" onValueChange={handleTabChange}>
+    <Tabs defaultValue={active} onValueChange={handleTabChange}>
       <div className="flex justify-between items-center mb-6">
         <TabsList className="space-x-4 flex">
           {tabs.map((tab) => (

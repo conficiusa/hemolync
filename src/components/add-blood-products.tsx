@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { getRouteApi } from '@tanstack/react-router'
 import type { z } from 'zod'
 import type React from 'react'
 import { TextInput } from '@/components/textInputBuilder'
@@ -20,6 +21,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 type FormData = z.infer<typeof addBloodSchema>
 const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
+  const routeApi = getRouteApi('/dashboard')
+  const { user } = routeApi.useLoaderData()
   const {
     control,
     handleSubmit,
@@ -32,7 +35,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
       collection_date: '',
       expiration_date: '',
       type: '',
-      added_by: 'Bright Adu',
+      added_by: user.name,
     },
   })
 
@@ -98,6 +101,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                 label="Added by"
                 placeholder="added by"
                 error={errors.added_by?.message}
+                disabled
               />
             </div>
             <DialogFooter className=" flex justify-center sm:justify-center gap-3 px-[24px] py-[20px]">

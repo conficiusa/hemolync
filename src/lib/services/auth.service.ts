@@ -2,17 +2,22 @@ import type { LoginFormData } from '@/components/loginForm'
 import useProtectedAxios from '@/lib/hooks/useProtectedAxios'
 import { api } from '@/lib/server/api'
 
-export const useAuthService = () => {
-  const protectedApi = useProtectedAxios()
+export const useAuthService = (token: string | null) => {
+  const protectedApi = useProtectedAxios(token)
 
   const login = async (data: LoginFormData) => {
-    console.log
-    const response = await api.post('users/auth/login/', data)
+    const response = await api.post('users/auth/login', data)
     return response.data
   }
 
-  const getProfile = async () => {
-    const response = await protectedApi.get(`/users/me`)
+  const getProfile = async (accessToken?: string) => {
+    const headers = accessToken
+      ? { Authorization: `Bearer ${accessToken}` }
+      : undefined
+    const response = await api.get(`/users/me`, {
+      withCredentials: true,
+      headers,
+    })
     return response.data
   }
 

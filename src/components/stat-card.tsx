@@ -19,7 +19,7 @@ export function StatCard({
   changeColor = 'success',
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-lg p-6 flex justify-between items-start">
+    <div className="bg-white border rounded-lg p-6 flex justify-between items-start">
       <div>
         <h3 className="text-xs font-medium text-muted-foreground mb-1">
           {title}

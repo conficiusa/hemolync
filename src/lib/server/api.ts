@@ -7,6 +7,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
 
 export const protectedApi = axios.create({
@@ -15,4 +16,5 @@ export const protectedApi = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
