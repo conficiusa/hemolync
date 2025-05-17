@@ -5,14 +5,14 @@ import { Loader2 } from 'lucide-react'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { TextInput } from './textInputBuilder'
 import type { z } from 'zod'
-import { useAuth } from '@/lib/contexts/auth.context'
 import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
 import { Button } from '@/components/ui/button'
 import { handleRedirectNavigation } from '@/lib/utils'
+import { useLogin } from '@/lib/data/mutations/login'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
 export default function LoginForm() {
-  const { login, error } = useAuth()
+  const { mutate: login, isPending} = useLogin()
   const location = useLocation()
   const navigate = useNavigate()
   const {
@@ -28,16 +28,17 @@ export default function LoginForm() {
   })
 
   const onSubmit = handleSubmit(async (data: LoginFormData) => {
-    const promise = login(data)
-    toast.promise(promise, {
-      loading: 'Logging in...',
-      success: () => {
+    const toastId = toast.loading('Logging in...')
+    login(data, {
+      onSuccess: () => {
+        toast.dismiss(toastId)
         handleRedirectNavigation(location, navigate, '/dashboard')
-        return 'Logged in successfully!'
       },
-      error: (err: any) => err.detail || 'Login failed',
+      onError: (err:any) => {
+        toast.dismiss(toastId)
+        toast.error(err.message || 'Login failed')
+      }
     })
-    await promise
   })
 
   return (
@@ -66,11 +67,11 @@ export default function LoginForm() {
 
       <Button
         size={'lg'}
-        disabled={isSubmitting}
+        disabled={isSubmitting || isPending}
         type="submit"
         className="mt-6 w-full  rounded-md py-3 text-center text-white hover:bg-[#611035] focus:outline-none"
       >
-        {isSubmitting ? (
+        {isPending || isSubmitting ? (
           <Loader2 size={16} className="animate-spin" />
         ) : (
           'Login'

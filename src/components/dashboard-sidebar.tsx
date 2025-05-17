@@ -18,7 +18,12 @@ import { NavItem } from '@/components/nav-item'
 
 const DashboardSidebar = () => {
   const routeApi = getRouteApi('/dashboard')
-  const { user } = routeApi.useLoaderData()
+  const { user } = routeApi.useLoaderData({
+    select: (data) => ({
+      user: data?.user,
+    }),
+  })
+
   return (
     <aside className="w-68 bg-white flex flex-col border-r fixed h-screen">
       {/* Logo */}
@@ -49,7 +54,7 @@ const DashboardSidebar = () => {
             icon={<LineChart size={20} />}
             text="Tracking"
           />
-          {user.role === 'facility_administrator' && (
+          {user?.role === 'facility_administrator' && (
             <NavItem
               href="/dashboard/staff-management"
               icon={<Users size={20} />}

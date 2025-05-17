@@ -1,92 +1,30 @@
 import { memo } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { InventoryTableError } from './inventory-table-error'
 import { Checkbox } from '@/components/ui/checkbox'
 import { getStatusBadgeClass } from '@/lib/utils'
+import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
 
 interface BloodProduct {
-  id: number
-  batchNumber: string
-  productName: string
-  dateAdded: string
-  expirationDate: string
-  status: 'In Stock' | 'Limited' | 'Out of Stock' | 'Expired'
+  id: string
+  blood_product: string
+  blood_type: string
+  quantity: number
+  expiry_date: string
+  blood_bank_name: string
+  added_by_name: string
+  created_at: string
+  updated_at: string
 }
 
-const bloodProducts: Array<BloodProduct> = [
-  {
-    id: 1,
-    batchNumber: '14637',
-    productName: 'Whole Blood',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Expired',
-  },
-  {
-    id: 2,
-    batchNumber: '14637',
-    productName: 'Concentrated Red Cells (CRC)',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Expired',
-  },
-  {
-    id: 3,
-    batchNumber: '14637',
-    productName: 'Fresh frozen plasma (FFP)',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'In Stock',
-  },
-  {
-    id: 4,
-    batchNumber: '14637',
-    productName: 'Platelets',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Out of Stock',
-  },
-  {
-    id: 5,
-    batchNumber: '14637',
-    productName: 'Cryoprecipitate',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Out of Stock',
-  },
-  {
-    id: 6,
-    batchNumber: '14637',
-    productName: 'Platelets',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Limited',
-  },
-  {
-    id: 7,
-    batchNumber: '14637',
-    productName: 'Fresh frozen plasma (FFP)',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Expired',
-  },
-  {
-    id: 8,
-    batchNumber: '14637',
-    productName: 'Platelets',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'Out of Stock',
-  },
-  {
-    id: 9,
-    batchNumber: '14637',
-    productName: 'Cryoprecipitate',
-    dateAdded: '12/04/2024',
-    expirationDate: '12/04/2024',
-    status: 'In Stock',
-  },
-]
 const InventoryTable = memo(() => {
+  const { data, error } = useSuspenseQuery(fetchProductsQuery)
+
+  if (error) {
+    return <InventoryTableError />
+  }
+
   return (
     <table className="w-full text-sm">
       <thead>
@@ -98,19 +36,19 @@ const InventoryTable = memo(() => {
             />
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-            Batch Number
+            Blood Type
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
             Blood Product
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-            Date Added
+            Quantity
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-            Expiration Date
+            Expiry Date
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-            Status
+            Blood Bank
           </th>
           <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
             Actions
@@ -118,7 +56,7 @@ const InventoryTable = memo(() => {
         </tr>
       </thead>
       <tbody>
-        {bloodProducts.map((product) => (
+        {data.map((product: BloodProduct) => (
           <tr
             key={product.id}
             className="border-b border-gray-100 hover:bg-gray-50"
@@ -130,25 +68,19 @@ const InventoryTable = memo(() => {
               />
             </td>
             <td className="py-4 px-4 text-sm text-gray-900">
-              {product.batchNumber}
+              {product.blood_type}
             </td>
             <td className="py-4 px-4 text-sm text-gray-900">
-              {product.productName}
+              {product.blood_product}
+            </td>
+            <td className="py-4 px-4 text-sm text-gray-900">
+              {product.quantity}
             </td>
             <td className="py-4 px-4 text-sm text-gray-500">
-              {product.dateAdded}
+              {new Date(product.expiry_date).toLocaleDateString()}
             </td>
             <td className="py-4 px-4 text-sm text-gray-500">
-              {product.expirationDate}
-            </td>
-            <td className="py-4 px-4">
-              <span
-                className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                  product.status,
-                )}`}
-              >
-                {product.status}
-              </span>
+              {product.blood_bank_name}
             </td>
             <td className="py-4 px-4">
               <div className="flex items-center gap-2">

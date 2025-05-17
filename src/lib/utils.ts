@@ -1,14 +1,10 @@
-import {  clsx } from 'clsx'
+import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { toast } from 'sonner'
-import {
-  
-  
-  redirect
-} from '@tanstack/react-router'
-import type {NavigateOptions, ParsedLocation} from '@tanstack/react-router';
-import type {ClassValue} from 'clsx';
-import type { AuthContextType } from './types/system-types'
+import { redirect } from '@tanstack/react-router'
+import type { NavigateOptions, ParsedLocation } from '@tanstack/react-router'
+import type { ClassValue } from 'clsx'
+import type { Session } from './types/system-types'
 
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
@@ -80,11 +76,11 @@ export const getRequestStatusBadgeClassComplementary = (
 }
 
 export const checkAuth = (
-  auth: AuthContextType,
+  auth: Session,
   location: ParsedLocation,
   preload: boolean,
 ) => {
-  if (auth.isAuthenticated) {
+  if (!auth.access_token) {
     if (!preload) {
       toast.warning('Session Expired!', {
         description: 'please login again',
@@ -113,9 +109,8 @@ export const handleRedirectNavigation = (
   })
 }
 
-
-export const getReadableRole = (role: string) => { 
-  switch (role) { 
+export const getReadableRole = (role: string) => {
+  switch (role) {
     case 'staff':
       return 'Staff'
     case 'facility_administrator':

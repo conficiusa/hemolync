@@ -9,10 +9,9 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-import { AuthProvider, useAuth } from '@/lib/contexts/auth.context.tsx'
 
 // Create a new router instance
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     ...TanstackQuery.getContext(),
@@ -24,8 +23,7 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
 })
 function InnerApp() {
-  const auth = useAuth()
-  return <RouterProvider router={router} context={{ auth }} />
+  return <RouterProvider router={router} />
 }
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -41,9 +39,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanstackQuery.Provider>
-        <AuthProvider>
-          <InnerApp />
-        </AuthProvider>
+        <InnerApp />
       </TanstackQuery.Provider>
     </StrictMode>,
   )

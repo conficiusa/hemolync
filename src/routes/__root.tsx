@@ -3,7 +3,6 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import type { AuthContextType } from '@/lib/types/system-types'
 import TanstackQueryLayout from '@/lib/integrations/tanstack-query/layout'
-
 import { Toaster } from '@/components/ui/sonner'
 
 interface MyRouterContext {
@@ -12,14 +11,16 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: () => (
+  component: RootLayout,
+})
+
+function RootLayout() {
+  return (
     <>
-      
       <Outlet />
       <TanStackRouterDevtools />
-
       <TanstackQueryLayout />
       <Toaster richColors />
     </>
-  ),
-})
+  )
+}

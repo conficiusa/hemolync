@@ -6,8 +6,15 @@ export const useAuthService = (token: string | null) => {
   const protectedApi = useProtectedAxios(token)
 
   const login = async (data: LoginFormData) => {
-    const response = await api.post('users/auth/login', data)
+    const response = await api.post('/users/auth/login', data)
     return response.data
+  }
+
+const getSession = async () => {
+    const response = await api.get('/users/auth/refresh', {
+      withCredentials: true,
+    })
+    return response.data.data
   }
 
   const getProfile = async (accessToken?: string) => {
@@ -18,7 +25,7 @@ export const useAuthService = (token: string | null) => {
       withCredentials: true,
       headers,
     })
-    return response.data
+    return response.data.data
   }
 
   const uploadImage = async (imageUri: string) => {
@@ -47,5 +54,5 @@ export const useAuthService = (token: string | null) => {
     }
   }
 
-  return { login, uploadImage, getProfile }
+  return { login, uploadImage, getProfile, getSession }
 }

@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getRouteApi } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 import type React from 'react'
 import { TextInput } from '@/components/textInputBuilder'
@@ -16,13 +17,16 @@ import {
 } from '@/components/ui/dialog'
 import { addBloodSchema } from '@/lib/schemas/product-schemas/add-product.schema'
 import SelectComponent from '@/components/select-component'
-import { bloodProducts } from '@/lib/constants/blood-products'
+import { bloodProducts, bloodTypes } from '@/lib/constants/blood-products'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { DatePicker } from '@/components/datepicker'
+import useAddProduct from '@/lib/data/mutations/add-product'
 
 type FormData = z.infer<typeof addBloodSchema>
 const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
   const routeApi = getRouteApi('/dashboard')
   const { user } = routeApi.useLoaderData()
+  const { mutate: addProduct } = useAddProduct()
   const {
     control,
     handleSubmit,
@@ -30,18 +34,28 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
   } = useForm<FormData>({
     resolver: zodResolver(addBloodSchema),
     defaultValues: {
-      batch_number: '',
       blood_product: '',
-      collection_date: '',
-      expiration_date: '',
-      type: '',
+      expiry_date: '',
+      quantity: 0,
+      blood_type: '',
       added_by: user.name,
     },
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-  }
+  const onSubmit = handleSubmit((data: FormData) => {
+    const toastId = toast.loading('Adding product...')
+    addProduct(data, {
+      onSuccess: () => {
+        toast.dismiss(toastId)
+        toast.success('Product added successfully')
+      },
+      onError: (err: any) => {
+        console.log(err)
+        toast.dismiss(toastId)
+        toast.error(err.message || 'Product addition failed')
+      },
+    })
+  })
 
   return (
     <Dialog>
@@ -50,26 +64,9 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
         <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-semibold">Add Blood</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-[80dvh]">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <TextInput
-                  control={control}
-                  name="batch_number"
-                  label="Batch Number"
-                  placeholder="Enter batch number"
-                  error={errors.batch_number?.message}
-                />
-
-                <TextInput
-                  control={control}
-                  name="collection_date"
-                  label="Collection Date"
-                  placeholder="Enter collection Date"
-                  error={errors.collection_date?.message}
-                />
-              </div>
+        <ScrollArea className="h-[65dvh]">
+          <form onSubmit={onSubmit}>
+            <div className="p-4 space-y-1">
               <div className="grid grid-cols-2 gap-3">
                 <SelectComponent
                   items={bloodProducts}
@@ -79,22 +76,32 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                   control={control}
                   error={errors.blood_product?.message}
                 />
-                <TextInput
+                <SelectComponent
+                  items={bloodTypes}
+                  label="Select blood type"
+                  name="blood_type"
+                  placeholder="Blood Type"
                   control={control}
-                  name="type"
-                  label="Blood Group"
-                  placeholder="eg. AB+"
-                  error={errors.type?.message}
+                  error={errors.blood_type?.message}
                 />
               </div>
-
-              <TextInput
-                control={control}
-                name="expiration_date"
-                label="Expiration Date"
-                placeholder="expiration date"
-                error={errors.expiration_date?.message}
-              />
+              <div className="grid grid-cols-2 gap-3">
+                <TextInput
+                  control={control}
+                  name="quantity"
+                  label="Quantity"
+                  type="number"
+                  placeholder="quantity"
+                  error={errors.quantity?.message}
+                />
+                <DatePicker
+                  control={control}
+                  name="expiry_date"
+                  label="Expiration Date"
+                  placeholder="expiration date"
+                  error={errors.expiry_date?.message}
+                />
+              </div>
               <TextInput
                 control={control}
                 name="added_by"

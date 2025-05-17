@@ -1,5 +1,7 @@
+import { Suspense } from 'react'
 import { ChevronDown, Download, Plus, Search } from 'lucide-react'
 import InventoryTable from '@/components/inventory-table'
+import { InventoryTableSkeleton } from '@/components/inventory-table-skeleton'
 import TablePagination from '@/components/table-pagination'
 import { AddBloodDialog } from '@/components/add-blood-products'
 
@@ -44,7 +46,9 @@ export default function Inventory() {
           </div>
 
           <div className="overflow-x-auto">
-            <InventoryTable />
+            <Suspense fallback={<InventoryTableSkeleton />}>
+              <InventoryTable />
+            </Suspense>
           </div>
           <TablePagination />
         </div>

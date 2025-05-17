@@ -6,3 +6,14 @@ export const bloodProducts = [
   { label: 'Cryoprecipitate', value: 'cryoprecipitate' },
   { label: 'Albumin', value: 'albumin' },
 ]
+
+export const bloodTypes = [
+  { label: 'A+', value: 'A+' },
+  { label: 'A-', value: 'A-' },
+  { label: 'B+', value: 'B+' },
+  { label: 'B-', value: 'B-' },
+  { label: 'AB+', value: 'AB+' },
+  { label: 'AB-', value: 'AB-' },
+  { label: 'O+', value: 'O+' },
+  { label: 'O-', value: 'O-' },
+]
