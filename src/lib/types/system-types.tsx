@@ -35,3 +35,14 @@ export type Session = {
   user: User & { facility: Facility | null }
   facility: Facility | null
 }
+
+type Success<T> = {
+  data: T
+  error: null
+}
+
+type Failure<TError> = {
+  data: null
+  error: TError
+}
+export type Result<T, TError = Error> = Success<T> | Failure<TError>

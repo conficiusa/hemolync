@@ -3,7 +3,6 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { InventoryTableError } from './inventory-table-error'
 import { Checkbox } from '@/components/ui/checkbox'
-import { getStatusBadgeClass } from '@/lib/utils'
 import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
 
 interface BloodProduct {

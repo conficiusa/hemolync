@@ -1,4 +1,4 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { Outlet, createFileRoute} from '@tanstack/react-router'
 import DashboardSidebar from '@/components/dashboard-sidebar'
 import DashboardHeader from '@/components/dashboard-header'
 import { session } from '@/lib/data/queries/auth/refresh'
@@ -16,9 +16,12 @@ export const Route = createFileRoute('/dashboard')({
   },
   beforeLoad: async ({ context, location, preload }) => {
     const { queryClient } = context
-    queryClient.ensureQueryData(session)
-    const data = await queryClient.fetchQuery(session)
-    checkAuth(data, location, preload)
+    try {
+      const data = await queryClient.fetchQuery(session)
+      checkAuth(data, location, preload)
+    } catch (error) {
+      checkAuth(null, location, preload)
+    }
   },
   loader: ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(session)

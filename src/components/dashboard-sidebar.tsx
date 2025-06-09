@@ -1,4 +1,3 @@
-import { getRouteApi } from '@tanstack/react-router'
 import {
   ClipboardList,
   FileText,
@@ -10,20 +9,19 @@ import {
   Users,
   Zap,
 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { LogoutDialog } from '@/components/logout-dialog'
 import { NavItem } from '@/components/nav-item'
+import { session } from '@/lib/data/queries/auth/refresh'
 
 const DashboardSidebar = () => {
-  const routeApi = getRouteApi('/dashboard')
-  const { user } = routeApi.useLoaderData({
-    select: (data) => ({
-      user: data?.user,
-    }),
-  })
+  console.log("sssssss")
+  const { data, error, isLoading } = useQuery(session)
 
+  if (isLoading || error) return
   return (
     <aside className="w-68 bg-white flex flex-col border-r fixed h-screen">
       {/* Logo */}
@@ -54,7 +52,7 @@ const DashboardSidebar = () => {
             icon={<LineChart size={20} />}
             text="Tracking"
           />
-          {user?.role === 'facility_administrator' && (
+          {data?.user.role === 'facility_administrator' && (
             <NavItem
               href="/dashboard/staff-management"
               icon={<Users size={20} />}

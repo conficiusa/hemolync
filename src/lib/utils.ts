@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { redirect } from '@tanstack/react-router'
 import type { NavigateOptions, ParsedLocation } from '@tanstack/react-router'
 import type { ClassValue } from 'clsx'
-import type { Session } from './types/system-types'
+import type { Result, Session } from './types/system-types'
 
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
@@ -75,15 +75,17 @@ export const getRequestStatusBadgeClassComplementary = (
   }
 }
 
-export const checkAuth = (
-  auth: Session,
+export const  checkAuth = (
+  auth: Session | null,
   location: ParsedLocation,
   preload: boolean,
 ) => {
-  if (!auth.access_token) {
+
+  if (!auth || !auth.access_token) {
+    console.log("preload",preload)
     if (!preload) {
       toast.warning('Session Expired!', {
-        description: 'please login again',
+        description: 'Please login again',
       })
     }
     throw redirect({
@@ -117,5 +119,16 @@ export const getReadableRole = (role: string) => {
       return 'Admin'
     default:
       return 'Unknown'
+  }
+}
+
+export const tryCatch = async function tryCatch<T, TError = Error>(
+  promise: Promise<T>,
+): Promise<Result<T, TError>> {
+  try {
+    const data = await promise
+    return { data, error: null }
+  } catch (error) {
+    return { data: null, error: error as TError }
   }
 }

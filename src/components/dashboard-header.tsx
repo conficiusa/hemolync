@@ -6,7 +6,7 @@ import { session } from '@/lib/data/queries/auth/refresh'
 
 const DashboardHeader = () => {
   const { data, isError } = useSuspenseQuery(session)
-  const { user } = data
+  const { user } = data 
   const { facility } = user
 
   if (isError) {

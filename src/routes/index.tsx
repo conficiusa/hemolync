@@ -1,4 +1,9 @@
-import { Link, createFileRoute, redirect } from '@tanstack/react-router'
+import {
+  Link,
+  createFileRoute,
+  isRedirect,
+  redirect,
+} from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { session } from '@/lib/data/queries/auth/refresh'
 
@@ -6,10 +11,16 @@ export const Route = createFileRoute('/')({
   component: Home,
   beforeLoad: async ({ context }) => {
     const { queryClient } = context
-    queryClient.ensureQueryData(session)
-    const data = await queryClient.fetchQuery(session)
-    if (data.access_token) {
-      throw redirect({ to: '/dashboard' })
+    try {
+      const data = await queryClient.ensureQueryData(session)
+      if (data.access_token) {
+        throw redirect({ to: '/dashboard' })
+      }
+    } catch (error) {
+      if (isRedirect(error)) {
+        throw error
+      }
+      return
     }
   },
 })
