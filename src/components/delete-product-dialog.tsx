@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import type { BloodProduct } from '@/lib/types/product.types'
 import {
   AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
   AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import useMutateProduct from '@/lib/data/mutations/mutate-product'
 
@@ -25,7 +25,7 @@ const DeleteProductDialog = memo(function DeleteProductDialog({
   product,
 }: DeleteProductDialogProps) {
   const {
-    deleteProductMutation: { mutate: deleteProduct, isLoading },
+    deleteProductMutation: { mutate: deleteProduct, isPending },
   } = useMutateProduct()
   const queryClient = useQueryClient()
 
@@ -58,8 +58,8 @@ const DeleteProductDialog = memo(function DeleteProductDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
-            {isLoading ? 'Deleting...' : 'Delete'}
+          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+            {isPending ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { ArrowLeft } from 'lucide-react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, getRouteApi, useNavigate } from '@tanstack/react-router'
 import { cn, getRequestStatusBadgeClass } from '@/lib/utils'
 
 interface TrackingItemDetails {
@@ -20,6 +20,8 @@ interface TrackingItemDetails {
 
 export default function TrackingDetails({ id }: { id: string }) {
   const navigate = useNavigate()
+  const search = getRouteApi('/dashboard/request-management/$id').useSearch()
+
   const [trackingItem, setTrackingItem] = useState<TrackingItemDetails | null>(
     null,
   )
@@ -57,7 +59,10 @@ export default function TrackingDetails({ id }: { id: string }) {
     // Handle accept logic
     alert('Accepted')
     navigate({
-      to: '/dashboard/tracking',
+      to: '/dashboard/request-management',
+      search: {
+        tab: search.from,
+      },
     })
   }
 
@@ -65,13 +70,19 @@ export default function TrackingDetails({ id }: { id: string }) {
     // Handle reject logic
     alert('Rejected')
     navigate({
-      to: '/dashboard/tracking',
+      to: '/dashboard/request-management',
+      search: {
+        tab: search.from,
+      },
     })
   }
 
   const handleBack = () => {
     navigate({
-      to: '/dashboard/tracking',
+      to: '/dashboard/request-management',
+      search: {
+        tab: search.from,
+      },
     })
   }
 
@@ -125,7 +136,10 @@ export default function TrackingDetails({ id }: { id: string }) {
     <div className="p-6">
       <div className="flex items-center mb-6">
         <Link
-          to={'/dashboard/tracking'}
+          to="/dashboard/request-management"
+          search={{
+            tab: search.from,
+          }}
           className="flex items-center group text-muted-foreground text-sm hover:text-foreground transition-colors"
         >
           <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform duration-500 " />

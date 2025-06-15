@@ -1,5 +1,5 @@
 import { Eye } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { TooltipBuilder } from './tooltip-builder'
 import {
   cn,
@@ -133,6 +133,7 @@ const trackingItems: Array<TrackingItem> = [
 ]
 
 const TrackingTable = () => {
+  const search = getRouteApi('/dashboard/request-management/').useSearch()
   return (
     <table className="w-full whitespace-nowrap">
       <thead>
@@ -218,8 +219,11 @@ const TrackingTable = () => {
             </td>
             <td className="py-4 px-6">
               <Link
-                to={`/dashboard/request-management/$id`}
+                to="/dashboard/request-management/$id"
                 params={{ id: item.id.toString() }}
+                search={{
+                  from: search.tab,
+                }}
               >
                 <TooltipBuilder content="View Details">
                   <Eye size={28} className="hover:opacity-70" strokeWidth={1} />

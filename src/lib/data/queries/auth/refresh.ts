@@ -12,6 +12,5 @@ const getSession = async () => {
 export const session = queryOptions({
   queryKey: ['session'],
   queryFn: getSession,
-
   staleTime: 1000 * 60 * 60,
 })
