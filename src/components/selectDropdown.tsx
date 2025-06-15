@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 type SelectDropdownProps = {
   items?: Array<{ value: string; label: string }>
   selected: string | null
-  setSelected: (value: string) => void
+  setSelected: (value: any) => void
   placeholder?: string
   fieldClassName?: string
   error?: string

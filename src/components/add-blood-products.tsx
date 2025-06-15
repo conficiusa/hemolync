@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
 import type { z } from 'zod'
 import type React from 'react'
 import { TextInput } from '@/components/textInputBuilder'
@@ -20,13 +21,16 @@ import SelectComponent from '@/components/select-component'
 import { bloodProducts, bloodTypes } from '@/lib/constants/blood-products'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { DatePicker } from '@/components/datepicker'
-import useAddProduct from '@/lib/data/mutations/add-product'
+import useMutateProduct from '@/lib/data/mutations/mutate-product'
 
 type FormData = z.infer<typeof addBloodSchema>
 const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
   const routeApi = getRouteApi('/dashboard')
   const { user } = routeApi.useLoaderData()
-  const { mutate: addProduct } = useAddProduct()
+  const {
+    addProductMutation: { mutate: addProduct },
+  } = useMutateProduct()
+  const queryClient = useQueryClient()
   const {
     control,
     handleSubmit,
@@ -48,6 +52,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
       onSuccess: () => {
         toast.dismiss(toastId)
         toast.success('Product added successfully')
+        queryClient.invalidateQueries({ queryKey: ['inventory'] })
       },
       onError: (err: any) => {
         console.log(err)

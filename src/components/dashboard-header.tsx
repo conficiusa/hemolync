@@ -3,20 +3,23 @@ import { UserIcon } from 'lucide-react'
 import { NotificationsPanel } from '@/components/notifications'
 import { getReadableRole } from '@/lib/utils'
 import { session } from '@/lib/data/queries/auth/refresh'
+import DashboardMobileSidebar from '@/components/dashboard-mobile-sidebar'
 
 const DashboardHeader = () => {
-  const { data, isError } = useSuspenseQuery(session)
-  const { user } = data 
+  const { data } = useSuspenseQuery(session)
+  const { user } = data
   const { facility } = user
 
-  if (isError) {
-    return <div>Error</div>
-  }
   return (
     <div>
-      <header className="h-16 bg-white border-b flex items-center justify-between px-6">
-        <h1 className="text-2xl font-bold">{facility?.facility_name}</h1>
-        <div className="flex items-center gap-4">
+      <header className="py-4 bg-white border-b flex items-center justify-between px-6">
+        <div className="md:flex hidden">
+          <h1 className="text-2xl font-bold">{facility?.facility_name}</h1>
+        </div>
+        <div className="md:hidden flex">
+          <img src="/logo.png" alt="HemoLync Logo" width={120} height={100} />
+        </div>
+        <div className="items-center gap-4 lg:flex hidden">
           <div className="flex items-center gap-2 bg-muted-foreground/20 px-2  pr-6 py-1 rounded-full">
             <div className="relative w-8 h-8 rounded-full bg-muted-foreground/40 flex items-center justify-center">
               <UserIcon size={16} className="text-muted-foreground" />
@@ -32,6 +35,8 @@ const DashboardHeader = () => {
 
           <NotificationsPanel />
         </div>
+        {/* Mobile sidebar toggle */}
+        <DashboardMobileSidebar session={data} />
       </header>
     </div>
   )

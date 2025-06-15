@@ -1,31 +1,28 @@
 import { memo } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { InventoryTableEmpty } from './inventory-table-empty'
 import { InventoryTableError } from './inventory-table-error'
-import { Checkbox } from '@/components/ui/checkbox'
+import type { BloodProduct } from '@/lib/types/product.types'
 import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
-
-interface BloodProduct {
-  id: string
-  blood_product: string
-  blood_type: string
-  quantity: number
-  expiry_date: string
-  blood_bank_name: string
-  added_by_name: string
-  created_at: string
-  updated_at: string
-}
+import { Checkbox } from '@/components/ui/checkbox'
+import { EditProductDialog } from '@/components/edit-product-dialog'
+import { DeleteProductDialog } from '@/components/delete-product-dialog'
 
 const InventoryTable = memo(() => {
-  const { data, error } = useSuspenseQuery(fetchProductsQuery)
+  const { data, error} = useSuspenseQuery(fetchProductsQuery)
 
   if (error) {
     return <InventoryTableError />
   }
 
+  if (!data.length) {
+    return <InventoryTableEmpty />
+  }
+
   return (
-    <table className="w-full text-sm">
+    <table className="text-sm w-full whitespace-nowrap">
       <thead>
         <tr className="border-b border-gray-200">
           <th className="py-3 px-4 text-left">
@@ -76,19 +73,23 @@ const InventoryTable = memo(() => {
               {product.quantity}
             </td>
             <td className="py-4 px-4 text-sm text-gray-500">
-              {new Date(product.expiry_date).toLocaleDateString()}
+              {format(product.expiry_date, 'MMM dd, yyyy')}
             </td>
             <td className="py-4 px-4 text-sm text-gray-500">
               {product.blood_bank_name}
             </td>
             <td className="py-4 px-4">
               <div className="flex items-center gap-2">
-                <button className="p-1 text-muted-foreground/70 hover:text-muted-foreground">
-                  <Trash2 size={14} />
-                </button>
-                <button className="p-1 text-muted-foreground/70 hover:text-muted-foreground">
-                  <Pencil size={14} />
-                </button>
+                <DeleteProductDialog product={product}>
+                  <button className="p-1 text-muted-foreground/70 hover:text-muted-foreground">
+                    <Trash2 size={14} />
+                  </button>
+                </DeleteProductDialog>
+                <EditProductDialog product={product}>
+                  <button className="p-1 text-muted-foreground/70 hover:text-muted-foreground">
+                    <Pencil size={14} />
+                  </button>
+                </EditProductDialog>
               </div>
             </td>
           </tr>

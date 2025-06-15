@@ -18,12 +18,11 @@ import { NavItem } from '@/components/nav-item'
 import { session } from '@/lib/data/queries/auth/refresh'
 
 const DashboardSidebar = () => {
-  console.log("sssssss")
   const { data, error, isLoading } = useQuery(session)
 
   if (isLoading || error) return
   return (
-    <aside className="w-68 bg-white flex flex-col border-r fixed h-screen">
+    <aside className="w-68 bg-white lg:flex flex-col border-r fixed h-screen hidden">
       {/* Logo */}
       <div className="p-6">
         <img
@@ -41,6 +40,7 @@ const DashboardSidebar = () => {
             href="/dashboard"
             icon={<LayoutDashboard size={20} />}
             text="Dashboard"
+            exact
           />
           <NavItem
             href="/dashboard/inventory"
@@ -48,9 +48,9 @@ const DashboardSidebar = () => {
             text="Inventory"
           />
           <NavItem
-            href="/dashboard/tracking"
+            href="/dashboard/request-management"
             icon={<LineChart size={20} />}
-            text="Tracking"
+            text="Request Management"
           />
           {data?.user.role === 'facility_administrator' && (
             <NavItem

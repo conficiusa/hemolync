@@ -16,9 +16,10 @@ import { Route as IndexImport } from './routes/index'
 import { Route as DashboardStaffManagementImport } from './routes/dashboard/staff-management'
 import { Route as AuthLoginImport } from './routes/auth.login'
 import { Route as DashboardcardRoutesRouteImport } from './routes/dashboard/(card-routes)/route'
-import { Route as DashboardTrackingIndexImport } from './routes/dashboard/tracking/index'
+import { Route as DashboardRequestManagementIndexImport } from './routes/dashboard/request-management/index'
 import { Route as DashboardcardRoutesIndexImport } from './routes/dashboard/(card-routes)/index'
-import { Route as DashboardTrackingIdImport } from './routes/dashboard/tracking/$id'
+import { Route as DashboardRequestManagementNewImport } from './routes/dashboard/request-management/new'
+import { Route as DashboardRequestManagementIdImport } from './routes/dashboard/request-management/$id'
 import { Route as DashboardcardRoutesInventoryImport } from './routes/dashboard/(card-routes)/inventory'
 
 // Create/Update Routes
@@ -52,11 +53,12 @@ const DashboardcardRoutesRouteRoute = DashboardcardRoutesRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 
-const DashboardTrackingIndexRoute = DashboardTrackingIndexImport.update({
-  id: '/tracking/',
-  path: '/tracking/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
+const DashboardRequestManagementIndexRoute =
+  DashboardRequestManagementIndexImport.update({
+    id: '/request-management/',
+    path: '/request-management/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 const DashboardcardRoutesIndexRoute = DashboardcardRoutesIndexImport.update({
   id: '/',
@@ -64,11 +66,19 @@ const DashboardcardRoutesIndexRoute = DashboardcardRoutesIndexImport.update({
   getParentRoute: () => DashboardcardRoutesRouteRoute,
 } as any)
 
-const DashboardTrackingIdRoute = DashboardTrackingIdImport.update({
-  id: '/tracking/$id',
-  path: '/tracking/$id',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
+const DashboardRequestManagementNewRoute =
+  DashboardRequestManagementNewImport.update({
+    id: '/request-management/new',
+    path: '/request-management/new',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardRequestManagementIdRoute =
+  DashboardRequestManagementIdImport.update({
+    id: '/request-management/$id',
+    path: '/request-management/$id',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 const DashboardcardRoutesInventoryRoute =
   DashboardcardRoutesInventoryImport.update({
@@ -123,11 +133,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardcardRoutesInventoryImport
       parentRoute: typeof DashboardcardRoutesRouteImport
     }
-    '/dashboard/tracking/$id': {
-      id: '/dashboard/tracking/$id'
-      path: '/tracking/$id'
-      fullPath: '/dashboard/tracking/$id'
-      preLoaderRoute: typeof DashboardTrackingIdImport
+    '/dashboard/request-management/$id': {
+      id: '/dashboard/request-management/$id'
+      path: '/request-management/$id'
+      fullPath: '/dashboard/request-management/$id'
+      preLoaderRoute: typeof DashboardRequestManagementIdImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/request-management/new': {
+      id: '/dashboard/request-management/new'
+      path: '/request-management/new'
+      fullPath: '/dashboard/request-management/new'
+      preLoaderRoute: typeof DashboardRequestManagementNewImport
       parentRoute: typeof DashboardRouteImport
     }
     '/dashboard/(card-routes)/': {
@@ -137,11 +154,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardcardRoutesIndexImport
       parentRoute: typeof DashboardcardRoutesRouteImport
     }
-    '/dashboard/tracking/': {
-      id: '/dashboard/tracking/'
-      path: '/tracking'
-      fullPath: '/dashboard/tracking'
-      preLoaderRoute: typeof DashboardTrackingIndexImport
+    '/dashboard/request-management/': {
+      id: '/dashboard/request-management/'
+      path: '/request-management'
+      fullPath: '/dashboard/request-management'
+      preLoaderRoute: typeof DashboardRequestManagementIndexImport
       parentRoute: typeof DashboardRouteImport
     }
   }
@@ -168,15 +185,17 @@ const DashboardcardRoutesRouteRouteWithChildren =
 interface DashboardRouteRouteChildren {
   DashboardcardRoutesRouteRoute: typeof DashboardcardRoutesRouteRouteWithChildren
   DashboardStaffManagementRoute: typeof DashboardStaffManagementRoute
-  DashboardTrackingIdRoute: typeof DashboardTrackingIdRoute
-  DashboardTrackingIndexRoute: typeof DashboardTrackingIndexRoute
+  DashboardRequestManagementIdRoute: typeof DashboardRequestManagementIdRoute
+  DashboardRequestManagementNewRoute: typeof DashboardRequestManagementNewRoute
+  DashboardRequestManagementIndexRoute: typeof DashboardRequestManagementIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardcardRoutesRouteRoute: DashboardcardRoutesRouteRouteWithChildren,
   DashboardStaffManagementRoute: DashboardStaffManagementRoute,
-  DashboardTrackingIdRoute: DashboardTrackingIdRoute,
-  DashboardTrackingIndexRoute: DashboardTrackingIndexRoute,
+  DashboardRequestManagementIdRoute: DashboardRequestManagementIdRoute,
+  DashboardRequestManagementNewRoute: DashboardRequestManagementNewRoute,
+  DashboardRequestManagementIndexRoute: DashboardRequestManagementIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -190,8 +209,9 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
-  '/dashboard/tracking/$id': typeof DashboardTrackingIdRoute
-  '/dashboard/tracking': typeof DashboardTrackingIndexRoute
+  '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
+  '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -199,9 +219,10 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
-  '/dashboard/tracking/$id': typeof DashboardTrackingIdRoute
+  '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
   '/dashboard': typeof DashboardcardRoutesIndexRoute
-  '/dashboard/tracking': typeof DashboardTrackingIndexRoute
+  '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
 }
 
 export interface FileRoutesById {
@@ -212,9 +233,10 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/(card-routes)/inventory': typeof DashboardcardRoutesInventoryRoute
-  '/dashboard/tracking/$id': typeof DashboardTrackingIdRoute
+  '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
   '/dashboard/(card-routes)/': typeof DashboardcardRoutesIndexRoute
-  '/dashboard/tracking/': typeof DashboardTrackingIndexRoute
+  '/dashboard/request-management/': typeof DashboardRequestManagementIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -226,17 +248,19 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
-    | '/dashboard/tracking/$id'
-    | '/dashboard/tracking'
+    | '/dashboard/request-management/$id'
+    | '/dashboard/request-management/new'
+    | '/dashboard/request-management'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth/login'
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
-    | '/dashboard/tracking/$id'
+    | '/dashboard/request-management/$id'
+    | '/dashboard/request-management/new'
     | '/dashboard'
-    | '/dashboard/tracking'
+    | '/dashboard/request-management'
   id:
     | '__root__'
     | '/'
@@ -245,9 +269,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/dashboard/staff-management'
     | '/dashboard/(card-routes)/inventory'
-    | '/dashboard/tracking/$id'
+    | '/dashboard/request-management/$id'
+    | '/dashboard/request-management/new'
     | '/dashboard/(card-routes)/'
-    | '/dashboard/tracking/'
+    | '/dashboard/request-management/'
   fileRoutesById: FileRoutesById
 }
 
@@ -286,8 +311,9 @@ export const routeTree = rootRoute
       "children": [
         "/dashboard/(card-routes)",
         "/dashboard/staff-management",
-        "/dashboard/tracking/$id",
-        "/dashboard/tracking/"
+        "/dashboard/request-management/$id",
+        "/dashboard/request-management/new",
+        "/dashboard/request-management/"
       ]
     },
     "/dashboard/(card-routes)": {
@@ -309,16 +335,20 @@ export const routeTree = rootRoute
       "filePath": "dashboard/(card-routes)/inventory.tsx",
       "parent": "/dashboard/(card-routes)"
     },
-    "/dashboard/tracking/$id": {
-      "filePath": "dashboard/tracking/$id.tsx",
+    "/dashboard/request-management/$id": {
+      "filePath": "dashboard/request-management/$id.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/request-management/new": {
+      "filePath": "dashboard/request-management/new.tsx",
       "parent": "/dashboard"
     },
     "/dashboard/(card-routes)/": {
       "filePath": "dashboard/(card-routes)/index.tsx",
       "parent": "/dashboard/(card-routes)"
     },
-    "/dashboard/tracking/": {
-      "filePath": "dashboard/tracking/index.tsx",
+    "/dashboard/request-management/": {
+      "filePath": "dashboard/request-management/index.tsx",
       "parent": "/dashboard"
     }
   }

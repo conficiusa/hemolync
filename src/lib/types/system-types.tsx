@@ -21,8 +21,15 @@ export interface User {
   image?: string
   emailVerified: boolean
 }
+export type BloodBank ={
+  id: string
+  phone: string
+  email: string
+  blood_bank_name: string
+}
+
 export interface Facility {
-  blood_bank: null
+  blood_bank: BloodBank
   created_at: string
   facility_contact_number: string
   facility_digital_address: string

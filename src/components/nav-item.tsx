@@ -6,11 +6,14 @@ interface NavItemProps {
   href: string
   icon: React.ReactNode
   text: string
+  exact?: boolean
 }
-export function NavItem({ href, icon, text }: NavItemProps) {
+export function NavItem({ href, icon, text,exact }: NavItemProps) {
   const { pathname } = useLocation()
   const active = useMemo(() => {
-    return pathname === href
+    return exact
+      ? pathname === href
+      : pathname === href || pathname.startsWith(href + '/')
   }, [pathname, href])
 
   return (

@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query'
 import { protectedApi } from '@/lib/server/protected-api'
 
 const fetchProducts = async () => {
-    try {
+  try {
     const response = await protectedApi.get('/blood-inventory/')
     return response.data
   } catch (error: any) {
@@ -11,7 +11,7 @@ const fetchProducts = async () => {
 }
 
 export const fetchProductsQuery = queryOptions({
-  queryKey: ['blood-products'],
+  queryKey: ['inventory'],
   queryFn: fetchProducts,
   staleTime: 1000 * 60 * 60,
 })

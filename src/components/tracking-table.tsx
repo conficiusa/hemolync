@@ -134,7 +134,7 @@ const trackingItems: Array<TrackingItem> = [
 
 const TrackingTable = () => {
   return (
-    <table className="w-full">
+    <table className="w-full whitespace-nowrap">
       <thead>
         <tr className="border-b border-gray-200">
           <th className="text-left py-4 px-6 text-xs font-medium text-muted-foreground">
@@ -218,7 +218,7 @@ const TrackingTable = () => {
             </td>
             <td className="py-4 px-6">
               <Link
-                to={`/dashboard/tracking/$id`}
+                to={`/dashboard/request-management/$id`}
                 params={{ id: item.id.toString() }}
               >
                 <TooltipBuilder content="View Details">
