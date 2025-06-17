@@ -1,47 +1,71 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { memo } from 'react'
-import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
+import { memo, useMemo } from 'react'
+import type { Pagination as PaginationType } from '@/lib/types/system-types'
 
-const TablePagination = memo(() => {
-  const { data, error } = useSuspenseQuery(fetchProductsQuery)
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
+import { generatePages } from '@/lib/utils'
 
-  if (error) return null
-  if (!data.length) return null
+// Allow an optional page-change callback while keeping backwards compatibility
+interface TablePaginationProps extends PaginationType {
+  onPageChange?: (page: number) => void
+}
+
+const TablePagination = memo((props: TablePaginationProps) => {
+  const { current_page, total_pages, has_next, has_prev, onPageChange } = props
+
+  const pages = useMemo(
+    () => generatePages(current_page, total_pages),
+    [current_page, total_pages],
+  )
+
+  const handleChange = (page: number) => {
+    if (onPageChange) onPageChange(page)
+  }
 
   return (
-    <div className="flex justify-between items-center">
-      <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700">
-        <ChevronLeft className="h-4 w-4" />
-        Previous
-      </button>
-      {/* <div className="flex items-center gap-1">
-        <button className="w-8 h-8 flex items-center justify-center rounded-md bg-primary text-white text-sm font-medium">
-          1
-        </button>
-        {[2, 3].map((page) => (
-          <button
-            key={page}
-            className="w-8 h-8 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 text-sm font-medium"
-          >
-            {page}
-          </button>
+    <Pagination className="mt-6">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            aria-disabled={!has_prev}
+            disabled={!has_prev}
+            tabIndex={!has_prev ? -1 : 0}
+            onClick={() => has_prev && handleChange(current_page - 1)}
+          />
+        </PaginationItem>
+
+        {pages.map((p: number | 'ellipsis', idx: number) => (
+          <PaginationItem key={`${p}-${idx}`}>
+            {p === 'ellipsis' ? (
+              <PaginationEllipsis />
+            ) : (
+              <PaginationLink
+                isActive={p === current_page}
+                onClick={() => handleChange(p)}
+              >
+                {p}
+              </PaginationLink>
+            )}
+          </PaginationItem>
         ))}
-        <span className="text-gray-500 px-1">...</span>
-        {[8].map((page) => (
-          <button
-            key={page}
-            className="w-8 h-8 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 text-sm font-medium"
-          >
-            {page}
-          </button>
-        ))}
-      </div> */}
-      <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-sm text-sm font-medium text-gray-700">
-        Next
-        <ChevronRight className="h-4 w-4" />
-      </button>
-    </div>
+
+        <PaginationItem>
+          <PaginationNext
+            aria-disabled={!has_next}
+            disabled={!has_next}
+            tabIndex={!has_next ? -1 : 0}
+            onClick={() => has_next && handleChange(current_page + 1)}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   )
 })
 

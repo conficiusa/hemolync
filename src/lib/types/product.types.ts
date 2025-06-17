@@ -1,3 +1,5 @@
+import type { Pagination } from './system-types'
+
 export type BloodProduct = {
   id: string
   blood_product: string
@@ -6,4 +8,7 @@ export type BloodProduct = {
   blood_type: string
   added_by: string
   blood_bank_name: string
+}
+export type BloodProductResponse = Pagination & {
+  items: Array<BloodProduct>
 }

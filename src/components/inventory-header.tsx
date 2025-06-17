@@ -5,10 +5,10 @@ import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
 import { Button } from '@/components/ui/button'
 
 const InventoryHeader = () => {
-  const { data, error } = useSuspenseQuery(fetchProductsQuery)
+  const { data, error } = useSuspenseQuery(fetchProductsQuery())
 
   if (error) return null
-  if (!data.length) return null
+  if (!data.items.length) return null
 
   return (
     <div className="flex justify-between items-center">

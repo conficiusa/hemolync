@@ -21,7 +21,7 @@ export interface User {
   image?: string
   emailVerified: boolean
 }
-export type BloodBank ={
+export type BloodBank = {
   id: string
   phone: string
   email: string
@@ -41,6 +41,15 @@ export type Session = {
   access_token: string
   user: User & { facility: Facility | null }
   facility: Facility | null
+}
+
+export type Pagination = {
+  total_items: number
+  total_pages: number
+  current_page: number
+  page_size: number
+  has_next: boolean
+  has_prev: boolean
 }
 
 type Success<T> = {

@@ -75,14 +75,13 @@ export const getRequestStatusBadgeClassComplementary = (
   }
 }
 
-export const  checkAuth = (
+export const checkAuth = (
   auth: Session | null,
   location: ParsedLocation,
   preload: boolean,
 ) => {
-
   if (!auth || !auth.access_token) {
-    console.log("preload",preload)
+    console.log('preload', preload)
     if (!preload) {
       toast.warning('Session Expired!', {
         description: 'Please login again',
@@ -131,4 +130,32 @@ export const tryCatch = async function tryCatch<T, TError = Error>(
   } catch (error) {
     return { data: null, error: error as TError }
   }
+}
+
+export const generatePages = (current: number, total: number) => {
+  const pages: Array<number | 'ellipsis'> = []
+
+  if (total <= 7) {
+    for (let i = 1; i <= total; i++) pages.push(i)
+    return pages
+  }
+
+  // Always include the first page
+  pages.push(1)
+
+  // Show dots if current page is far from the first page
+  if (current > 4) pages.push('ellipsis')
+
+  const start = Math.max(2, current - 1)
+  const end = Math.min(total - 1, current + 1)
+
+  for (let i = start; i <= end; i++) pages.push(i)
+
+  // Show dots if current page is far from the last page
+  if (current < total - 3) pages.push('ellipsis')
+
+  // Always include the last page
+  pages.push(total)
+
+  return pages
 }

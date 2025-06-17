@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { BloodProduct } from '@/lib/types/product.types'
 import {
@@ -18,16 +17,18 @@ import useMutateProduct from '@/lib/data/mutations/mutate-product'
 interface DeleteProductDialogProps {
   children: React.ReactNode
   product: BloodProduct
+  onDeleted?: () => void
 }
 
 const DeleteProductDialog = memo(function DeleteProductDialog({
   children,
   product,
+  onDeleted,
 }: DeleteProductDialogProps) {
+  
   const {
     deleteProductMutation: { mutate: deleteProduct, isPending },
   } = useMutateProduct()
-  const queryClient = useQueryClient()
 
   const handleDelete = () => {
     const toastId = toast.loading('Deleting product...')
@@ -35,7 +36,7 @@ const DeleteProductDialog = memo(function DeleteProductDialog({
       onSuccess: () => {
         toast.dismiss(toastId)
         toast.success(`${product.blood_product} deleted successfully`)
-        queryClient.invalidateQueries({ queryKey: ['inventory'] })
+        onDeleted?.()
       },
       onError: (err: any) => {
         console.error(err)

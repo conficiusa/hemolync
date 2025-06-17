@@ -12,7 +12,7 @@ import { useLogin } from '@/lib/data/mutations/login'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
 export default function LoginForm() {
-  const { mutate: login, isPending} = useLogin()
+  const { mutate: login, isPending } = useLogin()
   const location = useLocation()
   const navigate = useNavigate()
   const {
@@ -34,10 +34,10 @@ export default function LoginForm() {
         toast.dismiss(toastId)
         handleRedirectNavigation(location, navigate, '/dashboard')
       },
-      onError: (err:any) => {
+      onError: (err: any) => {
         toast.dismiss(toastId)
-        toast.error(err.message || 'Login failed')
-      }
+        toast.warning(err.response.data.detail || 'Login failed')
+      },
     })
   })
 

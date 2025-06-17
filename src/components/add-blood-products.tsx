@@ -11,6 +11,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,8 +21,8 @@ import { addBloodSchema } from '@/lib/schemas/product-schemas/add-product.schema
 import SelectComponent from '@/components/select-component'
 import { bloodProducts, bloodTypes } from '@/lib/constants/blood-products'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { DatePicker } from '@/components/datepicker'
 import useMutateProduct from '@/lib/data/mutations/mutate-product'
+import { NaturalLanguageDatePicker } from '@/components/natural-language-datepicker'
 
 type FormData = z.infer<typeof addBloodSchema>
 const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
@@ -68,13 +69,19 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-semibold">Add Blood</DialogTitle>
+          <DialogDescription className="sr-only">
+            fill the form to add the blood product
+          </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-[65dvh]">
-          <form onSubmit={onSubmit}>
-            <div className="p-4 space-y-1">
-              <div className="grid grid-cols-2 gap-3">
+        <ScrollArea>
+          <form onSubmit={onSubmit} className="h-fit max-h-[500px]">
+            <div className="p-4 space-y-2">
+              <div className="grid grid-cols-2 gap-5">
                 <SelectComponent
-                  items={bloodProducts}
+                  items={bloodProducts.map((product) => ({
+                    label: product.label,
+                    value: product.label,
+                  }))}
                   label="Select blood product"
                   name="blood_product"
                   placeholder="Blood Product"
@@ -90,22 +97,27 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                   error={errors.blood_type?.message}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <TextInput
-                  control={control}
-                  name="quantity"
-                  label="Quantity"
-                  type="number"
-                  placeholder="quantity"
-                  error={errors.quantity?.message}
-                />
-                <DatePicker
-                  control={control}
-                  name="expiry_date"
-                  label="Expiration Date"
-                  placeholder="expiration date"
-                  error={errors.expiry_date?.message}
-                />
+              <div className="grid grid-cols-2 gap-5 items-start">
+                <div className="self-start">
+                  <TextInput
+                    control={control}
+                    name="quantity"
+                    label="Quantity"
+                    type="number"
+                    placeholder="quantity"
+                    error={errors.quantity?.message}
+                  />
+                </div>
+                <div className="self-start">
+                  <NaturalLanguageDatePicker
+                    control={control}
+                    name="expiry_date"
+                    label="Expiration Date"
+                    placeholder="enter number of days"
+                    error={errors.expiry_date?.message}
+                    description="Expires on"
+                  />
+                </div>
               </div>
               <TextInput
                 control={control}
@@ -127,7 +139,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
               </DialogClose>
               <button
                 type="submit"
-                className="px-3  py-2 min-w-[125px] bg-primary text-white rounded-full text-sm font-medium"
+                className="px-3  py-3 min-w-[125px] bg-primary text-white rounded-full text-sm font-medium"
               >
                 Add Product
               </button>

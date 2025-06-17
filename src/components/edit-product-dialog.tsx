@@ -12,6 +12,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -82,9 +83,12 @@ const EditProductDialog = memo(
             <DialogTitle className="text-xl font-semibold">
               Edit Blood Product
             </DialogTitle>
+            <DialogDescription className='sr-only'>
+              fill the form to edit the blood product
+            </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="h-[65dvh]">
-            <form onSubmit={onSubmit}>
+          <ScrollArea>
+            <form onSubmit={onSubmit} className="h-fit max-h-[500px]">
               <div className="p-4 space-y-1">
                 <div className="grid grid-cols-2 gap-3">
                   <SelectComponent

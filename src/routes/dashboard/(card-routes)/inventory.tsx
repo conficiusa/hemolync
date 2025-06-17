@@ -16,7 +16,7 @@ export const Route = createFileRoute('/dashboard/(card-routes)/inventory')({
   errorComponent: InventoryError,
   loader: ({ context }) => {
     const { queryClient } = context
-    queryClient.prefetchQuery(fetchProductsQuery)
+    queryClient.prefetchQuery(fetchProductsQuery())
   },
 })
 

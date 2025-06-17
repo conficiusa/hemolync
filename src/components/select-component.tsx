@@ -56,7 +56,7 @@ export default function SelectComponent({
               id={name}
               aria-invalid={!!error}
               className={cn(
-                'text-muted-foreground w-full py-2 sm:py-[22px] shadow-none focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:border-0',
+                'text-muted-foreground w-full py-2 sm:py-[22px] shadow-none focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:border-0 aria-invalid:border-2 aria-invalid:border-destructive',
                 field.value && 'text-black dark:text-white',
               )}
             >

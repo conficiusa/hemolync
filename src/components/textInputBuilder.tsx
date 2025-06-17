@@ -94,7 +94,9 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
             </div>
           </div>
           {error && (
-            <p className="text-sm text-destructive pt-0.5 px-2">{error}</p>
+            <p className="text-sm text-destructive pt-0.5 px-2">
+              {error}
+            </p>
           )}
         </div>
       )}
