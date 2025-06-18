@@ -24,7 +24,7 @@ export function NavItem({ href, icon, text,exact }: NavItemProps) {
         active && 'bg-primary text-white hover:bg-primary',
       )}
     >
-      <span className={cn('', active ? 'text-white' : 'text-gray-600')}>
+      <span className={cn(active ? 'text-white' : 'text-gray-600')}>
         {icon}
       </span>
       <span className="text-sm font-medium">{text}</span>

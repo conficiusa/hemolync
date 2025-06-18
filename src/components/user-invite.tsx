@@ -2,8 +2,10 @@
 import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type React from 'react'
-import type { z } from 'zod'
+import type { UserInviteFormData } from '@/lib/schemas/user-schemas/user-invite.schema'
 import {
   Dialog,
   DialogClose,
@@ -16,31 +18,45 @@ import {
 import { Label } from '@/components/ui/label'
 import SelectDropdown from '@/components/selectDropdown'
 import { UserInviteSchema } from '@/lib/schemas/user-schemas/user-invite.schema'
+import { useMutateStaff } from '@/lib/data/mutations/mutate-staff'
 import { TextInput } from '@/components/textInputBuilder'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-type FormData = z.infer<typeof UserInviteSchema>
 const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
+  const { addStaffMutation } = useMutateStaff()
+  const queryClient = useQueryClient()
   const {
     control,
     handleSubmit,
     setValue,
     setError,
     watch,
+    reset,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<UserInviteFormData>({
     resolver: zodResolver(UserInviteSchema),
     defaultValues: {
       email: '',
-      first_name: '',
-      last_name: '',
-      password: '',
+      name: '',
+      phone: '',
+      password: '2006Adda',
+      password_confirm: '2006Adda',
       role: '',
     },
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
+
+  const onSubmit = (data: UserInviteFormData) => {
+    addStaffMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success('User invited successfully')
+        reset()
+        queryClient.invalidateQueries({ queryKey: ['staff'] })
+      },
+      onError: (err:any) => {
+        toast.error(err.response?.data?.detail || 'Failed to invite user')
+      },
+    })
   }
   const handleRoleChange = (value: string) => {
     setValue('role', value)
@@ -55,25 +71,20 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
             Invite User
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-[80dvh]">
-          <form onSubmit={handleSubmit(onSubmit)}>
+        <ScrollArea>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="h-fit max-h-[450px]"
+          >
             <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <TextInput
-                  control={control}
-                  name="first_name"
-                  label="First Name"
-                  placeholder="Enter first name"
-                  error={errors.first_name?.message}
-                />
-                <TextInput
-                  control={control}
-                  name="last_name"
-                  label="Last Name"
-                  placeholder="Enter last name"
-                  error={errors.last_name?.message}
-                />
-              </div>
+              <TextInput
+                control={control}
+                name="name"
+                label="Username"
+                placeholder="Enter username"
+                error={errors.name?.message}
+              />
+
               <TextInput
                 control={control}
                 name="email"
@@ -84,11 +95,20 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
               />
               <TextInput
                 control={control}
+                type="tel"
+                name="phone"
+                label="Phone Number"
+                placeholder="Enter phone number"
+                error={errors.phone?.message}
+              />
+              <TextInput
+                control={control}
                 name="password"
                 type="password"
                 label="Provisional Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
+                allowCopy
               />
               <div className="space-y-2">
                 <Label

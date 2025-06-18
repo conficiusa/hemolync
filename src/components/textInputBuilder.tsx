@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import { CheckIcon, CopyIcon, Eye, EyeOff } from 'lucide-react'
 import { Controller } from 'react-hook-form'
 import type { Control, Path } from 'react-hook-form'
 import type { ZodSchema, z } from 'zod'
 import { cn } from '@/lib/utils'
+import { TooltipBuilder } from '@/components/tooltip-builder'
 
 export const TextInput = <T extends ZodSchema<any, any, any>>({
   control,
@@ -14,11 +15,13 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
   required = false,
   label,
   labelClassName,
+  allowCopy = false,
   ...rest
 }: {
   control: Control<z.infer<T>>
   type?: 'text' | 'password' | 'email' | 'tel' | 'number'
   placeholder?: string
+  allowCopy?: boolean
   required?: boolean
   label?: string
   error?: string
@@ -81,10 +84,11 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
                 className={cn(
                   'w-full rounded-lg border border-input bg-background px-3 py-3  text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
                   error && 'border-2 border-destructive',
-                  type === 'password' && 'pr-10',
+                  type === 'password' && 'pr-10', allowCopy && "pr-22"
                 )}
                 required={required}
               />
+              {allowCopy && <Copy value={value} />}
               {type === 'password' && (
                 <WhichEye
                   showPassword={showPassword}
@@ -94,9 +98,7 @@ export const TextInput = <T extends ZodSchema<any, any, any>>({
             </div>
           </div>
           {error && (
-            <p className="text-sm text-destructive pt-0.5 px-2">
-              {error}
-            </p>
+            <p className="text-sm text-destructive pt-0.5 px-2">{error}</p>
           )}
         </div>
       )}
@@ -118,5 +120,40 @@ const WhichEye = ({ showPassword, togglePassword }: WhichEyeProps) => {
     )
   return (
     <Eye className="absolute top-3 right-4" onClick={() => togglePassword()} />
+  )
+}
+
+const Copy = ({ value }: { value: string }) => {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = () => {
+    if (copied) return
+    navigator.clipboard.writeText(value)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  }
+  return (
+    <TooltipBuilder content={copied ? 'Copied' : 'Copy provisional password'}>
+      <div
+        onClick={handleCopy}
+        className={cn('absolute right-16 top-3 h-4 w-4', {
+          'cursor-pointer': !copied,
+        })}
+      >
+        <CheckIcon
+          className={cn(
+            'absolute transition-all duration-300 ease-in-out',
+            copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
+          )}
+        />
+        <CopyIcon
+          className={cn(
+            'absolute transition-all duration-300 ease-in-out text-muted-foreground',
+            copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
+          )}
+        />
+      </div>
+    </TooltipBuilder>
   )
 }

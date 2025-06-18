@@ -8,3 +8,15 @@ export type User = {
   role: Role
   dateJoined: string
 }
+
+export type Staff = {
+  email: string
+  name: string
+  phone: string
+  id: string
+  role: Role
+  is_active: boolean
+  created_at: string
+  last_login: string | null
+}
+

@@ -1,6 +1,6 @@
 import type { LoginFormData } from '@/components/loginForm'
 
-export type Role = 'Staff' | 'Administrator' | 'Blood-bank in-charge' | 'Staff'
+export type Role = 'staff' | 'facility_administrator' | 'lab_manager'
 export interface AuthContextType {
   user: User | null
   isLoading: boolean

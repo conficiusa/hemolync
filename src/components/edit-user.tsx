@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Pencil } from 'lucide-react'
-import type { z } from 'zod'
-import type { User } from '@/lib/types/user-types'
+import type { Staff } from '@/lib/types/user-types'
+import type { EditUserFormData } from '@/lib/schemas/user-schemas/user-edit.schema'
 import {
   Dialog,
   DialogClose,
@@ -17,8 +17,7 @@ import SelectDropdown from '@/components/selectDropdown'
 import { UserEditSchema } from '@/lib/schemas/user-schemas/user-edit.schema'
 import { TextInput } from '@/components/textInputBuilder'
 
-type FormData = z.infer<typeof UserEditSchema>
-export function EditUserDialog({ user }: { user: User }) {
+export function EditUserDialog({ user }: { user: Pick<Staff, 'email' | 'name' | 'role' | 'id'> }) {
   const {
     control,
     handleSubmit,
@@ -26,17 +25,16 @@ export function EditUserDialog({ user }: { user: User }) {
     setError,
     watch,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<EditUserFormData>({
     resolver: zodResolver(UserEditSchema),
     defaultValues: {
       email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      name: user.name,
       role: user.role,
     },
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: EditUserFormData) => {
     console.log(data)
   }
   const handleRoleChange = (value: string) => {
@@ -61,17 +59,10 @@ export function EditUserDialog({ user }: { user: User }) {
             <div className="grid grid-cols-2 gap-3">
               <TextInput
                 control={control}
-                name="first_name"
-                label="First Name"
-                placeholder="Enter first name"
-                error={errors.first_name?.message}
-              />
-              <TextInput
-                control={control}
-                name="last_name"
-                label="Last Name"
-                placeholder="Enter last name"
-                error={errors.last_name?.message}
+                name="name"
+                label="Username"
+                placeholder="Enter username"
+                error={errors.name?.message}
               />
             </div>
             <TextInput

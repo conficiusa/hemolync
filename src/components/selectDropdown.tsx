@@ -17,9 +17,8 @@ type SelectDropdownProps = {
   error?: string
 }
 const defaultItems = [
-  { value: 'Administrator', label: 'Administrator' },
-  { value: 'Blood bank in-charge', label: 'Blood bank in-charge' },
-  { value: 'Staff', label: 'Staff' },
+  { value: 'lab_manager', label: 'Lab Manager' },
+  { value: 'staff', label: 'Staff' },
 ]
 const SelectDropdown = ({
   items = defaultItems,

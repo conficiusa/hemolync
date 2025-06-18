@@ -3,7 +3,6 @@ import { ChevronsUpDown, Pencil, Trash2 } from 'lucide-react'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { InventoryTableEmpty } from './inventory-table-empty'
-import { InventoryTableError } from './inventory-table-error'
 import type { BloodProduct } from '@/lib/types/product.types'
 import type {
   ProductSortBy,
@@ -47,15 +46,13 @@ const InventoryTable = memo(() => {
   const [sortBy, setSortBy] = useState<ProductSortBy>('created_at')
   const [sortOrder, setSortOrder] = useState<ProductSortOrder>('asc')
   const [, startTransition] = useTransition()
-  const { data, error } = useSuspenseQuery(
-    fetchProductsQuery(page, sortBy, sortOrder),
-  )
+  const { data,isFetching } = useSuspenseQuery(fetchProductsQuery(page, sortBy, sortOrder))
   const queryClient = useQueryClient()
 
-  const pagination = useMemo(() => {
+  const pagination =() => {
     const { items, ...rest } = data
     return rest
-  }, [data])
+  }
 
   const handlePageChange = (newPage: number) => {
     startTransition(() => {
@@ -77,20 +74,16 @@ const InventoryTable = memo(() => {
     })
   }
   const onDelete = () => {
-    if (data.items.length === 1 && !pagination.has_next && page > 1) {
+    if (data.items.length === 1 && !pagination().has_next && page > 1) {
       startTransition(() => {
         handlePageChange(page - 1)
       })
       return
     }
-    queryClient.fetchQuery({ queryKey: ['inventory'] })
+    queryClient.invalidateQueries({ queryKey: ['inventory'] })
   }
 
-  if (error) {
-    return <InventoryTableError />
-  }
-
-  if (!data.items.length) {
+  if (!data.items.length && !isFetching) {
     return <InventoryTableEmpty />
   }
   return (
@@ -172,7 +165,7 @@ const InventoryTable = memo(() => {
           ))}
         </tbody>
       </table>
-      <TablePagination {...pagination} onPageChange={handlePageChange} />
+      <TablePagination {...pagination()} onPageChange={handlePageChange} />
     </>
   )
 })

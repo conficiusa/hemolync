@@ -2,13 +2,13 @@ import { useMutation } from '@tanstack/react-query'
 import { protectedApi } from '@/lib/server/protected-api'
 
 // Add blood distribution
-const addDistribution = async (data: any) => {
-  const response = await protectedApi.post('/blood-distribution/', data)
+const addRequest = async (data: any) => {
+  const response = await protectedApi.post('/requests/requests', data)
   return response
 }
 
 // Update blood distribution
-const updateDistribution = async (data: any) => {
+const updateRequest = async (data: any) => {
   const response = await protectedApi.patch(
     `/api/blood-distribution/${data.id}`,
     data,
@@ -17,32 +17,32 @@ const updateDistribution = async (data: any) => {
 }
 
 // Delete blood distribution
-const deleteDistribution = async (id: string) => {
+const deleteRequest = async (id: string) => {
   const response = await protectedApi.delete(`/api/blood-distribution/${id}`)
   return response
 }
 
-const useMutateDistribution = () => {
-  const addDistributionMutation = useMutation({
-    mutationKey: ['distribution'],
-    mutationFn: addDistribution,
+const useMutateRequest = () => {
+  const addRequestMutation = useMutation({
+    mutationKey: ['request'],
+    mutationFn: addRequest,
   })
 
-  const updateDistributionMutation = useMutation({
-    mutationKey: ['distribution'],
-    mutationFn: updateDistribution,
+  const updateRequestMutation = useMutation({
+    mutationKey: ['request'],
+    mutationFn: updateRequest,
   })
 
-  const deleteDistributionMutation = useMutation({
-    mutationKey: ['distribution'],
-    mutationFn: deleteDistribution,
+  const deleteRequestMutation = useMutation({
+    mutationKey: ['request'],
+    mutationFn: deleteRequest,
   })
 
   return {
-    addDistributionMutation,
-    updateDistributionMutation,
-    deleteDistributionMutation,
+    addRequestMutation,
+    updateRequestMutation,
+    deleteRequestMutation,
   }
 }
 
-export default useMutateDistribution
+export default useMutateRequest

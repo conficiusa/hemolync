@@ -25,7 +25,7 @@ const fetchProducts = async ({
 }: FetchArgs) => {
   try {
     const response = await protectedApi.get(
-      `/blood-inventory/?page=${page ?? 1}&page_size=${page_size ?? 5}&sort_by=${sort_by ?? 'created_at'}&sort_order=${sort_order ?? 'asc'}`,
+      `/blood-inventory/?page=${page ?? 1}&page_size=${page_size ?? 2}&sort_by=${sort_by ?? 'created_at'}&sort_order=${sort_order ?? 'asc'}`,
     )
     return response.data as BloodProductResponse
   } catch (error: any) {

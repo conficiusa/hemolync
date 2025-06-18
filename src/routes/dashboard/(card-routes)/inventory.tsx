@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import Inventory from '@/components/inventory'
 import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
 import Loader from '@/components/loader'
-import InventoryError from '@/components/inventory-error'
+import ErrorBoundary from '@/components/error-boundary'
 
 export const Route = createFileRoute('/dashboard/(card-routes)/inventory')({
   component: InventoryPage,
@@ -13,7 +13,7 @@ export const Route = createFileRoute('/dashboard/(card-routes)/inventory')({
       </div>
     )
   },
-  errorComponent: InventoryError,
+  errorComponent: ErrorBoundary,
   loader: ({ context }) => {
     const { queryClient } = context
     queryClient.prefetchQuery(fetchProductsQuery())

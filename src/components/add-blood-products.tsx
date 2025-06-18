@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
+import  { Loader2 } from 'lucide-react'
 import type { z } from 'zod'
 import type React from 'react'
 import { TextInput } from '@/components/textInputBuilder'
@@ -29,7 +30,7 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
   const routeApi = getRouteApi('/dashboard')
   const { user } = routeApi.useLoaderData()
   const {
-    addProductMutation: { mutate: addProduct },
+    addProductMutation: { mutate: addProduct,isPending },
   } = useMutateProduct()
   const queryClient = useQueryClient()
   const {
@@ -48,16 +49,12 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
   })
 
   const onSubmit = handleSubmit((data: FormData) => {
-    const toastId = toast.loading('Adding product...')
     addProduct(data, {
       onSuccess: () => {
-        toast.dismiss(toastId)
         toast.success('Product added successfully')
         queryClient.invalidateQueries({ queryKey: ['inventory'] })
       },
       onError: (err: any) => {
-        console.log(err)
-        toast.dismiss(toastId)
         toast.error(err.message || 'Product addition failed')
       },
     })
@@ -138,10 +135,11 @@ const AddBloodDialog = memo(({ children }: { children: React.ReactNode }) => {
                 </button>
               </DialogClose>
               <button
+                disabled={isPending}
                 type="submit"
-                className="px-3  py-3 min-w-[125px] bg-primary text-white rounded-full text-sm font-medium"
+                className="px-3  py-3 min-w-[125px] bg-primary text-white rounded-full flex justify-center items-center text-sm font-medium disabled:opacity-65"
               >
-                Add Product
+                {isPending ? <Loader2 size={16} className='animate-spin'/> : 'Add Product'}
               </button>
             </DialogFooter>
           </form>

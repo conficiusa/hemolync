@@ -9,17 +9,17 @@ import { newRequestSchema } from '@/lib/schemas/requests/new-request.schema'
 import SelectComponent from '@/components/select-component'
 import { bloodProducts, bloodTypes } from '@/lib/constants/blood-products'
 import { TextInput } from '@/components/textInputBuilder'
-import { priority } from '@/lib/constants/requuests'
+import { priority } from '@/lib/constants/requests'
 import { fetchBloodBanksQuery } from '@/lib/data/queries/facilities/fetch-facilities'
 import { TextAreaInput } from '@/components/textarea-input'
-import useMutateDistribution from '@/lib/data/mutations/mutate-requests'
+import useMutateRequest from '@/lib/data/mutations/mutate-requests'
 
 export type newRequestSchemaData = z.infer<typeof newRequestSchema>
 export const BloodRequestFiltersSection = () => {
   const { data: bloodbanks } = useSuspenseQuery(fetchBloodBanksQuery)
   const {
-    addDistributionMutation: { mutate },
-  } = useMutateDistribution()
+    addRequestMutation: { mutate },
+  } = useMutateRequest()
 
   const {
     control,
@@ -29,7 +29,7 @@ export const BloodRequestFiltersSection = () => {
   } = useForm<newRequestSchemaData>({
     resolver: zodResolver(newRequestSchema),
     defaultValues: {
-      blood_product: 'Whole blood',
+      blood_product: '',
       quantity: 0,
       blood_type: '',
       blood_product_id: '',
@@ -49,6 +49,8 @@ export const BloodRequestFiltersSection = () => {
     })
   }
 
+  console.log(errors)
+
   return (
     <main className="grid grid-cols-2">
       <Card className="flex flex-col rounded-3xl bg-white col-span-2 border-0 shadow-none xl:col-span-1">
@@ -61,15 +63,17 @@ export const BloodRequestFiltersSection = () => {
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <SelectComponent
-                  placeholder="Select Product"
+                  name="blood_product"
+                  placeholder="Select Blood Product"
                   control={control}
-                  items={bloodProducts}
+                  items={bloodProducts.map((item) => {
+                    return { label: item.label, value: item.label }
+                  })}
                   label="Blood Product"
-                  name="blood_product_id"
-                  error={errors.blood_product_id?.message}
+                  error={errors.blood_product?.message}
                 />
                 <SelectComponent
-                  placeholder="Select"
+                  placeholder="Select Blood Type"
                   control={control}
                   items={bloodTypes}
                   label="Blood Type"
