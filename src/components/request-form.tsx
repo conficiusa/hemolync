@@ -32,8 +32,9 @@ export const BloodRequestFiltersSection = () => {
       blood_product: '',
       quantity: 0,
       blood_type: '',
-      blood_product_id: '',
       dispatched_to_id: '',
+      priority: '',
+      notes: '',
     },
   })
 
