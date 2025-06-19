@@ -28,7 +28,8 @@ const TablePagination = memo((props: TablePaginationProps) => {
   const handleChange = (page: number) => {
     if (onPageChange) onPageChange(page)
   }
-
+  
+  if (total_pages === 1) return null
   return (
     <Pagination className="mt-6">
       <PaginationContent>
