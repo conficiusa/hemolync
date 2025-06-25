@@ -53,7 +53,7 @@ const TableRow = memo(({ user }: { user: User }) => (
     </td>
     <td className="py-4 px-4">
       <div className="flex items-center gap-2">
-        <DeleteUserDialog />
+        <DeleteUserDialog id={user.id} />
         <EditUserDialog
           user={{
             id: user.id,

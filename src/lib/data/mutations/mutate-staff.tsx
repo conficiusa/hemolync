@@ -9,7 +9,8 @@ const addStaff = async (data: UserInviteFormData) => {
 }
 
 const editStaff = async (data: EditUserFormData & { id: string }) => {
-  const res = await protectedApi.patch(`/users/update-account`, data)
+  const { id, ...rest } = data
+  const res = await protectedApi.patch(`/users/update-account/${id}`, rest)
   return res.data
 }
 

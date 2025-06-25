@@ -1,5 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { Trash2 } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogClose,
@@ -8,13 +10,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { useMutateStaff } from '@/lib/data/mutations/mutate-staff'
 
-export const DeleteUserDialog = memo(function DeleteUserDialog() {
+export const DeleteUserDialog = memo(function DeleteUserDialog({
+  id,
+}: {
+  id: string
+}) {
+  const {
+    deleteStaffMutation: { mutate },
+  } = useMutateStaff()
+  const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleOpen = useCallback(() => setIsOpen(true), [])
   const handleOpenChange = useCallback((open: boolean) => setIsOpen(open), [])
 
+  const handleDelete = () => {
+    mutate(id, {
+      onSuccess: () => {
+        toast.success('User deleted successfully')
+        queryClient.invalidateQueries({ queryKey: ['staff'] })
+      },
+      onError: () => {
+        toast.error('Failed to delete user')
+      },
+    })
+  }
   return (
     <>
       <button
@@ -49,6 +71,7 @@ export const DeleteUserDialog = memo(function DeleteUserDialog() {
             <button
               type="button"
               className="flex-1 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium"
+              onClick={handleDelete}
             >
               Remove
             </button>
