@@ -52,7 +52,7 @@ const EditProductDialog = memo(
         expiry_date: product.expiry_date,
         quantity: product.quantity,
         blood_type: product.blood_type,
-        added_by: user.name,
+        added_by: user.first_name + ' ' + user.last_name,
       },
     })
 
