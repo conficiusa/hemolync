@@ -1,26 +1,17 @@
-import {
-  ClipboardList,
-  FileText,
-  LayoutDashboard,
-  LineChart,
-  LogOut,
-  MessageSquare,
-  Settings,
-  Users,
-  Zap,
-} from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { memo } from 'react'
+import { getRouteApi } from '@tanstack/react-router'
+import { LogOut, Settings, Zap } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { LogoutDialog } from '@/components/logout-dialog'
-import { NavItem } from '@/components/nav-item'
-import { session } from '@/lib/data/queries/auth/refresh'
+import NavItem from '@/components/nav-item'
+import { DashboardNavItems } from '@/lib/constants/system'
 
-const DashboardSidebar = () => {
-  const { data, error, isLoading } = useQuery(session)
+const DashboardSidebar = memo(() => {
+  const router = getRouteApi('/dashboard')
+  const { user } = router.useLoaderData()
 
-  if (isLoading || error) return
   return (
     <aside className="w-68 bg-white lg:flex flex-col border-r fixed h-screen hidden">
       {/* Logo */}
@@ -36,38 +27,24 @@ const DashboardSidebar = () => {
       <ScrollArea>
         <div className="h-[calc(100dvh_-_100px)] flex flex-col justify-between">
           {/* Navigation */}
-          <nav>
-            <NavItem
-              href="/dashboard"
-              icon={<LayoutDashboard size={20} />}
-              text="Dashboard"
-              exact
-            />
-            <NavItem
-              href="/dashboard/inventory"
-              icon={<ClipboardList size={20} />}
-              text="Inventory"
-            />
-            <NavItem
-              href="/dashboard/request-management"
-              icon={<LineChart size={20} />}
-              text="Request Management"
-            />
-            {data?.user.role === 'facility_administrator' && (
-              <NavItem
-                href="/dashboard/staff-management"
-                icon={<Users size={20} />}
-                text="Staff Management"
-              />
-            )}
-            <NavItem
-              href="#"
-              icon={<MessageSquare size={20} />}
-              text="Chatroom"
-            />
-            <NavItem href="#" icon={<FileText size={20} />} text="Report" />
+          <nav className="space-y-1">
+            {DashboardNavItems.map((item) => {
+              if (
+                item.href === '/dashboard/staff-management' &&
+                user.role !== 'facility_administrator'
+              )
+                return null
+              return (
+                <NavItem
+                  key={item.href}
+                  href={item.href}
+                  icon={item.icon}
+                  text={item.label}
+                  exact={item.href === '/dashboard'}
+                />
+              )
+            })}
           </nav>
-
           {/* Support */}
           <div>
             <div className="mx-3 mt-10">
@@ -93,12 +70,12 @@ const DashboardSidebar = () => {
 
             {/* Bottom Navigation */}
             <div className="mt-4 mb-6">
-              <div className="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-gray-600 hover:bg-muted">
-                <Settings size={20} className="text-gray-600 mx-2" />
-                <span className="text-sm font-medium text-gray-600">
-                  Settings
-                </span>
-              </div>
+              <NavItem
+                href="/dashboard/settings/"
+                icon={<Settings />}
+                text="Settings"
+                className='!px-10'
+              />
               <LogoutDialog>
                 <div className="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-gray-600 hover:bg-muted">
                   <LogOut size={20} className="text-gray-600 mx-2" />
@@ -113,6 +90,6 @@ const DashboardSidebar = () => {
       </ScrollArea>
     </aside>
   )
-}
+})
 
 export default DashboardSidebar

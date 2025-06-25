@@ -1,11 +1,12 @@
+import { memo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { UserIcon } from 'lucide-react'
-import { NotificationsPanel } from '@/components/notifications'
+import NotificationsPanel from '@/components/notifications'
 import { getReadableRole } from '@/lib/utils'
 import { session } from '@/lib/data/queries/auth/refresh'
 import DashboardMobileSidebar from '@/components/dashboard-mobile-sidebar'
 
-const DashboardHeader = () => {
+const DashboardHeader = memo(() => {
   const { data } = useSuspenseQuery(session)
   const { user } = data
   const { facility } = user
@@ -26,7 +27,7 @@ const DashboardHeader = () => {
               <span className="w-2 h-2 absolute bg-green-600 rounded-full bottom-0 right-0 border-2 border-white" />
             </div>
             <div>
-              <p className="text-sm font-medium">{user.name.split(' ')[1]}</p>
+              <p className="text-sm font-medium">{user.first_name}</p>
               <p className="text-xs text-gray-500">
                 {getReadableRole(user.role as string)}
               </p>
@@ -36,10 +37,9 @@ const DashboardHeader = () => {
           <NotificationsPanel />
         </div>
         {/* Mobile sidebar toggle */}
-        <DashboardMobileSidebar session={data} />
+        <DashboardMobileSidebar user={user} />
       </header>
     </div>
   )
-}
-
+})
 export default DashboardHeader

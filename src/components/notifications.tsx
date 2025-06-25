@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { Bell } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -13,7 +13,7 @@ interface Notification {
   isSelected?: boolean
 }
 
-export function NotificationsPanel() {
+const NotificationsPanel = memo(() => {
   const [activeTab, setActiveTab] = useState<'unread' | 'all'>('all')
   const [notifications, setNotifications] = useState<Array<Notification>>([
     {
@@ -23,51 +23,6 @@ export function NotificationsPanel() {
         "I have not yet arrived there, I haven't reached where I want to be, I have the feeling of having the best so far though I'm not there yet buh the Bible said it has not yet appeared like what we shall look like",
       time: '13min ago',
       isUnread: true,
-      isSelected: true,
-    },
-    {
-      id: 2,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "Sure. God has a lot installed for us. It's a matter of time and proper alignment",
-      time: '13min ago',
-      isUnread: false,
-      isSelected: true,
-    },
-    {
-      id: 3,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "Sure. God has a lot installed for us. It's a matter of time and proper alignment",
-      time: '13min ago',
-      isUnread: false,
-      isSelected: true,
-    },
-    {
-      id: 4,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "Sure. God has a lot installed for us. It's a matter of time and proper alignment",
-      time: '13min ago',
-      isUnread: false,
-      isSelected: true,
-    },
-    {
-      id: 5,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "Sure. God has a lot installed for us. It's a matter of time and proper alignment",
-      time: '13min ago',
-      isUnread: false,
-      isSelected: true,
-    },
-    {
-      id: 6,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "Sure. God has a lot installed for us. It's a matter of time and proper alignment",
-      time: '13min ago',
-      isUnread: false,
       isSelected: true,
     },
   ])
@@ -239,4 +194,7 @@ export function NotificationsPanel() {
       </SheetContent>
     </Sheet>
   )
-}
+})
+
+NotificationsPanel.displayName = 'NotificationsPanel'
+export default NotificationsPanel

@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { DropletOff, Plus } from 'lucide-react'
 import { AddBloodDialog } from '@/components/add-blood-products'
 
-export function InventoryTableEmpty() {
+const InventoryTableEmpty = memo(() => {
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
       <div className="flex items-center justify-center rounded-full bg-muted p-4">
@@ -23,4 +24,7 @@ export function InventoryTableEmpty() {
       </AddBloodDialog>
     </div>
   )
-}
+})
+
+InventoryTableEmpty.displayName = 'InventoryTableEmpty'
+export default InventoryTableEmpty

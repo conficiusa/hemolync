@@ -116,6 +116,9 @@ export const getReadableRole = (role: string) => {
       return 'Staff'
     case 'facility_administrator':
       return 'Admin'
+    case 'lab_manager':
+      return 'Lab Manager'
+
     default:
       return 'Unknown'
   }

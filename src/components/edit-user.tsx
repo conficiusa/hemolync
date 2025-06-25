@@ -1,8 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Pencil } from 'lucide-react'
-import type { Staff } from '@/lib/types/user-types'
+import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
 import type { EditUserFormData } from '@/lib/schemas/user-schemas/user-edit.schema'
+import type { User } from '@/lib/types/system-types'
 import {
   Dialog,
   DialogClose,
@@ -16,26 +18,51 @@ import { Label } from '@/components/ui/label'
 import SelectDropdown from '@/components/selectDropdown'
 import { UserEditSchema } from '@/lib/schemas/user-schemas/user-edit.schema'
 import { TextInput } from '@/components/textInputBuilder'
+import { useMutateStaff } from '@/lib/data/mutations/mutate-staff'
 
-export function EditUserDialog({ user }: { user: Pick<Staff, 'email' | 'name' | 'role' | 'id'> }) {
+export function EditUserDialog({
+  user,
+}: {
+  user: Pick<
+    User,
+    'email' | 'first_name' | 'last_name' | 'role' | 'id' | 'phone'
+  >
+}) {
+  const queryClient = useQueryClient()
+  const {
+    editStaffMutation: { mutate },
+  } = useMutateStaff()
   const {
     control,
     handleSubmit,
     setValue,
     setError,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm<EditUserFormData>({
     resolver: zodResolver(UserEditSchema),
     defaultValues: {
       email: user.email,
-      name: user.name,
+      phone: user.phone,
+      first_name: user.first_name,
+      last_name: user.last_name,
       role: user.role,
     },
   })
 
   const onSubmit = (data: EditUserFormData) => {
-    console.log(data)
+    mutate(
+      { ...data, id: user.id },
+      {
+        onSuccess: () => {
+          toast.success('User updated successfully')
+          queryClient.invalidateQueries({ queryKey: ['staff'] })
+        },
+        onError: () => {
+          toast.error('Failed to update user')
+        },
+      },
+    )
   }
   const handleRoleChange = (value: string) => {
     setValue('role', value)
@@ -59,10 +86,17 @@ export function EditUserDialog({ user }: { user: Pick<Staff, 'email' | 'name' | 
             <div className="grid grid-cols-2 gap-3">
               <TextInput
                 control={control}
-                name="name"
-                label="Username"
-                placeholder="Enter username"
-                error={errors.name?.message}
+                name="first_name"
+                label="First Name"
+                placeholder="Enter first name"
+                error={errors.first_name?.message}
+              />
+              <TextInput
+                control={control}
+                name="last_name"
+                label="Last Name"
+                placeholder="Enter last name"
+                error={errors.last_name?.message}
               />
             </div>
             <TextInput
@@ -72,6 +106,14 @@ export function EditUserDialog({ user }: { user: Pick<Staff, 'email' | 'name' | 
               label="Email Address"
               placeholder="Enter user's email address"
               error={errors.email?.message}
+            />
+            <TextInput
+              control={control}
+              name="phone"
+              type="tel"
+              label="Phone Number"
+              placeholder="Enter user's phone number"
+              error={errors.phone?.message}
             />
             <div className="space-y-2">
               <Label
@@ -99,6 +141,7 @@ export function EditUserDialog({ user }: { user: Pick<Staff, 'email' | 'name' | 
             </DialogClose>
             <button
               type="submit"
+              disabled={!isDirty || isSubmitting}
               className="px-3  py-3 min-w-[125px] bg-primary text-white rounded-full text-sm font-medium"
             >
               Save Changes

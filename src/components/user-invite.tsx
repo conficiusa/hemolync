@@ -37,7 +37,8 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
     resolver: zodResolver(UserInviteSchema),
     defaultValues: {
       email: '',
-      name: '',
+      first_name: '',
+      last_name: '',
       phone: '',
       password: '2006Adda',
       password_confirm: '2006Adda',
@@ -77,13 +78,22 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
             className="h-fit max-h-[450px]"
           >
             <div className="p-4 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
               <TextInput
                 control={control}
-                name="name"
-                label="Username"
-                placeholder="Enter username"
-                error={errors.name?.message}
+                name="first_name"
+                label="First Name"
+                placeholder="Enter first name"
+                error={errors.first_name?.message}
+                />
+              <TextInput
+                control={control}
+                name="last_name"
+                label="Last Name"
+                placeholder="Enter last name"
+                error={errors.last_name?.message}
               />
+              </div>
 
               <TextInput
                 control={control}

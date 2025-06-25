@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+import { useNavigate } from '@tanstack/react-router'
 import {
   Dialog,
   DialogClose,
@@ -7,12 +9,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useAuth } from '@/lib/data/mutations/mutate-auth'
 
 interface LogoutDialogProps {
   children: React.ReactNode
 }
 
 export function LogoutDialog({ children }: LogoutDialogProps) {
+  const {
+    logout: { mutate },
+  } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        navigate({
+          to: '/auth/login',
+        })
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.detail || 'Failed to logout')
+      },
+    })
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -37,6 +57,7 @@ export function LogoutDialog({ children }: LogoutDialogProps) {
           <button
             type="button"
             className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium"
+            onClick={handleLogout}
           >
             Log out
           </button>

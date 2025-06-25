@@ -8,11 +8,13 @@ import type { z } from 'zod'
 import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
 import { Button } from '@/components/ui/button'
 import { handleRedirectNavigation } from '@/lib/utils'
-import { useLogin } from '@/lib/data/mutations/login'
+import { useAuth } from '@/lib/data/mutations/mutate-auth'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
 export default function LoginForm() {
-  const { mutate: login, isPending } = useLogin()
+  const {
+    login: { mutate, isPending },
+  } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const {
@@ -27,9 +29,9 @@ export default function LoginForm() {
     },
   })
 
-  const onSubmit = handleSubmit(async (data: LoginFormData) => {
+  const onSubmit = handleSubmit((data: LoginFormData) => {
     const toastId = toast.loading('Logging in...')
-    login(data, {
+    mutate(data, {
       onSuccess: () => {
         toast.dismiss(toastId)
         handleRedirectNavigation(location, navigate, '/dashboard')

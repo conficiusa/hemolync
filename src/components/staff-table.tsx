@@ -1,7 +1,7 @@
+import { format } from 'date-fns'
 import { memo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import type { Staff } from '@/lib/types/user-types'
-import type { Role } from '@/lib/types/system-types'
+import type { Role, User } from '@/lib/types/system-types'
 import { StaffTableEmpty } from '@/components/staff-table-empty'
 import { DeleteUserDialog } from '@/components/delete-user'
 import { EditUserDialog } from '@/components/edit-user'
@@ -20,19 +20,35 @@ const getRoleBadgeClass = (role: Role) => {
   }
 }
 
-const TableRow = memo(({ user }: { user: Staff }) => (
+const TableRow = memo(({ user }: { user: User }) => (
   <tr className="border-b border-gray-100 hover:bg-gray-100">
-    <td className="py-4 px-4 text-sm text-gray-500">{user.name}</td>
+    <td className="py-4 px-4 text-sm text-gray-500">
+      {user.first_name} {user.last_name}
+    </td>
     <td className="py-4 px-4 text-sm text-gray-500">{user.email}</td>
-    <td className="py-4 px-4 text-sm text-gray-500">{user.created_at}</td>
-    <td className="py-4 px-4 text-sm text-gray-500">{user.last_login || 'N/A'}</td>
+    <td className="py-4 px-4 text-sm text-gray-500">
+      {format(user.created_at, 'MMM d, yyyy')}
+    </td>
+    <td className="py-4 px-4 text-sm text-gray-500">
+      {user.last_login ? format(user.last_login, 'MMM d, yyyy') : 'N/A'}
+    </td>
     <td className="py-4 px-4">
       <span
         className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getRoleBadgeClass(
           user.role,
         )}`}
       >
-        {user.role}
+        {user.role
+          .split('_')
+          .join(' ')
+          .replace('facility', 'Facility')
+          .charAt(0)
+          .toUpperCase() +
+          user.role
+            .split('_')
+            .join(' ')
+            .replace('facility', 'Facility')
+            .slice(1)}
       </span>
     </td>
     <td className="py-4 px-4">
@@ -41,9 +57,11 @@ const TableRow = memo(({ user }: { user: Staff }) => (
         <EditUserDialog
           user={{
             id: user.id,
-            name: user.name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,
             role: user.role,
+            phone: user.phone,
           }}
         />
       </div>

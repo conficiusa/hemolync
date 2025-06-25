@@ -14,11 +14,14 @@ export interface AuthContextType {
 }
 export interface User {
   id: string
-  name: string
+  first_name: string
+  last_name: string
   email: string
-  role: 'staff' | 'facility_administrator'
+  role: Role
   phone?: string
   image?: string
+  created_at: string
+  last_login: string | null
   emailVerified: boolean
 }
 export type BloodBank = {

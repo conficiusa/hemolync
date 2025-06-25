@@ -2,7 +2,7 @@ import { memo, useState, useTransition } from 'react'
 import { ChevronsUpDown, Pencil, Trash2 } from 'lucide-react'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { InventoryTableEmpty } from './inventory-table-empty'
+import  InventoryTableEmpty  from './inventory-table-empty'
 import type { BloodProduct } from '@/lib/types/product.types'
 import type {
   ProductSortBy,

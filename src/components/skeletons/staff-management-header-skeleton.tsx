@@ -7,7 +7,7 @@ export default function StaffManagementHeaderSkeleton() {
         <Skeleton className="h-6 w-16" />
         <Skeleton className="h-6 w-20 rounded-full" />
       </div>
-      <div className="flex items-center max-md:justify-between gap-3 w-full">
+      <div className="flex items-center max-md:justify-between gap-3 w-full md:w-auto">
         <div className="relative">
           <Skeleton className="h-10 max-sm:w-[250px] md:w-[300px] rounded-lg" />
         </div>

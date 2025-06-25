@@ -1,8 +1,13 @@
 import { z } from 'zod'
+import { isValidPhoneNumber } from 'libphonenumber-js'
 
 export const UserEditSchema = z.object({
-  name: z.string().min(1, 'Username is required'),
   role: z.string().min(1, 'User role is required'),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required').refine((val) => isValidPhoneNumber(val, 'GH'), {
+    message: 'Invalid phone number',
+  }),
   email: z
     .string()
     .min(1, 'Email address is required')
