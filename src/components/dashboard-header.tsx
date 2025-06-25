@@ -21,9 +21,9 @@ const DashboardHeader = memo(() => {
           <img src="/logo.png" alt="HemoLync Logo" width={120} height={100} />
         </div>
         <div className="items-center gap-4 lg:flex hidden">
-          <div className="flex items-center gap-2 bg-muted-foreground/20 px-2  pr-6 py-1 rounded-full">
-            <div className="relative w-8 h-8 rounded-full bg-muted-foreground/40 flex items-center justify-center">
-              <UserIcon size={16} className="text-muted-foreground" />
+          <div className="flex items-center gap-2 bg-muted-foreground/10 px-2  pr-6 py-1 rounded-full">
+            <div className="relative w-8 h-8 rounded-full bg-primary-accent flex items-center justify-center">
+              <UserIcon size={16} className="text-primary-accent-foreground" />
               <span className="w-2 h-2 absolute bg-green-600 rounded-full bottom-0 right-0 border-2 border-white" />
             </div>
             <div>
