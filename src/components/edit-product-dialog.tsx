@@ -83,7 +83,7 @@ const EditProductDialog = memo(
             <DialogTitle className="text-xl font-semibold">
               Edit Blood Product
             </DialogTitle>
-            <DialogDescription className='sr-only'>
+            <DialogDescription className="sr-only">
               fill the form to edit the blood product
             </DialogDescription>
           </DialogHeader>

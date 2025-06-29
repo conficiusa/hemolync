@@ -25,7 +25,6 @@ const DeleteProductDialog = memo(function DeleteProductDialog({
   product,
   onDeleted,
 }: DeleteProductDialogProps) {
-  
   const {
     deleteProductMutation: { mutate: deleteProduct, isPending },
   } = useMutateProduct()

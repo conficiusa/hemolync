@@ -71,7 +71,7 @@ export function DatePicker({
                   onSelect={(date) =>
                     field.onChange(date ? date.toISOString() : '')
                   }
-                  initialFocus
+                  autoFocus
                   disabled={disabled}
                 />
               </PopoverContent>

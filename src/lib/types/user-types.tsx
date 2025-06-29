@@ -19,4 +19,3 @@ export type Staff = {
   created_at: string
   last_login: string | null
 }
-

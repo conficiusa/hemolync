@@ -2,12 +2,12 @@ import { memo, useState, useTransition } from 'react'
 import { ChevronsUpDown, Pencil, Trash2 } from 'lucide-react'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import  InventoryTableEmpty  from './inventory-table-empty'
-import type { BloodProduct } from '@/lib/types/product.types'
+import InventoryTableEmpty from './inventory-table-empty'
 import type {
+  BloodProduct,
   ProductSortBy,
   ProductSortOrder,
-} from '@/lib/data/queries/inventory/fetch-products'
+} from '@/lib/types/product.types'
 import { fetchProductsQuery } from '@/lib/data/queries/inventory/fetch-products'
 import { Checkbox } from '@/components/ui/checkbox'
 import { EditProductDialog } from '@/components/edit-product-dialog'
@@ -46,10 +46,12 @@ const InventoryTable = memo(() => {
   const [sortBy, setSortBy] = useState<ProductSortBy>('created_at')
   const [sortOrder, setSortOrder] = useState<ProductSortOrder>('asc')
   const [, startTransition] = useTransition()
-  const { data,isFetching } = useSuspenseQuery(fetchProductsQuery(page, sortBy, sortOrder))
+  const { data, isFetching } = useSuspenseQuery(
+    fetchProductsQuery(page, sortBy, sortOrder),
+  )
   const queryClient = useQueryClient()
 
-  const pagination =() => {
+  const pagination = () => {
     const { items, ...rest } = data
     return rest
   }

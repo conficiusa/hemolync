@@ -74,10 +74,9 @@ const DashboardSidebar = memo(() => {
                 href="/dashboard/settings/"
                 icon={<Settings />}
                 text="Settings"
-                className='!px-10'
               />
               <LogoutDialog>
-                <div className="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-gray-600 hover:bg-muted">
+                <div className="flex items-center gap-3 px-2 py-3 mx-2 rounded-lg text-gray-600 hover:bg-muted">
                   <LogOut size={20} className="text-gray-600 mx-2" />
                   <span className="text-sm font-medium text-gray-600">
                     Logout

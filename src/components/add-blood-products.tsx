@@ -115,7 +115,11 @@ const AddBloodDialog = memo(
                       label="Expiration Date"
                       placeholder="enter number of days"
                       error={errors.expiry_date?.message}
-                      description="Expires on"
+                      description="Expires"
+                      disabled={(date) => {
+                        const today = new Date()
+                        return date < today
+                      }}
                     />
                   </div>
                 </div>

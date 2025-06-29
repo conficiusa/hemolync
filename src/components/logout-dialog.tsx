@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import { useNavigate } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   Dialog,
   DialogClose,
@@ -9,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useAuth } from '@/lib/data/mutations/mutate-auth'
+import useAuth from '@/lib/data/mutations/mutate-auth'
 
 interface LogoutDialogProps {
   children: React.ReactNode
@@ -20,10 +21,12 @@ export function LogoutDialog({ children }: LogoutDialogProps) {
     logout: { mutate },
   } = useAuth()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleLogout = () => {
     mutate(undefined, {
       onSuccess: () => {
+        queryClient.removeQueries()
         navigate({
           to: '/auth/login',
         })

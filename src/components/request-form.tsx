@@ -1,8 +1,10 @@
+import { memo } from 'react'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { z } from 'zod'
+import type { BloodProduct, bloodType } from '@/lib/types/product.types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { newRequestSchema } from '@/lib/schemas/requests/new-request.schema'
@@ -15,8 +17,7 @@ import { TextAreaInput } from '@/components/textarea-input'
 import useMutateRequest from '@/lib/data/mutations/mutate-requests'
 
 export type newRequestSchemaData = z.infer<typeof newRequestSchema>
-export const BloodRequestFiltersSection = () => {
-  const { data: bloodbanks } = useSuspenseQuery(fetchBloodBanksQuery)
+const BloodRequestForm = memo(() => {
   const {
     addRequestMutation: { mutate },
   } = useMutateRequest()
@@ -24,19 +25,28 @@ export const BloodRequestFiltersSection = () => {
   const {
     control,
     handleSubmit,
+    watch,
     reset,
     formState: { errors },
   } = useForm<newRequestSchemaData>({
     resolver: zodResolver(newRequestSchema),
     defaultValues: {
-      blood_product: '',
-      quantity: 0,
-      blood_type: '',
-      dispatched_to_id: '',
+      blood_product: 'Cryoprecipitate',
+      quantity_requested: 0,
+      blood_type: 'A+',
+      blood_bank_id: '',
       priority: '',
       notes: '',
     },
   })
+  const { data: bloodbanks } = useSuspenseQuery(
+    fetchBloodBanksQuery({
+      blood_product: watch('blood_product') as unknown as BloodProduct,
+      blood_type: watch('blood_type') as unknown as bloodType,
+    }),
+  )
+
+  console.log(bloodbanks)
 
   const onSubmit = (data: newRequestSchemaData) => {
     mutate(data, {
@@ -89,7 +99,7 @@ export const BloodRequestFiltersSection = () => {
                   label="Quantity"
                   type="number"
                   placeholder="quantity"
-                  error={errors.quantity?.message}
+                  error={errors.quantity_requested?.message}
                 />
                 <SelectComponent
                   placeholder="Priority"
@@ -100,22 +110,13 @@ export const BloodRequestFiltersSection = () => {
                   error={errors.priority?.message}
                 />
               </div>
-              <SelectComponent
-                placeholder="Select Facility"
-                control={control}
-                items={bloodbanks.map((item) => {
-                  return { label: item.facility_name, value: item.id }
-                })}
-                label="Select Facility"
-                name="dispatched_to_id"
-                error={errors.dispatched_to_id?.message}
-              />
               <TextAreaInput
                 control={control}
                 label="Additional Information"
                 name="notes"
                 error={errors.notes?.message}
                 placeholder="Additional Information"
+                className="resize-none"
                 rows={3}
               />
             </div>
@@ -137,4 +138,8 @@ export const BloodRequestFiltersSection = () => {
       </Card>
     </main>
   )
-}
+})
+
+BloodRequestForm.displayName = 'BloodRequestForm'
+
+export default BloodRequestForm

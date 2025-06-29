@@ -19,7 +19,7 @@ export const Route = createFileRoute('/dashboard/staff-management')({
   loader: ({ context: { queryClient } }) => {
     queryClient.prefetchQuery(fetchStaffQuery())
   },
-  errorComponent: ErrorBoundary
+  errorComponent: ErrorBoundary,
 })
 
 function StaffManagementpage() {

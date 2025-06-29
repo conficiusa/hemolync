@@ -13,11 +13,11 @@ export const Route = createFileRoute('/dashboard/(card-routes)/inventory')({
       </div>
     )
   },
-  errorComponent: ErrorBoundary,
   loader: ({ context }) => {
     const { queryClient } = context
     queryClient.prefetchQuery(fetchProductsQuery())
   },
+  errorComponent: ErrorBoundary,
 })
 
 function InventoryPage() {

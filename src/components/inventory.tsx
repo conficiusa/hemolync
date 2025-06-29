@@ -12,7 +12,6 @@ const Inventory = memo(() => {
           <Suspense fallback={<InventoryHeaderSkeleton />}>
             <InventoryHeader />
           </Suspense>
-
           <Suspense fallback={<InventoryTableSkeleton />}>
             <div className="overflow-x-auto max-w-[calc(100vw_-_120px)]">
               <InventoryTable />

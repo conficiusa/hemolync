@@ -2,8 +2,6 @@ import { memo } from 'react'
 import NavItem from '@/components/nav-item'
 import { SettingsNavigationItems } from '@/lib/constants/system'
 
-
-
 export const SettingsSidebar = memo(() => {
   return (
     <div className="h-full">

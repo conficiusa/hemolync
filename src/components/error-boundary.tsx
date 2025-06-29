@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useQueryErrorResetBoundary } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 
-export default function ErrorBoundary({ error }: { error: any }) {
+export default function ErrorBoundary({ error }: { error?: any }) {
   const router = useRouter()
   const { reset } = useQueryErrorResetBoundary()
 
@@ -23,7 +23,7 @@ export default function ErrorBoundary({ error }: { error: any }) {
           Error loading data
         </h3>
         <p className="text-sm text-muted-foreground max-w-md">
-          {error?.data?.detail ?? 'Something went wrong.'}
+          {error?.data?.detail || error?.message || 'Something went wrong.'}
         </p>
       </div>
       <Button

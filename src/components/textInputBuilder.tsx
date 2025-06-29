@@ -110,7 +110,8 @@ export const TextInput = memo(
   (prevProps, nextProps) => {
     return (
       prevProps.control === nextProps.control &&
-      prevProps.name === nextProps.name
+      prevProps.name === nextProps.name &&
+      prevProps.error === nextProps.error
     )
   },
 )

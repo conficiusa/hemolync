@@ -20,7 +20,6 @@ export const Route = createFileRoute('/dashboard/request-management/')({
   validateSearch: (search) => RequestTabSchema.parse(search),
 })
 
-
 export default function TrackingPage() {
-  return <Tracking/>
+  return <Tracking />
 }

@@ -9,7 +9,6 @@ body {
   @apply m-0 font-inter;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 }
 
 code {
@@ -18,15 +17,9 @@ code {
 }
 
 @theme inline {
-  --font-inter: "Inter", -apple-system, BlinkMacSystemFont,
-    'Segoe UI',
-    'Roboto',
-    'Oxygen',
-    'Ubuntu',
-    'Cantarell',
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
+  --font-inter:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

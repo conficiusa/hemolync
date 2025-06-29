@@ -1,21 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
-import { protectedApi } from '@/lib/server/protected-api'
+import productsService from '@/lib/services/products.service'
 
-const addProduct = async (data: any) => {
-  const response = await protectedApi.post('/blood-inventory/', data)
-  return response
-}
-
-const updateProduct = async (data: any) => {
-  const response = await protectedApi.patch(`/blood-inventory/${data.id}`, data)
-  return response
-}
-
-const deleteProduct = async (id: string) => {
-  const response = await protectedApi.delete(`/blood-inventory/${id}`)
-  return response
-}
-
+const { addProduct, updateProduct, deleteProduct } = productsService
 const useMutateProduct = () => {
   // add product
   const addProductMutation = useMutation({

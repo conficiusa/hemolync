@@ -49,7 +49,7 @@ const TrackingTabs = memo(() => {
   return (
     <Tabs defaultValue={active} onValueChange={handleTabChange}>
       <div className="flex justify-between items-center md:mb-6 mb-3">
-        <div className='min-w-[200px] md:hidden'>
+        <div className="min-w-[200px] md:hidden">
           <SelectDropdown
             selected={active}
             setSelected={handleTabChange}

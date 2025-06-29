@@ -7,7 +7,7 @@ import type { User } from '@/lib/types/system-types'
 import type { UserProfileSchemaData } from '@/lib/schemas/user-schemas/user-profile.schema'
 import { userProfileSchema } from '@/lib/schemas/user-schemas/user-profile.schema'
 import { TextInput } from '@/components/textInputBuilder'
-import { useAuth } from '@/lib/data/mutations/mutate-auth'
+import useAuth from '@/lib/data/mutations/mutate-auth'
 
 export const UserProfile = ({ user }: { user: User }) => {
   const queryClient = useQueryClient()
@@ -37,15 +37,18 @@ export const UserProfile = ({ user }: { user: User }) => {
   })
 
   const onSubmit = (data: UserProfileSchemaData) => {
-    mutate(data, {
-      onSuccess: () => {
-        toast.success('Profile updated successfully')
-        queryClient.invalidateQueries({ queryKey: ['session'] })
+    mutate(
+      { ...data, id: user.id },
+      {
+        onSuccess: () => {
+          toast.success('Profile updated successfully')
+          queryClient.invalidateQueries({ queryKey: ['session'] })
+        },
+        onError: () => {
+          toast.error('Failed to update profile')
+        },
       },
-      onError: () => {
-        toast.error('Failed to update profile')
-      },
-    })
+    )
   }
 
   return (

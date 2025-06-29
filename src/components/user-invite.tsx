@@ -46,7 +46,6 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
     },
   })
 
-
   const onSubmit = (data: UserInviteFormData) => {
     addStaffMutation.mutate(data, {
       onSuccess: () => {
@@ -54,7 +53,7 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
         reset()
         queryClient.invalidateQueries({ queryKey: ['staff'] })
       },
-      onError: (err:any) => {
+      onError: (err: any) => {
         toast.error(err.response?.data?.detail || 'Failed to invite user')
       },
     })
@@ -79,20 +78,20 @@ const InviteUserDialog = memo(({ children }: { children: React.ReactNode }) => {
           >
             <div className="p-4 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-              <TextInput
-                control={control}
-                name="first_name"
-                label="First Name"
-                placeholder="Enter first name"
-                error={errors.first_name?.message}
+                <TextInput
+                  control={control}
+                  name="first_name"
+                  label="First Name"
+                  placeholder="Enter first name"
+                  error={errors.first_name?.message}
                 />
-              <TextInput
-                control={control}
-                name="last_name"
-                label="Last Name"
-                placeholder="Enter last name"
-                error={errors.last_name?.message}
-              />
+                <TextInput
+                  control={control}
+                  name="last_name"
+                  label="Last Name"
+                  placeholder="Enter last name"
+                  error={errors.last_name?.message}
+                />
               </div>
 
               <TextInput

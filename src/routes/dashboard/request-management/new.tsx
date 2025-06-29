@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
-import { BloodRequestFiltersSection } from '@/components/request-form'
+import BloodRequestForm from '@/components/request-form'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { fetchBloodBanksQuery } from '@/lib/data/queries/facilities/fetch-facilities'
 
 const RequestTabSchema = z.object({
   from: z
@@ -19,9 +19,6 @@ const RequestTabSchema = z.object({
 export const Route = createFileRoute('/dashboard/request-management/new')({
   validateSearch: (search) => RequestTabSchema.parse(search),
   component: RouteComponent,
-  loader: async ({ context: { queryClient } }) => {
-    return await queryClient.ensureQueryData(fetchBloodBanksQuery)
-  },
 })
 
 function RouteComponent() {
@@ -51,7 +48,7 @@ function RouteComponent() {
       </Breadcrumb>
 
       {/* Blood request filters section */}
-      <BloodRequestFiltersSection />
+      <BloodRequestForm />
     </main>
   )
 }

@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { differenceInDays, isPast, isSameDay, startOfDay } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 import { toast } from 'sonner'
 import { redirect } from '@tanstack/react-router'
@@ -161,4 +162,44 @@ export const generatePages = (current: number, total: number) => {
   pages.push(total)
 
   return pages
+}
+
+export const formatDate = (date: Date | undefined) => {
+  if (!date) {
+    return ''
+  }
+
+  return date.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+export const formatDateDescription = (date: Date | undefined) => {
+  if (!date) {
+    return ''
+  }
+
+  const today = startOfDay(new Date())
+  const targetDate = startOfDay(date)
+
+  if (isSameDay(today, targetDate)) {
+    return 'today'
+  }
+
+  const daysDifference = differenceInDays(targetDate, today)
+
+  if (isPast(targetDate)) {
+    const absoluteDays = Math.abs(daysDifference)
+    if (absoluteDays === 1) {
+      return 'yesterday'
+    }
+    return `${absoluteDays} days ago`
+  } else {
+    if (daysDifference === 1) {
+      return 'tomorrow'
+    }
+    return `in ${daysDifference} days`
+  }
 }

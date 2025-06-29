@@ -25,7 +25,7 @@ function RouteComponent() {
           href={item.href}
           text={item.name}
           showarrow
-          className='outline outline-gray-200 px-4 text-xl'
+          className="outline outline-gray-200 px-4 text-xl"
         />
       ))}
     </nav>

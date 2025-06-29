@@ -5,7 +5,6 @@ import { Controller } from 'react-hook-form'
 import { parseDate } from 'chrono-node'
 import { CalendarIcon } from 'lucide-react'
 import type { Control } from 'react-hook-form'
-
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Label } from '@/components/ui/label'
@@ -14,19 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-
-function formatDate(date: Date | undefined) {
-  if (!date) {
-    return ''
-  }
-
-  return date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  })
-}
+import { cn, formatDate, formatDateDescription } from '@/lib/utils'
 
 export function NaturalLanguageDatePicker({
   control,
@@ -35,6 +22,7 @@ export function NaturalLanguageDatePicker({
   placeholder,
   error,
   description,
+  disabled,
 }: {
   control: Control<any>
   name: string
@@ -42,13 +30,18 @@ export function NaturalLanguageDatePicker({
   placeholder: string
   error?: string
   description?: string
+  disabled?: (date: Date) => boolean
 }) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('')
   const [date, setDate] = React.useState<Date | undefined>(
     parseDate(value) || undefined,
   )
+  const [inputMethod, setInputMethod] = React.useState<'number' | 'calendar'>(
+    'number',
+  )
   const [month, setMonth] = React.useState<Date | undefined>(date)
+
   return (
     <Controller
       control={control}
@@ -71,10 +64,13 @@ export function NaturalLanguageDatePicker({
               onChange={(e) => {
                 const newDate = parseDate(`In ${e.target.value} days`)
                 setValue(e.target.value.replace(/[^0-9]/g, ''))
+                setInputMethod('number')
                 if (newDate) {
                   setDate(newDate)
                   setMonth(newDate)
-                  field.onChange(new Date(newDate.setHours(0, 0, 0, 0)).toISOString())
+                  field.onChange(
+                    new Date(newDate.setHours(0, 0, 0, 0)).toISOString(),
+                  )
                 }
               }}
               onKeyDown={(e) => {
@@ -104,10 +100,12 @@ export function NaturalLanguageDatePicker({
                   selected={date}
                   month={month}
                   onMonthChange={setMonth}
+                  disabled={disabled}
                   onSelect={(newDate) => {
                     field.onChange(newDate?.toISOString())
                     setDate(newDate)
                     setValue(formatDate(newDate))
+                    setInputMethod('calendar')
                     setOpen(false)
                   }}
                 />
@@ -115,10 +113,15 @@ export function NaturalLanguageDatePicker({
             </Popover>
           </div>
           <div className="text-muted-foreground px-1 text-sm">
-            {description && date && (
+            {description && date && value && (
               <>
                 {description}{' '}
-                <span className="font-medium">{formatDate(date)}</span>.
+                <span className="font-medium">
+                  {inputMethod === 'number'
+                    ? `on ${formatDate(date)}`
+                    : formatDateDescription(date)}
+                </span>
+                .
               </>
             )}
           </div>
