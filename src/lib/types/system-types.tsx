@@ -40,6 +40,10 @@ export interface Facility {
   facility_name: string
   id: string
 }
+export type PaginatedFacilities = {
+  items: Array<Facility>
+  pagination: Pagination
+}
 export type Session = {
   access_token: string
   user: User & { facility: Facility | null }

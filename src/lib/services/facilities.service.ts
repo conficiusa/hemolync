@@ -1,5 +1,5 @@
-import { protectedApi } from '../server/protected-api'
-import type { getFacilitiesWithRequirementsArgs } from '../types/facilities.types'
+import type { getFacilitiesWithRequirementsArgs } from '@/lib/types/facilities.types'
+import { protectedApi } from '@/lib/server/protected-api'
 
 const facilitiesServices = {
   getFacilitiesWithRequirements: async ({
@@ -14,7 +14,7 @@ const facilitiesServices = {
       query.set('blood_type', blood_type as unknown as string)
     }
     const response = await protectedApi.get(
-      `/blood-inventory/search-stock?${query.toString()}`,
+      `/blood-inventory/facilities/search-stock?${query.toString()}`,
     )
 
     return response.data

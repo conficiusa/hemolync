@@ -29,7 +29,7 @@ export const newRequestSchema = z
     priority: z.string().min(1, 'Please select a priority level'),
     notes: z.string().optional(),
     blood_bank_id: z
-      .string()
+      .array(z.string())
       .min(1, 'Please select a facility to place the request'),
   })
   .refine((data) => data.blood_type !== '', {

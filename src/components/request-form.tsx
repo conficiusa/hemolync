@@ -1,10 +1,9 @@
-import { memo } from 'react'
+import { Suspense, memo } from 'react'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { z } from 'zod'
-import type { BloodProduct, bloodType } from '@/lib/types/product.types'
+import type { BloodProductType, BloodType } from '@/lib/types/product.types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { newRequestSchema } from '@/lib/schemas/requests/new-request.schema'
@@ -12,9 +11,10 @@ import SelectComponent from '@/components/select-component'
 import { bloodProducts, bloodTypes } from '@/lib/constants/blood-products'
 import { TextInput } from '@/components/textInputBuilder'
 import { priority } from '@/lib/constants/requests'
-import { fetchBloodBanksQuery } from '@/lib/data/queries/facilities/fetch-facilities'
 import { TextAreaInput } from '@/components/textarea-input'
 import useMutateRequest from '@/lib/data/mutations/mutate-requests'
+import { FacilitySelectionSection } from '@/components/select-facility'
+import FacilitySelectionSkeleton from '@/components/skeletons/facility-selection-skeleton'
 
 export type newRequestSchemaData = z.infer<typeof newRequestSchema>
 const BloodRequestForm = memo(() => {
@@ -22,31 +22,30 @@ const BloodRequestForm = memo(() => {
     addRequestMutation: { mutate },
   } = useMutateRequest()
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<newRequestSchemaData>({
+  const form = useForm<newRequestSchemaData>({
     resolver: zodResolver(newRequestSchema),
     defaultValues: {
-      blood_product: 'Cryoprecipitate',
+      blood_product: '',
       quantity_requested: 0,
-      blood_type: 'A+',
-      blood_bank_id: '',
+      blood_type: '',
+      blood_bank_id: [],
       priority: '',
       notes: '',
     },
   })
-  const { data: bloodbanks } = useSuspenseQuery(
-    fetchBloodBanksQuery({
-      blood_product: watch('blood_product') as unknown as BloodProduct,
-      blood_type: watch('blood_type') as unknown as bloodType,
-    }),
-  )
-
-  console.log(bloodbanks)
+  const {
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = form
+  const selectedBloodProduct = watch('blood_product') as unknown as
+    | BloodProductType
+    | undefined
+  const selectedBloodType = watch('blood_type') as unknown as
+    | BloodType
+    | undefined
 
   const onSubmit = (data: newRequestSchemaData) => {
     mutate(data, {
@@ -60,7 +59,7 @@ const BloodRequestForm = memo(() => {
     })
   }
 
-  console.log(errors)
+  console.log('errors', errors)
 
   return (
     <main className="grid grid-cols-2">
@@ -95,7 +94,7 @@ const BloodRequestForm = memo(() => {
               <div className="grid grid-cols-2 gap-3">
                 <TextInput
                   control={control}
-                  name="quantity"
+                  name="quantity_requested"
                   label="Quantity"
                   type="number"
                   placeholder="quantity"
@@ -110,6 +109,15 @@ const BloodRequestForm = memo(() => {
                   error={errors.priority?.message}
                 />
               </div>
+              {selectedBloodProduct && selectedBloodType && (
+                <Suspense fallback={<FacilitySelectionSkeleton />}>
+                  <FacilitySelectionSection
+                    blood_product={selectedBloodProduct}
+                    blood_type={selectedBloodType}
+                    form={form}
+                  />
+                </Suspense>
+              )}
               <TextAreaInput
                 control={control}
                 label="Additional Information"

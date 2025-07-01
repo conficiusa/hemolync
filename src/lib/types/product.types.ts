@@ -1,6 +1,6 @@
 import type { Pagination } from './system-types'
 
-export type bloodType = 'A+' | 'A-' | 'B' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-'
+export type BloodType = 'A+' | 'A-' | 'B' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-'
 
 export type BloodProductType =
   | 'Whole Blood'
@@ -14,7 +14,7 @@ export type BloodProduct = {
   blood_product: BloodProductType
   expiry_date: string
   quantity: number
-  blood_type: bloodType
+  blood_type: BloodType
   added_by: string
   blood_bank_name: string
 }
