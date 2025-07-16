@@ -21,7 +21,7 @@ export const FacilitySelectionSection = ({
   form: UseFormReturn<newRequestSchemaData>
 }) => {
   const { setValue, watch } = form
-  const selectedFacilities = watch('blood_bank_id')
+  const selectedFacilities = watch('facility_ids')
   const [initiateSearch, setInitiateSearch] = useState(false)
   const [_search, setSearch] = useState('')
   // Define facilities data for mapping
@@ -36,7 +36,7 @@ export const FacilitySelectionSection = ({
 
   const toggleSelect = (itemId: string) => {
     setValue(
-      'blood_bank_id',
+      'facility_ids',
       selectedFacilities.includes(itemId)
         ? selectedFacilities.filter((id) => id !== itemId)
         : [...selectedFacilities, itemId],
@@ -45,8 +45,8 @@ export const FacilitySelectionSection = ({
 
   if (bloodbanks.length === 0) {
     return (
-      <div className="flex flex-col items-center relative self-stretch w-full">
-        <div className="flex flex-col items-center justify-center gap-4 p-6 relative self-stretch w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 shadow-sm">
+      <div className="flex flex-col items-center relative self-stretch w-full bg-secondary rounded-sm p-4">
+        <div className="flex flex-col items-center justify-center gap-4 p-6 relative self-stretch w-full">
           <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
             <SearchIcon className="w-6 h-6 text-gray-400" />
           </div>

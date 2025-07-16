@@ -1,8 +1,8 @@
-import TrackingTabs from '@/components/tracking-tabs'
+import TrackingTabs from '@/components/requests-tabs'
 
 export default function Tracking() {
   return (
-    <div className="md:p-6">
+    <div className="px-3 md:px-6 ">
       <TrackingTabs />
     </div>
   )

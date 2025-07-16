@@ -21,9 +21,10 @@ import { Route as DashboardSettingsIndexImport } from './routes/dashboard/settin
 import { Route as DashboardRequestManagementIndexImport } from './routes/dashboard/request-management/index'
 import { Route as DashboardcardRoutesIndexImport } from './routes/dashboard/(card-routes)/index'
 import { Route as DashboardSettingsProfileImport } from './routes/dashboard/settings/profile'
-import { Route as DashboardRequestManagementNewImport } from './routes/dashboard/request-management/new'
 import { Route as DashboardRequestManagementIdImport } from './routes/dashboard/request-management/$id'
 import { Route as DashboardcardRoutesInventoryImport } from './routes/dashboard/(card-routes)/inventory'
+import { Route as DashboardRequestManagementNewIndexImport } from './routes/dashboard/request-management/new/index'
+import { Route as DashboardRequestManagementNewConfirmRequestImport } from './routes/dashboard/request-management/new/confirm-request'
 
 // Create/Update Routes
 
@@ -87,13 +88,6 @@ const DashboardSettingsProfileRoute = DashboardSettingsProfileImport.update({
   getParentRoute: () => DashboardSettingsRouteRoute,
 } as any)
 
-const DashboardRequestManagementNewRoute =
-  DashboardRequestManagementNewImport.update({
-    id: '/request-management/new',
-    path: '/request-management/new',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-
 const DashboardRequestManagementIdRoute =
   DashboardRequestManagementIdImport.update({
     id: '/request-management/$id',
@@ -106,6 +100,20 @@ const DashboardcardRoutesInventoryRoute =
     id: '/inventory',
     path: '/inventory',
     getParentRoute: () => DashboardcardRoutesRouteRoute,
+  } as any)
+
+const DashboardRequestManagementNewIndexRoute =
+  DashboardRequestManagementNewIndexImport.update({
+    id: '/request-management/new/',
+    path: '/request-management/new/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardRequestManagementNewConfirmRequestRoute =
+  DashboardRequestManagementNewConfirmRequestImport.update({
+    id: '/request-management/new/confirm-request',
+    path: '/request-management/new/confirm-request',
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -168,13 +176,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRequestManagementIdImport
       parentRoute: typeof DashboardRouteImport
     }
-    '/dashboard/request-management/new': {
-      id: '/dashboard/request-management/new'
-      path: '/request-management/new'
-      fullPath: '/dashboard/request-management/new'
-      preLoaderRoute: typeof DashboardRequestManagementNewImport
-      parentRoute: typeof DashboardRouteImport
-    }
     '/dashboard/settings/profile': {
       id: '/dashboard/settings/profile'
       path: '/profile'
@@ -202,6 +203,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/settings/'
       preLoaderRoute: typeof DashboardSettingsIndexImport
       parentRoute: typeof DashboardSettingsRouteImport
+    }
+    '/dashboard/request-management/new/confirm-request': {
+      id: '/dashboard/request-management/new/confirm-request'
+      path: '/request-management/new/confirm-request'
+      fullPath: '/dashboard/request-management/new/confirm-request'
+      preLoaderRoute: typeof DashboardRequestManagementNewConfirmRequestImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/request-management/new/': {
+      id: '/dashboard/request-management/new/'
+      path: '/request-management/new'
+      fullPath: '/dashboard/request-management/new'
+      preLoaderRoute: typeof DashboardRequestManagementNewIndexImport
+      parentRoute: typeof DashboardRouteImport
     }
   }
 }
@@ -245,8 +260,9 @@ interface DashboardRouteRouteChildren {
   DashboardSettingsRouteRoute: typeof DashboardSettingsRouteRouteWithChildren
   DashboardStaffManagementRoute: typeof DashboardStaffManagementRoute
   DashboardRequestManagementIdRoute: typeof DashboardRequestManagementIdRoute
-  DashboardRequestManagementNewRoute: typeof DashboardRequestManagementNewRoute
   DashboardRequestManagementIndexRoute: typeof DashboardRequestManagementIndexRoute
+  DashboardRequestManagementNewConfirmRequestRoute: typeof DashboardRequestManagementNewConfirmRequestRoute
+  DashboardRequestManagementNewIndexRoute: typeof DashboardRequestManagementNewIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -254,8 +270,11 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardSettingsRouteRoute: DashboardSettingsRouteRouteWithChildren,
   DashboardStaffManagementRoute: DashboardStaffManagementRoute,
   DashboardRequestManagementIdRoute: DashboardRequestManagementIdRoute,
-  DashboardRequestManagementNewRoute: DashboardRequestManagementNewRoute,
   DashboardRequestManagementIndexRoute: DashboardRequestManagementIndexRoute,
+  DashboardRequestManagementNewConfirmRequestRoute:
+    DashboardRequestManagementNewConfirmRequestRoute,
+  DashboardRequestManagementNewIndexRoute:
+    DashboardRequestManagementNewIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -271,10 +290,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
-  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
+  '/dashboard/request-management/new/confirm-request': typeof DashboardRequestManagementNewConfirmRequestRoute
+  '/dashboard/request-management/new': typeof DashboardRequestManagementNewIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -283,11 +303,12 @@ export interface FileRoutesByTo {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
-  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard': typeof DashboardcardRoutesIndexRoute
   '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
+  '/dashboard/request-management/new/confirm-request': typeof DashboardRequestManagementNewConfirmRequestRoute
+  '/dashboard/request-management/new': typeof DashboardRequestManagementNewIndexRoute
 }
 
 export interface FileRoutesById {
@@ -300,11 +321,12 @@ export interface FileRoutesById {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/(card-routes)/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
-  '/dashboard/request-management/new': typeof DashboardRequestManagementNewRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard/(card-routes)/': typeof DashboardcardRoutesIndexRoute
   '/dashboard/request-management/': typeof DashboardRequestManagementIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
+  '/dashboard/request-management/new/confirm-request': typeof DashboardRequestManagementNewConfirmRequestRoute
+  '/dashboard/request-management/new/': typeof DashboardRequestManagementNewIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -318,10 +340,11 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
     | '/dashboard/request-management/$id'
-    | '/dashboard/request-management/new'
     | '/dashboard/settings/profile'
     | '/dashboard/request-management'
     | '/dashboard/settings/'
+    | '/dashboard/request-management/new/confirm-request'
+    | '/dashboard/request-management/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -329,11 +352,12 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
     | '/dashboard/request-management/$id'
-    | '/dashboard/request-management/new'
     | '/dashboard/settings/profile'
     | '/dashboard'
     | '/dashboard/request-management'
     | '/dashboard/settings'
+    | '/dashboard/request-management/new/confirm-request'
+    | '/dashboard/request-management/new'
   id:
     | '__root__'
     | '/'
@@ -344,11 +368,12 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/(card-routes)/inventory'
     | '/dashboard/request-management/$id'
-    | '/dashboard/request-management/new'
     | '/dashboard/settings/profile'
     | '/dashboard/(card-routes)/'
     | '/dashboard/request-management/'
     | '/dashboard/settings/'
+    | '/dashboard/request-management/new/confirm-request'
+    | '/dashboard/request-management/new/'
   fileRoutesById: FileRoutesById
 }
 
@@ -389,8 +414,9 @@ export const routeTree = rootRoute
         "/dashboard/settings",
         "/dashboard/staff-management",
         "/dashboard/request-management/$id",
-        "/dashboard/request-management/new",
-        "/dashboard/request-management/"
+        "/dashboard/request-management/",
+        "/dashboard/request-management/new/confirm-request",
+        "/dashboard/request-management/new/"
       ]
     },
     "/dashboard/(card-routes)": {
@@ -424,10 +450,6 @@ export const routeTree = rootRoute
       "filePath": "dashboard/request-management/$id.tsx",
       "parent": "/dashboard"
     },
-    "/dashboard/request-management/new": {
-      "filePath": "dashboard/request-management/new.tsx",
-      "parent": "/dashboard"
-    },
     "/dashboard/settings/profile": {
       "filePath": "dashboard/settings/profile.tsx",
       "parent": "/dashboard/settings"
@@ -443,6 +465,14 @@ export const routeTree = rootRoute
     "/dashboard/settings/": {
       "filePath": "dashboard/settings/index.tsx",
       "parent": "/dashboard/settings"
+    },
+    "/dashboard/request-management/new/confirm-request": {
+      "filePath": "dashboard/request-management/new/confirm-request.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/request-management/new/": {
+      "filePath": "dashboard/request-management/new/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }

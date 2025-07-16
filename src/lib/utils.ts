@@ -27,27 +27,34 @@ export const getStatusBadgeClass = (status: string) => {
 }
 export const getRequestStatusBadgeClass = (
   status:
-    | 'Accepted'
-    | 'Pending'
-    | 'Rejected'
-    | 'Urgent'
-    | 'Emergency'
-    | 'Not Urgent',
+    | 'accepted'
+    | 'pending'
+    | 'rejected'
+    | 'urgent'
+    | 'emergency'
+    | 'not urgent'
+    | 'dispatched'
+    | 'completed'
+    | 'cancelled',
 ) => {
   switch (status) {
-    case 'Accepted':
-      return 'bg-green-50 text-green-500'
+    case 'accepted':
+    case 'completed':
+      return 'bg-green-50 text-green-500 border-[0.5px] border-green-500'
 
-    case 'Pending':
-    case 'Urgent':
-      return 'bg-amber-50 text-amber-500'
-    case 'Rejected':
-    case 'Emergency':
-      return 'bg-red-50 text-red-500'
-    case 'Not Urgent':
-      return 'bg-blue-50 text-blue-500'
+    case 'pending':
+    case 'urgent':
+      return 'bg-amber-50 text-amber-500 border-[0.5px] border-amber-500'
+    case 'rejected':
+    case 'emergency':
+      return 'bg-red-50 text-red-500 border-[0.5px] border-red-500'
+    case 'not urgent':
+    case 'dispatched':
+      return 'bg-blue-50 text-blue-500 border-[0.5px] border-blue-500'
+    case 'cancelled':
+      return 'bg-gray-50 text-gray-500 border-[0.5px] border-gray-500'
     default:
-      return 'bg-gray-50 text-gray-500'
+      return 'bg-gray-50 text-gray-500 border-[0.5px] border-gray-500'
   }
 }
 export const getRequestStatusBadgeClassComplementary = (

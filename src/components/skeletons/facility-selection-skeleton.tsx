@@ -5,14 +5,17 @@ export default function FacilitySelectionSkeleton() {
     <div className="flex flex-col items-center relative self-stretch w-full">
       <div className="flex flex-col items-start gap-3 p-4 w-full bg-gray-100 rounded-sm">
         {/* Header */}
-        <Skeleton className="h-5 w-40" />
-        <Skeleton className="h-3 w-56" />
+        <Skeleton className="h-5 w-40 bg-background " />
+        <Skeleton className="h-3 w-56 bg-background " />
 
         {/* Search toggle placeholder */}
-        <Skeleton className="h-4 w-32" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-4 bg-background" />
+          <Skeleton className="h-4 w-32 bg-background" />
+        </div>
 
         {/* Search input placeholder */}
-        <Skeleton className="h-9 w-2/3 max-w-md" />
+        <Skeleton className="h-9 w-2/3 max-w-md bg-background" />
 
         {/* Facility card placeholders */}
         {Array.from({ length: 3 }).map((_, idx) => (

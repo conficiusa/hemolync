@@ -28,9 +28,9 @@ export const newRequestSchema = z
     quantity_requested: z.number().gt(0, 'Quantity must be greater than 0'),
     priority: z.string().min(1, 'Please select a priority level'),
     notes: z.string().optional(),
-    blood_bank_id: z
+    facility_ids: z
       .array(z.string())
-      .min(1, 'Please select a facility to place the request'),
+      .min(1, 'Please select at least one facility'),
   })
   .refine((data) => data.blood_type !== '', {
     message: 'Please select a blood type',
