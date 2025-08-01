@@ -5,7 +5,8 @@ env:
 on:
   push:
     branches-ignore:
-      - main
+      - master
+  pull_request:
 jobs:
   code-quality:
     runs-on: ubuntu-latest
