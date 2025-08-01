@@ -2,8 +2,10 @@ import axios from 'axios'
 import { session } from '@/lib/data/queries/auth/refresh'
 import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
 
-const API_URL = 'http://localhost:8000/api'
-
+const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://hemolync.onrender.com/api'
+    : 'http://localhost:8000/api'
 // Create axios instance with default config
 export const protectedApi = axios.create({
   baseURL: API_URL,
