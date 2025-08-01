@@ -31,7 +31,7 @@ const EmptyRequestsTable = memo(() => {
         search={{ from: search.tab }}
       >
         <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-sm text-sm font-medium">
-          <Plus className="h-4 w-4" /> Add Product
+          <Plus className="h-4 w-4" /> Add Request
         </button>
       </Link>
     </div>
