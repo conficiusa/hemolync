@@ -36,6 +36,7 @@ function RouteComponent() {
   const {
     addRequestMutation: { mutate: createRequest, isPending },
   } = useMutateRequest()
+  const { invalidateQueries } = Route.useLoaderData()
 
   // Fetch facilities data to get facility names
   const {
@@ -71,8 +72,9 @@ function RouteComponent() {
   const onSubmit = (data: newRequestSchemaData) => {
     const toastId = toast.loading('Creating request...')
     createRequest(data, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.dismiss(toastId)
+        await invalidateQueries()
         toast.success('Request created successfully')
         clearDraft()
         navigate({ to: '/dashboard/request-management/new', search: { from } })

@@ -2,8 +2,12 @@ import { memo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import type { z } from 'zod'
+import type { RequestTabSchema } from '@/routes/dashboard/request-management/$id'
+import type { MainTab, RequestState, SubTab } from '@/lib/types/request-management.types'
 import { cn, getRequestStatusBadgeClass } from '@/lib/utils'
 import { fetchRequestById } from '@/lib/data/queries/requests/fetch-requests'
+// import { Button } from '@/components/ui/button'
 
 const TrackingDetails = memo(() => {
   const { id } = getRouteApi('/dashboard/request-management/$id').useParams()
@@ -32,7 +36,6 @@ const TrackingDetails = memo(() => {
       },
     })
   }
-
 
   return (
     <div className="bg-background rounded-lg p-8 shadow-sm">
@@ -95,8 +98,9 @@ const TrackingDetails = memo(() => {
             <div className="flex justify-between border-b border-muted pb-3">
               <h3 className="text-muted-foreground text-sm">Facility</h3>
               <div className="text-sm font-semibold">
-                {/* <div className="font-semibold">{data.hospital_name}</div> */}{' '}
-                Tamale Teaching Hospital
+                <div className="font-semibold">
+                  {data.requester_facility_name}
+                </div>
               </div>
             </div>
             {/* Sent By */}
@@ -107,8 +111,11 @@ const TrackingDetails = memo(() => {
               </div>
             </div>
             {data.notes && (
-              <div className="border border-gray-200 rounded-lg p-4">
-                <p className="text-muted-foreground text-sm">{data.notes}</p>
+              <div className="grid gap-2">
+                <p className="text-muted-foreground text-sm">Comments</p>
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <p className="text-muted-foreground text-sm">{data.notes}</p>
+                </div>
               </div>
             )}
 
@@ -117,21 +124,7 @@ const TrackingDetails = memo(() => {
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-4 mt-8">
-        <button
-          onClick={handleAccept}
-          className="px-6 py-2 bg-green-700 text-white rounded-lg"
-        >
-          Accept
-        </button>
-        <button
-          onClick={handleReject}
-          className="px-6 py-2 bg-red-600 text-white rounded-lg "
-        >
-          Reject
-        </button>
-      </div>
+      {getFooter(search.from, handleAccept, handleReject, data.request_status)}
     </div>
   )
 })
@@ -139,3 +132,48 @@ const TrackingDetails = memo(() => {
 TrackingDetails.displayName = 'TrackingDetails'
 
 export default TrackingDetails
+
+type Search = z.infer<typeof RequestTabSchema>['from']
+
+const getFooter = (
+  search: Search,
+  handleAccept: () => void,
+  handleReject: () => void,
+  state: RequestState,
+) => {
+  const [tab, _status] = search.split('-') as [MainTab, SubTab]
+  if (tab === 'sent') {
+    return (
+      <div>
+        <div className="flex justify-end gap-4 mt-8">
+          <button className="px-6 py-2 bg-red-500 text-white rounded-lg">
+            Cancel Request
+          </button>
+        </div>
+      </div>
+    )
+  } else {
+    switch (state) {
+      case 'pending':
+        return (
+          <div className="flex justify-end gap-4 mt-8">
+            <button
+              onClick={handleAccept}
+              className="px-6 py-2 bg-green-700 text-white rounded-lg"
+            >
+              Accept
+            </button>
+            <button
+              onClick={handleReject}
+              className="px-6 py-2 bg-red-600 text-white rounded-lg "
+            >
+              Reject
+            </button>
+          </div>
+        )
+
+      default:
+        break
+    }
+  }
+}

@@ -3,10 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { User } from '@/lib/types/system-types'
 import authService from '@/lib/services/auth.service'
 import { protectedApi } from '@/lib/server/protected-api'
 import { routeTree } from '@/routeTree.gen'
-import type { User } from '@/lib/types/system-types'
 
 // Mock the auth service
 vi.mock('@/lib/services/auth.service', () => ({
@@ -55,7 +55,7 @@ describe('Staff Management Page', () => {
     },
   })
 
-  const createStaffData = (): User[] => [
+  const createStaffData = (): Array<User> => [
     {
       id: '1',
       first_name: 'John',
@@ -196,7 +196,7 @@ describe('Staff Management Page', () => {
 
   it('should display empty state when no staff members exist', async () => {
     const sessionData = createSessionData('facility_administrator')
-    const emptyStaffData: User[] = []
+    const emptyStaffData: Array<User> = []
 
     vi.mocked(authService.getSession).mockResolvedValue(sessionData)
     vi.mocked(protectedApi.get).mockResolvedValue({ data: emptyStaffData })
@@ -564,7 +564,7 @@ describe('Staff Management Page', () => {
 
   it('should format dates correctly', async () => {
     const sessionData = createSessionData('facility_administrator')
-    const staffData: User[] = [
+    const staffData: Array<User> = [
       {
         id: '1',
         first_name: 'Test',
@@ -627,7 +627,7 @@ describe('Staff Management Page', () => {
 
   it('should handle different user roles correctly', async () => {
     const sessionData = createSessionData('facility_administrator')
-    const staffData: User[] = [
+    const staffData: Array<User> = [
       {
         id: '1',
         first_name: 'Staff',

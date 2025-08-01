@@ -159,7 +159,7 @@ const RequestsTabs = memo(
               value={subTab.value}
               className="bg-white rounded-lg overflow-hidden"
             >
-              <div className="overflow-x-auto max-md:max-w-[calc(100vw_-_60px)] max-w-[calc(100vw_-_360px)]">
+              <div className="overflow-x-auto max-md:max-w-[calc(100vw_-_60px)] max-lg:max-w-[calc(100vw_-_100px)] max-xl:max-w-[calc(100vw_-_360px)]">
                 <Suspense fallback={<RequestsTableSkeleton />}>
                   {table}
                 </Suspense>
