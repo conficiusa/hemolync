@@ -45,13 +45,7 @@ const SuccessDialog = memo(
         </DialogContent>
       </Dialog>
     )
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.open === nextProps.open &&
-      prevProps.onClose === nextProps.onClose
-    )
-  },
+  }
 )
 
 SuccessDialog.displayName = 'SuccessDialog'
