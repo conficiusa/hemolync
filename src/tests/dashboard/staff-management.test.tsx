@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { User } from '@/lib/types/system-types'
@@ -152,11 +152,11 @@ describe('Staff Management Page', () => {
     })
 
     // Try to navigate to staff-management route
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -191,11 +191,11 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -231,11 +231,11 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -278,11 +278,11 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -338,11 +338,11 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -388,11 +388,11 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await act(async () => {
-      await router.navigate({ to: '/dashboard/staff-management' })
+    act(() => {
+      router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act(async () => {
+    act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />

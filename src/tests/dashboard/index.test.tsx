@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -73,7 +73,7 @@ describe('Dashboard Index Route', () => {
       await router.navigate({ to: '/dashboard' })
     })
 
-    await act(async () => {
+    await act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -141,7 +141,7 @@ describe('Dashboard Index Route', () => {
       await router.navigate({ to: '/dashboard' })
     })
 
-    await act(async () => {
+    await act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
