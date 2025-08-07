@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import useMutateRequest from '@/lib/data/mutations/mutate-requests'
 import { fetchBloodBanksQuery } from '@/lib/data/queries/facilities/fetch-facilities'
+
 import {
   COMBINED_TAB_VALUES,
   DEFAULT_TAB,
@@ -76,11 +77,9 @@ function RouteComponent() {
     const toastId = toast.loading('Creating request...')
     createRequest(data, {
       onSuccess: async () => {
+        setOpen(true)
         toast.dismiss(toastId)
         await queryClient.invalidateQueries()
-        toast.success('Request created successfully')
-        setOpen(true)
-        // navigate({ to: '/dashboard/request-management/new', search: { from } })
       },
       onError: () => {
         toast.dismiss(toastId)
@@ -100,7 +99,7 @@ function RouteComponent() {
 
   return (
     <div className="grid grid-cols-[3fr_1fr] gap-3">
-      <SuccessDialog open={open} setOpen={setOpen} onClose={onClose} />
+      <SuccessDialog open={open} onClose={onClose} />
       <div className="bg-background p-6 rounded-xl flex flex-col gap-3">
         {/* Blood Product Details Card */}
         <div className="flex items-center justify-between gap-3">

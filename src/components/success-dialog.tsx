@@ -7,17 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import checkGif from '/check.gif'
 
 const SuccessDialog = memo(
-  ({
-    open,
-    setOpen,
-    onClose,
-  }: {
-    open: boolean
-    setOpen: (open: boolean) => void
-    onClose: () => void
-  }) => {
+  ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     return (
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-md overflow-hidden">
@@ -30,7 +23,7 @@ const SuccessDialog = memo(
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center text-center size-[200px] mx-auto">
-            <img src="/check.gif" alt="Success" className="mx-auto mt-4" />
+            <img src={checkGif} alt="Success" className="mx-auto mt-4" />
           </div>
           <div className="flex flex-col items-center justify-center p-6 text-center">
             <h2 className="font-bold">Request Sent</h2>
@@ -41,8 +34,8 @@ const SuccessDialog = memo(
 
             <div className="flex items-center justify-center mt-6">
               <button
-                onClick={() => setOpen(false)}
-                type="submit"
+                onClick={() => onClose()}
+                type="button"
                 className="px-3  py-3 min-w-[125px] bg-primary text-white rounded-full flex justify-center items-center text-sm font-medium disabled:opacity-65"
               >
                 Ok
@@ -54,7 +47,10 @@ const SuccessDialog = memo(
     )
   },
   (prevProps, nextProps) => {
-    return prevProps.open === nextProps.open
+    return (
+      prevProps.open === nextProps.open &&
+      prevProps.onClose === nextProps.onClose
+    )
   },
 )
 
