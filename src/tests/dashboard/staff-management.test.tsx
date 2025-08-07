@@ -451,7 +451,7 @@ describe('Staff Management Page', () => {
       await router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act( () => {
+    await act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
@@ -495,7 +495,7 @@ describe('Staff Management Page', () => {
       await router.navigate({ to: '/dashboard/staff-management' })
     })
 
-    await act( () => {
+    await act(() => {
       render(
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
