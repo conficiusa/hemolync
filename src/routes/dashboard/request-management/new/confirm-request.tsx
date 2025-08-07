@@ -15,6 +15,8 @@ import {
   COMBINED_TAB_VALUES,
   DEFAULT_TAB,
 } from '@/lib/types/request-management.types'
+import { SuccessDialog } from '@/components/success-dialog'
+import { useState } from 'react'
 
 const RequestTabSchema = z.object({
   from: z.enum(COMBINED_TAB_VALUES).catch(DEFAULT_TAB),
@@ -30,13 +32,14 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const [open, setOpen] = useState(false)
   const { draft, clearDraft } = useRequestDraft()
   const navigate = useNavigate()
   const { from } = Route.useSearch()
   const {
     addRequestMutation: { mutate: createRequest, isPending },
   } = useMutateRequest()
-  const { invalidateQueries } = Route.useLoaderData()
+  const queryClient = Route.useLoaderData()
 
   // Fetch facilities data to get facility names
   const {
@@ -74,10 +77,10 @@ function RouteComponent() {
     createRequest(data, {
       onSuccess: async () => {
         toast.dismiss(toastId)
-        await invalidateQueries()
+        await queryClient.invalidateQueries()
         toast.success('Request created successfully')
-        clearDraft()
-        navigate({ to: '/dashboard/request-management/new', search: { from } })
+        setOpen(true)
+        // navigate({ to: '/dashboard/request-management/new', search: { from } })
       },
       onError: () => {
         toast.dismiss(toastId)
@@ -86,11 +89,18 @@ function RouteComponent() {
     })
   }
 
+  const onClose = () => {
+    setOpen(false)
+    clearDraft()
+    navigate({ to: '/dashboard/request-management/new', search: { from } })
+  }
+
   if (!draft)
     return <Navigate to="/dashboard/request-management/new" search={{ from }} />
 
   return (
     <div className="grid grid-cols-[3fr_1fr] gap-3">
+      <SuccessDialog open={open} setOpen={setOpen} onClose={onClose} />
       <div className="bg-background p-6 rounded-xl flex flex-col gap-3">
         {/* Blood Product Details Card */}
         <div className="flex items-center justify-between gap-3">

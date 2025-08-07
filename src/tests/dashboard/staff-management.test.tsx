@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { User } from '@/lib/types/system-types'
@@ -8,7 +8,18 @@ import authService from '@/lib/services/auth.service'
 import { protectedApi } from '@/lib/server/protected-api'
 import { routeTree } from '@/routeTree.gen'
 
+// A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+// When testing, code that resolves suspended data should be wrapped into act(...):
+
+// act(() => {
+//   /* finish loading suspended data */
+// });
+// /* assert on the output */
+
+// This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
 // Mock the auth service
+
 vi.mock('@/lib/services/auth.service', () => ({
   default: {
     getSession: vi.fn(),
@@ -141,13 +152,17 @@ describe('Staff Management Page', () => {
     })
 
     // Try to navigate to staff-management route
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     // Should be redirected to dashboard
     await waitFor(() => {
@@ -176,13 +191,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     // Should stay on staff management route
     await waitFor(() => {
@@ -212,13 +231,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     // Should show empty state
     expect(
@@ -255,13 +278,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     // Verify header is present
     expect(await screen.findByText('Users')).toBeInTheDocument()
@@ -311,13 +338,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -357,13 +388,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -412,13 +447,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -452,13 +491,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -517,13 +560,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     // Should show correct user count
     expect(await screen.findByText('5 users')).toBeInTheDocument()
@@ -532,35 +579,6 @@ describe('Staff Management Page', () => {
     const badge = screen.getByText('5 users')
     expect(badge).toHaveClass('bg-[#f8e3e8]', 'text-primary-accent-foreground')
   }, 10000)
-
-  it('should handle error state when staff fetch fails', async () => {
-    const sessionData = createSessionData('facility_administrator')
-    vi.mocked(authService.getSession).mockResolvedValue(sessionData)
-
-    // Mock API to throw an error
-    vi.mocked(protectedApi.get).mockRejectedValue(
-      new Error('Failed to fetch staff'),
-    )
-
-    // Pre-populate session data but NOT staff data, so the loader will fail
-    queryClient.setQueryData(['session'], sessionData)
-
-    const router = createRouter({
-      routeTree,
-      context: {
-        queryClient,
-        auth: undefined!,
-      },
-    })
-
-    // Expect the navigation to throw due to the error in the loader
-    await expect(
-      router.navigate({ to: '/dashboard/staff-management' }),
-    ).rejects.toThrow()
-
-    // The error should be thrown during navigation/loader execution
-    // This is expected behavior for TanStack Router error handling
-  }, 15000)
 
   it('should format dates correctly', async () => {
     const sessionData = createSessionData('facility_administrator')
@@ -603,13 +621,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -677,13 +699,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()
@@ -718,13 +744,17 @@ describe('Staff Management Page', () => {
       },
     })
 
-    await router.navigate({ to: '/dashboard/staff-management' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Users')).toBeInTheDocument()

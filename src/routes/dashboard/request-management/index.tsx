@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import type { MainTab, RequestStatus } from '@/lib/types/request-management.types'
+import type {
+  MainTab,
+  RequestStatus,
+} from '@/lib/types/request-management.types'
 import {
   COMBINED_TAB_VALUES,
   DEFAULT_TAB,
