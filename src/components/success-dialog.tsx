@@ -45,7 +45,7 @@ const SuccessDialog = memo(
         </DialogContent>
       </Dialog>
     )
-  }
+  },
 )
 
 SuccessDialog.displayName = 'SuccessDialog'
