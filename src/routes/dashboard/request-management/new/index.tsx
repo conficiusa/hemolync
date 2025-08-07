@@ -16,9 +16,7 @@ import {
 } from '@/lib/types/request-management.types'
 
 export const RequestTabSchema = z.object({
-  from: z
-    .enum(COMBINED_TAB_VALUES)
-    .catch(DEFAULT_TAB),
+  from: z.enum(COMBINED_TAB_VALUES).catch(DEFAULT_TAB),
   edit: z.boolean().optional(),
 })
 export const Route = createFileRoute('/dashboard/request-management/new/')({

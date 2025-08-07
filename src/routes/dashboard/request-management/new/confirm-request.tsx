@@ -1,4 +1,5 @@
 import { toast } from 'sonner'
+import { useState } from 'react'
 import { z } from 'zod'
 import { Navigate, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Edit, Loader2 } from 'lucide-react'
@@ -11,10 +12,12 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import useMutateRequest from '@/lib/data/mutations/mutate-requests'
 import { fetchBloodBanksQuery } from '@/lib/data/queries/facilities/fetch-facilities'
+
 import {
   COMBINED_TAB_VALUES,
   DEFAULT_TAB,
 } from '@/lib/types/request-management.types'
+import { SuccessDialog } from '@/components/success-dialog'
 
 const RequestTabSchema = z.object({
   from: z.enum(COMBINED_TAB_VALUES).catch(DEFAULT_TAB),
@@ -30,13 +33,14 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const [open, setOpen] = useState(false)
   const { draft, clearDraft } = useRequestDraft()
   const navigate = useNavigate()
   const { from } = Route.useSearch()
   const {
     addRequestMutation: { mutate: createRequest, isPending },
   } = useMutateRequest()
-  const { invalidateQueries } = Route.useLoaderData()
+  const queryClient = Route.useLoaderData()
 
   // Fetch facilities data to get facility names
   const {
@@ -73,11 +77,9 @@ function RouteComponent() {
     const toastId = toast.loading('Creating request...')
     createRequest(data, {
       onSuccess: async () => {
+        setOpen(true)
         toast.dismiss(toastId)
-        await invalidateQueries()
-        toast.success('Request created successfully')
-        clearDraft()
-        navigate({ to: '/dashboard/request-management/new', search: { from } })
+        await queryClient.invalidateQueries()
       },
       onError: () => {
         toast.dismiss(toastId)
@@ -86,11 +88,18 @@ function RouteComponent() {
     })
   }
 
+  const onClose = () => {
+    setOpen(false)
+    clearDraft()
+    navigate({ to: '/dashboard/request-management/new', search: { from } })
+  }
+
   if (!draft)
     return <Navigate to="/dashboard/request-management/new" search={{ from }} />
 
   return (
     <div className="grid grid-cols-[3fr_1fr] gap-3">
+      <SuccessDialog open={open} onClose={onClose} />
       <div className="bg-background p-6 rounded-xl flex flex-col gap-3">
         {/* Blood Product Details Card */}
         <div className="flex items-center justify-between gap-3">

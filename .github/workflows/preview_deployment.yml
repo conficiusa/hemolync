@@ -3,10 +3,10 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
-  push:
-    branches-ignore:
-      - master
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+    branches:
+      - master
 jobs:
   code-quality:
     runs-on: ubuntu-latest
@@ -21,8 +21,12 @@ jobs:
         run: npm ci
       - name: Run ESLint
         run: npm run lint
+      - name: Run Prettier check
+        run: npx prettier --check .
       - name: Run TypeScript type check
         run: npm run typecheck
+      - name: Run Tests
+        run: npm test
 
   Deploy-Preview:
     runs-on: ubuntu-latest

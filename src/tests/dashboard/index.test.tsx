@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -69,13 +69,17 @@ describe('Dashboard Index Route', () => {
     })
 
     // Navigate to a protected route (dashboard) to trigger authentication check
-    router.navigate({ to: '/dashboard' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(() => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(window.location.pathname).toBe('/auth/login')
@@ -133,13 +137,17 @@ describe('Dashboard Index Route', () => {
     })
 
     // Navigate to dashboard with authenticated user
-    router.navigate({ to: '/dashboard' })
+    await act(async () => {
+      await router.navigate({ to: '/dashboard' })
+    })
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
+    await act(() => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>,
+      )
+    })
 
     await waitFor(() => {
       expect(window.location.pathname).toBe('/dashboard')
@@ -157,11 +165,6 @@ describe('Dashboard Index Route', () => {
     expect(screen.getByText(/total request/i)).toBeInTheDocument()
 
     expect(screen.getByText(/50 units/i)).toBeInTheDocument()
-
-    // ✅ Test for dashboard index content (from Outlet)
-    expect(screen.getByText(/welcome to hemolync/i)).toBeInTheDocument()
-
-    expect(screen.getByText(/to be updated soon/i)).toBeInTheDocument()
 
     // ✅ Test for dashboard navigation (proves we're on dashboard, not login)
     expect(

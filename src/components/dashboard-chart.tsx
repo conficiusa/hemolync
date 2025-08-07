@@ -51,7 +51,6 @@ export const DashboardChart = memo(() => {
               left: 12,
               right: 12,
             }}
-            
           >
             <CartesianGrid vertical={false} />
             <YAxis

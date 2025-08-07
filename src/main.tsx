@@ -36,7 +36,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanstackQuery.Provider>
-          <InnerApp />
+        <InnerApp />
       </TanstackQuery.Provider>
     </StrictMode>,
   )
