@@ -17,8 +17,8 @@
     "test:watch:coverage": "vitest run --coverage",
     "test:watch:coverage:ui": "vitest run --coverage --ui",
     "lint": "eslint",
-    "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "format": "prettier --write .",
+    "check": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
