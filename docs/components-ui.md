@@ -3,9 +3,11 @@
 Source: `src/components/ui/*`
 
 ### Button
+
 Source: `src/components/ui/button.tsx`
 
 Exports: `Button`, `buttonVariants`
+
 ```tsx
 import { Button } from '@/components/ui/button'
 
@@ -17,25 +19,31 @@ import { Button } from '@/components/ui/button'
 ```
 
 ### Input
+
 Source: `src/components/ui/input.tsx`
+
 ```tsx
 import { Input } from '@/components/ui/input'
-<Input placeholder="Email" type="email" />
+;<Input placeholder="Email" type="email" />
 ```
 
 ### Textarea
+
 Source: `src/components/ui/textarea.tsx`
+
 ```tsx
 import { Textarea } from '@/components/ui/textarea'
-<Textarea placeholder="Notes" rows={4} />
+;<Textarea placeholder="Notes" rows={4} />
 ```
 
 ### Tabs
+
 Source: `src/components/ui/tabs.tsx`
 Exports: `Tabs, TabsList, TabsTrigger, TabsContent`
+
 ```tsx
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-<Tabs defaultValue="one">
+;<Tabs defaultValue="one">
   <TabsList>
     <TabsTrigger value="one">One</TabsTrigger>
     <TabsTrigger value="two">Two</TabsTrigger>
@@ -46,7 +54,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 ```
 
 ### Other UI exports
+
 Also available and follow standard Radix-style props:
+
 - `Accordion, AccordionItem, AccordionTrigger, AccordionContent`
 - `Alert, AlertTitle, AlertDescription`
 - `AspectRatio`

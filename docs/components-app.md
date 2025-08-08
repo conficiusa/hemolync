@@ -3,9 +3,11 @@
 These are feature components exported from `src/components/*`.
 
 ### TrackingTabs (default)
+
 Source: `src/components/requests-tabs.tsx`
 
 Renders main and sub tabs for request tracking and integrates with TanStack Router search params.
+
 ```tsx
 import TrackingTabs from '@/components/requests-tabs'
 
@@ -15,43 +17,52 @@ export default function RequestsPage() {
 ```
 
 ### StaffTable (default)
+
 Source: `src/components/staff-table.tsx`
 
 Displays the staff list using `fetchStaffQuery()` and provides edit/delete actions.
+
 ```tsx
 import StaffTable from '@/components/staff-table'
-<StaffTable />
+;<StaffTable />
 ```
 
 ### InventoryTable (default)
+
 Source: `src/components/inventory-table.tsx`
 
 Tabular inventory list with pagination and actions.
+
 ```tsx
 import InventoryTable from '@/components/inventory-table'
-<InventoryTable />
+;<InventoryTable />
 ```
 
 ### InventoryHeader (default)
+
 Source: `src/components/inventory-header.tsx`
 
 Header controls for inventory screens.
 
 ### Inventory (default)
+
 Source: `src/components/inventory.tsx`
 
 Composed inventory section.
 
 ### Request form (default)
+
 Source: `src/components/request-form.tsx`
 
 Wizard-like form to create a new blood request.
+
 ```tsx
 import RequestForm from '@/components/request-form'
-<RequestForm />
+;<RequestForm />
 ```
 
 ### Common dialogs and panels
+
 - `EditProductDialog`, `DeleteProductDialog`
 - `EditUserDialog`, `DeleteUserDialog`
 - `LogoutDialog`
@@ -60,10 +71,13 @@ import RequestForm from '@/components/request-form'
 - `AddBloodDialog`
 
 ### Skeletons and empties
+
 See `src/components/skeletons/*` and `src/components/*empty*.tsx` for loading placeholders and empty states.
 
 ### Full components index
+
 Public exports are available from the following files (default or named):
+
 - `tracking-details.tsx` (default)
 - `staff-management-header.tsx` (default)
 - `table-pagination.tsx` (default)
