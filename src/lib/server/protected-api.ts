@@ -4,7 +4,7 @@ import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
 
 const API_URL =
   process.env.NODE_ENV === 'production'
-    ? 'backend.donorcom.org'
+    ? 'https://backend.donorcom.org'
     : 'http://localhost:8000/api'
 // Create axios instance with default config
 export const protectedApi = axios.create({
