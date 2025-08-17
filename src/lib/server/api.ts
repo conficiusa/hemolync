@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://hemolync.onrender.com/api'
+    ? 'backend.donorcom.org'
     : 'http://localhost:8000/api'
 export const api = axios.create({
   baseURL: API_URL,
