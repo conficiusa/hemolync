@@ -1,11 +1,11 @@
-## Project Documentation
+# Project Documentation
 
 This documentation covers all public APIs, services, hooks, queries, components, utilities, constants, context, and types in this codebase.
 
 - Navigate using the section links below.
 - Each section includes examples and usage notes.
 
-### Sections
+## Sections
 
 - [API Clients](./api.md)
 - [Services](./services.md)

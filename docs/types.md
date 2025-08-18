@@ -1,6 +1,6 @@
-## Types
+# Types
 
-### System Types
+## System Types
 
 Source: `src/lib/types/system-types.tsx`
 
@@ -10,7 +10,7 @@ Source: `src/lib/types/system-types.tsx`
 - `Pagination`
 - `Result<T, TError>`
 
-### Product Types
+## Product Types
 
 Source: `src/lib/types/product.types.ts`
 
@@ -21,14 +21,14 @@ Source: `src/lib/types/product.types.ts`
 - `FetchArgs`
 - `BloodProductResponse`
 
-### Facilities Types
+## Facilities Types
 
 Source: `src/lib/types/facilities.types.ts`
 
 - `getFacilitiesWithRequirementsArgs`
 - `PlacingRequestFacility`, `PlacingRequestFacilityResponse`
 
-### Request Management Types
+## Request Management Types
 
 Source: `src/lib/types/request-management.types.ts`
 
@@ -37,7 +37,7 @@ Source: `src/lib/types/request-management.types.ts`
 - `parseTabValue(combined)`, `combineTabValue(main, sub)`, `isCombinedTabValue(value)`
 - `RequestStatus`, `RequestState`, `RequestType`, `PaginatedRequestType`
 
-### User Types
+## User Types
 
 Source: `src/lib/types/user-types.tsx`
 
