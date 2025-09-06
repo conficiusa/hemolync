@@ -82,7 +82,8 @@ protectedApi.interceptors.response.use(
 
     try {
       // Refresh the session query which will get a new token
-      const newSession = await queryClient.fetchQuery(session)
+      await queryClient.refetchQueries({ queryKey: ['session'], exact: true })
+      const newSession = await queryClient.ensureQueryData(session)
 
       if (!newSession.access_token) {
         throw new Error('No access token available after refresh')
