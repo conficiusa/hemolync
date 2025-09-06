@@ -43,12 +43,14 @@ protectedApi.interceptors.request.use(
   async (config) => {
     // Get access token from session query
     const sessionData = await queryClient.fetchQuery(session)
+    console.log("intercepting",sessionData)
     if (sessionData.access_token) {
       config.headers.Authorization = `Bearer ${sessionData.access_token}`
     }
     return config
   },
   (error) => {
+    console.log("throwing")
     return Promise.reject(error)
   },
 )
