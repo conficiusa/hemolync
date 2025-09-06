@@ -17,7 +17,7 @@ const authService = {
   },
 
   logoutRequest: async () => {
-    const response = await api.post('/users/auth/logout')
+    const response = await protectedApi.post('/users/auth/logout')
     return response.data
   },
 

@@ -21,6 +21,7 @@ import { Route as DashboardSettingsIndexImport } from './routes/dashboard/settin
 import { Route as DashboardRequestManagementIndexImport } from './routes/dashboard/request-management/index'
 import { Route as DashboardcardRoutesIndexImport } from './routes/dashboard/(card-routes)/index'
 import { Route as DashboardSettingsProfileImport } from './routes/dashboard/settings/profile'
+import { Route as DashboardSettingsHelpCenterImport } from './routes/dashboard/settings/help-center'
 import { Route as DashboardRequestManagementIdImport } from './routes/dashboard/request-management/$id'
 import { Route as DashboardcardRoutesInventoryImport } from './routes/dashboard/(card-routes)/inventory'
 import { Route as DashboardRequestManagementNewIndexImport } from './routes/dashboard/request-management/new/index'
@@ -87,6 +88,13 @@ const DashboardSettingsProfileRoute = DashboardSettingsProfileImport.update({
   path: '/profile',
   getParentRoute: () => DashboardSettingsRouteRoute,
 } as any)
+
+const DashboardSettingsHelpCenterRoute =
+  DashboardSettingsHelpCenterImport.update({
+    id: '/help-center',
+    path: '/help-center',
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any)
 
 const DashboardRequestManagementIdRoute =
   DashboardRequestManagementIdImport.update({
@@ -176,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRequestManagementIdImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/dashboard/settings/help-center': {
+      id: '/dashboard/settings/help-center'
+      path: '/help-center'
+      fullPath: '/dashboard/settings/help-center'
+      preLoaderRoute: typeof DashboardSettingsHelpCenterImport
+      parentRoute: typeof DashboardSettingsRouteImport
+    }
     '/dashboard/settings/profile': {
       id: '/dashboard/settings/profile'
       path: '/profile'
@@ -240,12 +255,14 @@ const DashboardcardRoutesRouteRouteWithChildren =
   )
 
 interface DashboardSettingsRouteRouteChildren {
+  DashboardSettingsHelpCenterRoute: typeof DashboardSettingsHelpCenterRoute
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
 }
 
 const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
   {
+    DashboardSettingsHelpCenterRoute: DashboardSettingsHelpCenterRoute,
     DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
     DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
   }
@@ -290,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/settings/help-center': typeof DashboardSettingsHelpCenterRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
@@ -303,6 +321,7 @@ export interface FileRoutesByTo {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/settings/help-center': typeof DashboardSettingsHelpCenterRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard': typeof DashboardcardRoutesIndexRoute
   '/dashboard/request-management': typeof DashboardRequestManagementIndexRoute
@@ -321,6 +340,7 @@ export interface FileRoutesById {
   '/dashboard/staff-management': typeof DashboardStaffManagementRoute
   '/dashboard/(card-routes)/inventory': typeof DashboardcardRoutesInventoryRoute
   '/dashboard/request-management/$id': typeof DashboardRequestManagementIdRoute
+  '/dashboard/settings/help-center': typeof DashboardSettingsHelpCenterRoute
   '/dashboard/settings/profile': typeof DashboardSettingsProfileRoute
   '/dashboard/(card-routes)/': typeof DashboardcardRoutesIndexRoute
   '/dashboard/request-management/': typeof DashboardRequestManagementIndexRoute
@@ -340,6 +360,7 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
     | '/dashboard/request-management/$id'
+    | '/dashboard/settings/help-center'
     | '/dashboard/settings/profile'
     | '/dashboard/request-management'
     | '/dashboard/settings/'
@@ -352,6 +373,7 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/inventory'
     | '/dashboard/request-management/$id'
+    | '/dashboard/settings/help-center'
     | '/dashboard/settings/profile'
     | '/dashboard'
     | '/dashboard/request-management'
@@ -368,6 +390,7 @@ export interface FileRouteTypes {
     | '/dashboard/staff-management'
     | '/dashboard/(card-routes)/inventory'
     | '/dashboard/request-management/$id'
+    | '/dashboard/settings/help-center'
     | '/dashboard/settings/profile'
     | '/dashboard/(card-routes)/'
     | '/dashboard/request-management/'
@@ -431,6 +454,7 @@ export const routeTree = rootRoute
       "filePath": "dashboard/settings/route.tsx",
       "parent": "/dashboard",
       "children": [
+        "/dashboard/settings/help-center",
         "/dashboard/settings/profile",
         "/dashboard/settings/"
       ]
@@ -449,6 +473,10 @@ export const routeTree = rootRoute
     "/dashboard/request-management/$id": {
       "filePath": "dashboard/request-management/$id.tsx",
       "parent": "/dashboard"
+    },
+    "/dashboard/settings/help-center": {
+      "filePath": "dashboard/settings/help-center.tsx",
+      "parent": "/dashboard/settings"
     },
     "/dashboard/settings/profile": {
       "filePath": "dashboard/settings/profile.tsx",
