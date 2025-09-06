@@ -1,10 +1,10 @@
+import { memo } from 'react'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { memo } from 'react'
 
 const SettingsFaq = memo(() => {
   const faqItems = [
@@ -71,4 +71,3 @@ const SettingsFaq = memo(() => {
 })
 SettingsFaq.displayName = 'SettingsFaq'
 export default SettingsFaq
-
