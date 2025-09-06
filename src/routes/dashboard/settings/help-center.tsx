@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import { ChevronRight, MessageCircle, MessageSquare } from 'lucide-react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList } from '@/components/ui/tabs'
 import SettingsFaq from '@/components/settings-faq'
 
 export const Route = createFileRoute('/dashboard/settings/help-center')({
