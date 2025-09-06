@@ -1,7 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RequestDraftProvider } from '@/lib/contexts/request.context'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry:2
+    }
+  }
+})
 
 export function getContext() {
   return {
