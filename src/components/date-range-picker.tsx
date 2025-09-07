@@ -28,7 +28,6 @@ export function DateRangePicker({
   onDateRangeChange,
   onClear,
   placeholder = 'Pick a date range',
-  className,
 }: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -60,8 +59,8 @@ export function DateRangePicker({
   )
 
   return (
-    <div className={cn('grid gap-2', className)}>
-      <div className="relative">
+    <div>
+      <div className="flex items-center gap-2">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -69,7 +68,7 @@ export function DateRangePicker({
               variant="outline"
               aria-label="Pick a date range"
               className={cn(
-                'w-full justify-start text-left font-normal',
+                'justify-start text-left font-normal',
                 !dateRange.from && 'text-muted-foreground',
                 showClearButton && 'pr-10',
               )}
@@ -104,14 +103,14 @@ export function DateRangePicker({
         {/* Clear button */}
         {showClearButton && (
           <Button
-            variant="ghost"
-            size="sm"
-            className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 p-0 hover:bg-destructive hover:text-destructive-foreground"
+            variant="secondary"
+            size="icon"
+          
             onClick={handleClear}
             aria-label="Clear date range"
             type="button"
           >
-            <X className="h-3 w-3" />
+            <X className="size-4" />
           </Button>
         )}
       </div>

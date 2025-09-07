@@ -7,6 +7,8 @@ import type { ChartDataPoint } from '@/lib/data/mock-chart-data'
 
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
@@ -104,7 +106,7 @@ export const DashboardChart = memo(() => {
   return (
     <Card className="w-full shadow-none border-none">
       <CardHeader className="flex flex-row justify-between items-center space-y-0 pb-4">
-        <div className="min-w-0 flex-1">
+        <div className="flex-1">
           <MultiSelectDropdown
             options={bloodProducts}
             selectedValues={selectedBloodProducts}
@@ -113,7 +115,7 @@ export const DashboardChart = memo(() => {
             className="text-foreground py-2 px-6 justify-between flex border-none text-sm"
           />
         </div>
-        <div className="ml-4">
+        <div>
           <DateRangePicker
             dateRange={dateRange}
             onDateRangeChange={setDateRange}
@@ -146,6 +148,7 @@ export const DashboardChart = memo(() => {
               tickMargin={8}
               tickFormatter={(value) => value}
             />
+            <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent />}
