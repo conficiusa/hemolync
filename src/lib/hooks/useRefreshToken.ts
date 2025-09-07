@@ -1,19 +1,13 @@
-import { api } from '@/lib/server/api'
+import { session } from '@/lib/data/queries/auth/refresh'
+import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
+import { router } from '@/main'
 
-const useRefreshToken = () => {
-  const refresh = async () => {
-    try {
-      const response = await api.post('/auth/refresh', {
-        withCredentials: true,
-      })
-      return response.data.accessToken
-    } catch (error) {
-      console.error('Error refreshing token:', error)
-      throw error
-    }
-  }
-
-  return refresh
+export const RefreshToken = async () => {
+  const queryClient = getContext().queryClient
+  await queryClient.invalidateQueries({ queryKey: session.queryKey })
+  const newSession = await queryClient.fetchQuery(session).catch(() => {
+    return router.invalidate()
+  })
+  return newSession?.access_token 
 }
 
-export default useRefreshToken

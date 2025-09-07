@@ -89,7 +89,6 @@ export const checkAuth = (
   preload: boolean,
 ) => {
   if (!auth || !auth.access_token) {
-    console.log('preload', preload)
     if (!preload) {
       toast.warning('Session Expired!', {
         description: 'Please login again',

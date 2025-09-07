@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { session } from '@/lib/data/queries/auth/refresh'
 import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
+import { RefreshToken } from '@/lib/hooks/useRefreshToken'
 
 const API_URL =
   process.env.NODE_ENV === 'production'
@@ -43,14 +44,12 @@ protectedApi.interceptors.request.use(
   async (config) => {
     // Get access token from session query
     const sessionData = await queryClient.fetchQuery(session)
-    console.log("intercepting",sessionData)
     if (sessionData.access_token) {
       config.headers.Authorization = `Bearer ${sessionData.access_token}`
     }
     return config
   },
   (error) => {
-    console.log("throwing")
     return Promise.reject(error)
   },
 )
@@ -84,18 +83,16 @@ protectedApi.interceptors.response.use(
 
     try {
       // Refresh the session query which will get a new token
-      await queryClient.refetchQueries({ queryKey: ['session'], exact: true })
-      const newSession = await queryClient.ensureQueryData(session)
+      const access_token = await RefreshToken()
 
-      if (!newSession.access_token) {
-        throw new Error('No access token available after refresh')
+      if (!access_token) {
+        // throw new Error('No access token available after refresh')
       }
 
       // Update authorization header
       protectedApi.defaults.headers.common['Authorization'] =
-        `Bearer ${newSession.access_token}`
-      originalRequest.headers['Authorization'] =
-        `Bearer ${newSession.access_token}`
+        `Bearer ${access_token}`
+      originalRequest.headers['Authorization'] = `Bearer ${access_token}`
 
       // Process queue
       processQueue()

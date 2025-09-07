@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
@@ -10,16 +10,15 @@ import { LoginSchema } from '@/lib/schemas/auth-schemas/login.schema'
 import { Button } from '@/components/ui/button'
 import { handleRedirectNavigation } from '@/lib/utils'
 import useAuth from '@/lib/data/mutations/mutate-auth'
+import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
+import { session } from '@/lib/data/queries/auth/refresh'
 
 export type LoginFormData = z.infer<typeof LoginSchema>
+const queryClient = getContext().queryClient
 const LoginForm = memo(() => {
   const {
     login: { mutate, isPending, isError },
   } = useAuth()
-
-  useEffect(() => {
-    console.log(isPending)
-  }, [isPending])
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -38,8 +37,9 @@ const LoginForm = memo(() => {
   const onSubmit = (data: LoginFormData) => {
     const toastId = toast.loading('Logging in...')
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.dismiss(toastId)
+        queryClient.setQueryData(session.queryKey, data.data)
         handleRedirectNavigation(location, navigate, '/dashboard')
       },
       onError: (err: any) => {
