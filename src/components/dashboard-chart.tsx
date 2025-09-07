@@ -23,9 +23,9 @@ import {
 const chartConfig = getBloodProductChartConfig() satisfies ChartConfig
 
 export const DashboardChart = memo(() => {
-  const [selectedBloodProduct, setSelectedBloodProduct] = useState<string | null>(
-    bloodProducts[0]?.value || null,
-  )
+  const [selectedBloodProduct, setSelectedBloodProduct] = useState<
+    string | null
+  >(bloodProducts[0]?.value || null)
   const [dateRange, setDateRange] = useState<DateRange>({
     from: addDays(new Date(), -30), // Default to last 30 days
     to: new Date(),
@@ -42,8 +42,13 @@ export const DashboardChart = memo(() => {
     // Transform data to match chart requirements
     return filteredData.map((point: ChartDataPoint) => ({
       date: point.formattedDate,
-      value: selectedBloodProduct 
-        ? point[selectedBloodProduct as keyof Omit<ChartDataPoint, 'date' | 'formattedDate'>]
+      value: selectedBloodProduct
+        ? point[
+            selectedBloodProduct as keyof Omit<
+              ChartDataPoint,
+              'date' | 'formattedDate'
+            >
+          ]
         : point.red_blood_cells, // Default to red blood cells
     }))
   }, [dateRange.from, dateRange.to, selectedBloodProduct])
@@ -100,14 +105,11 @@ export const DashboardChart = memo(() => {
               tickMargin={8}
               tickFormatter={(value) => value}
             />
-            <ChartTooltip 
-              cursor={false} 
+            <ChartTooltip
+              cursor={false}
               content={<ChartTooltipContent />}
               labelFormatter={(label) => `Date: ${label}`}
-              formatter={(value) => [
-                value,
-                currentProductConfig.label,
-              ]}
+              formatter={(value) => [value, currentProductConfig.label]}
             />
             <defs>
               <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">

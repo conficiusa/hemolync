@@ -8,6 +8,5 @@ export const RefreshToken = async () => {
   const newSession = await queryClient.fetchQuery(session).catch(() => {
     return router.invalidate()
   })
-  return newSession?.access_token 
+  return newSession?.access_token
 }
-

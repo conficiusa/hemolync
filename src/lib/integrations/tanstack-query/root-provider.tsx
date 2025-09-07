@@ -4,9 +4,9 @@ import { RequestDraftProvider } from '@/lib/contexts/request.context'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry:0
-    }
-  }
+      retry: 0,
+    },
+  },
 })
 
 export function getContext() {

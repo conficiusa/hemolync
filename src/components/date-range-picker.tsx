@@ -30,16 +30,19 @@ export function DateRangePicker({
 }: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false)
 
-  const formatDateRange = React.useCallback((range: DateRange) => {
-    if (range.from) {
-      if (range.to) {
-        return `${format(range.from, 'LLL dd, y')} - ${format(range.to, 'LLL dd, y')}`
-      } else {
-        return format(range.from, 'LLL dd, y')
+  const formatDateRange = React.useCallback(
+    (range: DateRange) => {
+      if (range.from) {
+        if (range.to) {
+          return `${format(range.from, 'LLL dd, y')} - ${format(range.to, 'LLL dd, y')}`
+        } else {
+          return format(range.from, 'LLL dd, y')
+        }
       }
-    }
-    return placeholder
-  }, [placeholder])
+      return placeholder
+    },
+    [placeholder],
+  )
 
   return (
     <div className={cn('grid gap-2', className)}>
