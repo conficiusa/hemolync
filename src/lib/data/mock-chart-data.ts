@@ -137,27 +137,27 @@ export const filterChartDataByDateRange = (
 export const getBloodProductChartConfig = () => ({
   whole_blood: {
     label: 'Whole Blood',
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--chart-1)',
   },
   red_blood_cells: {
     label: 'Red Blood Cells',
-    color: 'hsl(var(--chart-2))',
+    color: 'var(--chart-2)',
   },
   platelets: {
     label: 'Platelets',
-    color: 'hsl(var(--chart-3))',
+    color: 'var(--chart-3)',
   },
   fresh_frozen_plasma: {
     label: 'Fresh Frozen Plasma',
-    color: 'hsl(var(--chart-4))',
+    color: 'var(--chart-4)',
   },
   cryoprecipitate: {
     label: 'Cryoprecipitate',
-    color: 'hsl(var(--chart-5))',
+    color: 'var(--chart-5)',
   },
   albumin: {
     label: 'Albumin',
-    color: 'hsl(var(--chart-6))',
+    color: 'var(--chart-6)',
   },
 })
 
