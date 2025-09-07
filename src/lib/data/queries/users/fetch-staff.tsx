@@ -15,7 +15,7 @@ export const fetchStaffQuery = () => {
   return queryOptions<Array<User>>({
     queryKey: ['staff'],
     queryFn: fetchStaff,
-    // staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 60,
     placeholderData: keepPreviousData,
   })
 }

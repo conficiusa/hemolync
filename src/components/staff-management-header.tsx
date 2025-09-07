@@ -12,7 +12,7 @@ const StaffManagementHeader = memo(() => {
   if (!data.length) return null
   return (
     <div className="flex justify-between items-center pt-4">
-      <div className="md:flex gap-2 items-center hidden">
+      <div className="flex gap-2 items-center">
         <h2 className="text-xl font-semibold text-gray-900">Users</h2>
         <Badge className="bg-[#f8e3e8] hover:bg-[#f8e3e8] text-primary-accent-foreground">
           {data.length} users
