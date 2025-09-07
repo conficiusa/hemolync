@@ -19,7 +19,7 @@ export const DashboardNavItems = [
   },
   {
     label: 'Request Management',
-    href: '/dashboard/request-management?tab=sent-all',
+    href: '/dashboard/request-management',
     icon: <LineChart />,
   },
   {
