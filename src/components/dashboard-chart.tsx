@@ -29,10 +29,12 @@ const chartConfig = getBloodProductChartConfig() satisfies ChartConfig
  */
 export const DashboardChart = memo(() => {
   // Default to first 3 blood products for better initial visualization
-  const defaultSelectedProducts = bloodProducts.slice(0, 3).map(product => product.value)
-  
-  const [selectedBloodProducts, setSelectedBloodProducts] = useState<string[]>(
-    defaultSelectedProducts
+  const defaultSelectedProducts = bloodProducts
+    .slice(0, 3)
+    .map((product) => product.value)
+
+  const [selectedBloodProducts, setSelectedBloodProducts] = useState<Array<string>>(
+    defaultSelectedProducts,
   )
   const [dateRange, setDateRange] = useState<DateRange>({
     from: addDays(new Date(), -7), // Default to last 7 days
@@ -63,7 +65,10 @@ export const DashboardChart = memo(() => {
 
       // Add data for each selected blood product
       selectedBloodProducts.forEach((productKey) => {
-        const key = productKey as keyof Omit<ChartDataPoint, 'date' | 'formattedDate'>
+        const key = productKey as keyof Omit<
+          ChartDataPoint,
+          'date' | 'formattedDate'
+        >
         transformedPoint[productKey] = point[key]
       })
 
@@ -76,12 +81,15 @@ export const DashboardChart = memo(() => {
     return selectedBloodProducts.map((productKey) => {
       const productConfig = chartConfig[productKey as keyof typeof chartConfig]
       return (
-        <linearGradient key={productKey} id={`fill${productKey}`} x1="0" y1="0" x2="0" y2="1">
-          <stop
-            offset="5%"
-            stopColor={productConfig.color}
-            stopOpacity={0.3}
-          />
+        <linearGradient
+          key={productKey}
+          id={`fill${productKey}`}
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop offset="5%" stopColor={productConfig.color} stopOpacity={0.3} />
           <stop
             offset="95%"
             stopColor={productConfig.color}
@@ -142,12 +150,11 @@ export const DashboardChart = memo(() => {
               content={<ChartTooltipContent />}
               labelFormatter={(label) => `Date: ${label}`}
             />
-            <defs>
-              {gradientDefs}
-            </defs>
+            <defs>{gradientDefs}</defs>
             {/* Render multiple Area components for each selected blood product */}
             {selectedBloodProducts.map((productKey) => {
-              const productConfig = chartConfig[productKey as keyof typeof chartConfig]
+              const productConfig =
+                chartConfig[productKey as keyof typeof chartConfig]
               return (
                 <Area
                   key={productKey}

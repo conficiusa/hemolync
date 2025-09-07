@@ -41,16 +41,18 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       const newSelection = isSelected
         ? selectedValues.filter((v) => v !== value)
         : [...selectedValues, value]
-      
+
       onSelectionChange(newSelection)
     },
-    [selectedValues, onSelectionChange]
+    [selectedValues, onSelectionChange],
   )
 
   const handleSelectAll = React.useCallback(() => {
     const allValues = options.map((option) => option.value)
-    const allSelected = allValues.every((value) => selectedValues.includes(value))
-    
+    const allSelected = allValues.every((value) =>
+      selectedValues.includes(value),
+    )
+
     if (allSelected) {
       onSelectionChange([])
     } else {
@@ -62,22 +64,22 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     if (selectedValues.length === 0) {
       return placeholder
     }
-    
+
     if (selectedValues.length === 1) {
       const option = options.find((opt) => opt.value === selectedValues[0])
       return option?.label || placeholder
     }
-    
+
     if (selectedValues.length === options.length) {
       return 'All Blood Products'
     }
-    
+
     return `${selectedValues.length} Blood Products Selected`
   }, [selectedValues, options, placeholder])
 
   const allSelected = React.useMemo(
     () => options.length > 0 && selectedValues.length === options.length,
-    [options.length, selectedValues.length]
+    [options.length, selectedValues.length],
   )
 
   return (
@@ -91,7 +93,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           className={cn(
             'justify-between text-left font-normal',
             selectedValues.length === 0 && 'text-muted-foreground',
-            className
+            className,
           )}
         >
           <span className="truncate">{displayText}</span>
@@ -115,7 +117,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               Select All
             </label>
           </div>
-          
+
           {/* Individual Options */}
           {options.map((option) => {
             const isChecked = selectedValues.includes(option.value)
@@ -136,9 +138,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                 >
                   {option.label}
                 </label>
-                {isChecked && (
-                  <Check className="h-4 w-4 text-primary" />
-                )}
+                {isChecked && <Check className="h-4 w-4 text-primary" />}
               </div>
             )
           })}

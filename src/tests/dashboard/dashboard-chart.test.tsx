@@ -10,8 +10,12 @@ vi.mock('recharts', () => ({
       {children}
     </div>
   ),
-  Area: (props: any) => <div data-testid="area" data-datakey={props.dataKey} {...props} />,
-  CartesianGrid: (props: any) => <div data-testid="cartesian-grid" {...props} />,
+  Area: (props: any) => (
+    <div data-testid="area" data-datakey={props.dataKey} {...props} />
+  ),
+  CartesianGrid: (props: any) => (
+    <div data-testid="cartesian-grid" {...props} />
+  ),
   XAxis: (props: any) => <div data-testid="x-axis" {...props} />,
   YAxis: (props: any) => <div data-testid="y-axis" {...props} />,
 }))
@@ -43,15 +47,17 @@ describe('DashboardChart', () => {
     expect(screen.getByTestId('area-chart')).toBeInTheDocument()
 
     // Check that date range picker is present
-    expect(screen.getByRole('button', { name: /pick a date range/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /pick a date range/i }),
+    ).toBeInTheDocument()
   })
 
   it('supports multi-select for blood products', async () => {
     render(<DashboardChart />)
 
     // Look for multi-select dropdown
-    const bloodProductSelector = screen.getByRole('button', { 
-      name: /select blood products/i 
+    const bloodProductSelector = screen.getByRole('button', {
+      name: /select blood products/i,
     })
     expect(bloodProductSelector).toBeInTheDocument()
 
@@ -60,9 +66,15 @@ describe('DashboardChart', () => {
 
     // Should show checkboxes for each blood product
     await waitFor(() => {
-      expect(screen.getByRole('checkbox', { name: /select whole blood/i })).toBeInTheDocument()
-      expect(screen.getByRole('checkbox', { name: /select red blood cells/i })).toBeInTheDocument()
-      expect(screen.getByRole('checkbox', { name: /select platelets/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('checkbox', { name: /select whole blood/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('checkbox', { name: /select red blood cells/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('checkbox', { name: /select platelets/i }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -80,7 +92,9 @@ describe('DashboardChart', () => {
     render(<DashboardChart />)
 
     // Look for clear button (X icon) next to date picker
-    const clearButton = screen.getByRole('button', { name: /clear date range/i })
+    const clearButton = screen.getByRole('button', {
+      name: /clear date range/i,
+    })
     expect(clearButton).toBeInTheDocument()
   })
 
@@ -88,7 +102,9 @@ describe('DashboardChart', () => {
     render(<DashboardChart />)
 
     // Click the clear button
-    const clearButton = screen.getByRole('button', { name: /clear date range/i })
+    const clearButton = screen.getByRole('button', {
+      name: /clear date range/i,
+    })
     fireEvent.click(clearButton)
 
     // The component should reset to the default 7-day range
@@ -102,11 +118,13 @@ describe('DashboardChart', () => {
   it('defaults to last 7 days instead of 30 days', () => {
     render(<DashboardChart />)
 
-    // Verify the chart is rendered - the actual date verification 
+    // Verify the chart is rendered - the actual date verification
     // would be in the implementation details
-    const datePickerButton = screen.getByRole('button', { name: /pick a date range/i })
+    const datePickerButton = screen.getByRole('button', {
+      name: /pick a date range/i,
+    })
     expect(datePickerButton).toBeInTheDocument()
-    
+
     // The default 7-day range is now set in the component
     const chartContainer = screen.getByTestId('chart-container')
     expect(chartContainer).toBeInTheDocument()
@@ -116,14 +134,18 @@ describe('DashboardChart', () => {
     render(<DashboardChart />)
 
     // Open the multi-select dropdown
-    const selector = screen.getByRole('button', { name: /select blood products/i })
+    const selector = screen.getByRole('button', {
+      name: /select blood products/i,
+    })
     fireEvent.click(selector)
 
     // Find and click a checkbox to toggle it
     await waitFor(() => {
-      const albuminCheckbox = screen.getByRole('checkbox', { name: /select albumin/i })
+      const albuminCheckbox = screen.getByRole('checkbox', {
+        name: /select albumin/i,
+      })
       expect(albuminCheckbox).toBeInTheDocument()
-      
+
       // Toggle the checkbox
       fireEvent.click(albuminCheckbox)
     })

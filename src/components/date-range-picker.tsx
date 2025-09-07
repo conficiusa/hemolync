@@ -51,12 +51,12 @@ export function DateRangePicker({
       e.stopPropagation()
       onClear?.()
     },
-    [onClear]
+    [onClear],
   )
 
   const showClearButton = React.useMemo(
     () => onClear && (dateRange.from || dateRange.to),
-    [onClear, dateRange.from, dateRange.to]
+    [onClear, dateRange.from, dateRange.to],
   )
 
   return (
@@ -70,7 +70,7 @@ export function DateRangePicker({
               className={cn(
                 'w-full justify-start text-left font-normal',
                 !dateRange.from && 'text-muted-foreground',
-                showClearButton && 'pr-10'
+                showClearButton && 'pr-10',
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -99,7 +99,7 @@ export function DateRangePicker({
             />
           </PopoverContent>
         </Popover>
-        
+
         {/* Clear button */}
         {showClearButton && (
           <Button
