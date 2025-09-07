@@ -16,7 +16,7 @@ export const fetchProductsQuery = (
   return queryOptions<BloodProductResponse>({
     queryKey: ['inventory', page, sort_by, sort_order],
     queryFn: () => fetchProducts({ page, sort_by, sort_order }),
-    staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60,
     placeholderData: keepPreviousData,
   })
 }

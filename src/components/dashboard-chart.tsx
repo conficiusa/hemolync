@@ -11,7 +11,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import SelectDropdown from '@/components/selectDropdown'
+import { MultiSelectDropdown } from '@/components/multi-select-dropdown'
 import { DateRangePicker } from '@/components/date-range-picker'
 import { bloodProducts } from '@/lib/constants/blood-products'
 import {
@@ -22,16 +22,34 @@ import {
 
 const chartConfig = getBloodProductChartConfig() satisfies ChartConfig
 
+/**
+ * Dashboard chart component that displays blood product inventory levels over time
+ * Supports multiple blood products displayed simultaneously as area curves
+ * Includes date range filtering and multi-product selection
+ */
 export const DashboardChart = memo(() => {
-  const [selectedBloodProduct, setSelectedBloodProduct] = useState<
-    string | null
-  >(bloodProducts[0]?.value || null)
+  // Default to first 3 blood products for better initial visualization
+  const defaultSelectedProducts = bloodProducts
+    .slice(0, 3)
+    .map((product) => product.value)
+
+  const [selectedBloodProducts, setSelectedBloodProducts] = useState<Array<string>>(
+    defaultSelectedProducts,
+  )
   const [dateRange, setDateRange] = useState<DateRange>({
-    from: addDays(new Date(), -30), // Default to last 30 days
+    from: addDays(new Date(), -7), // Default to last 7 days
     to: new Date(),
   })
 
-  // Filter and transform data based on selected date range and blood product
+  // Handle clearing date range - reset to last 7 days
+  const handleClearDateRange = () => {
+    setDateRange({
+      from: addDays(new Date(), -7),
+      to: new Date(),
+    })
+  }
+
+  // Filter and transform data based on selected date range and blood products
   const chartData = useMemo(() => {
     const filteredData = filterChartDataByDateRange(
       mockChartData,
@@ -39,44 +57,67 @@ export const DashboardChart = memo(() => {
       dateRange.to,
     )
 
-    // Transform data to match chart requirements
-    return filteredData.map((point: ChartDataPoint) => ({
-      date: point.formattedDate,
-      value: selectedBloodProduct
-        ? point[
-            selectedBloodProduct as keyof Omit<
-              ChartDataPoint,
-              'date' | 'formattedDate'
-            >
-          ]
-        : point.red_blood_cells, // Default to red blood cells
-    }))
-  }, [dateRange.from, dateRange.to, selectedBloodProduct])
+    // Transform data to include all selected blood products
+    return filteredData.map((point: ChartDataPoint) => {
+      const transformedPoint: any = {
+        date: point.formattedDate,
+      }
 
-  // Get the current blood product config for styling
-  const currentProductConfig = useMemo(() => {
-    if (!selectedBloodProduct) {
-      return chartConfig.red_blood_cells
-    }
-    const productKey = selectedBloodProduct as keyof typeof chartConfig
-    return chartConfig[productKey]
-  }, [selectedBloodProduct])
+      // Add data for each selected blood product
+      selectedBloodProducts.forEach((productKey) => {
+        const key = productKey as keyof Omit<
+          ChartDataPoint,
+          'date' | 'formattedDate'
+        >
+        transformedPoint[productKey] = point[key]
+      })
+
+      return transformedPoint
+    })
+  }, [dateRange.from, dateRange.to, selectedBloodProducts])
+
+  // Get unique gradients for each selected product
+  const gradientDefs = useMemo(() => {
+    return selectedBloodProducts.map((productKey) => {
+      const productConfig = chartConfig[productKey as keyof typeof chartConfig]
+       
+      return (
+        <linearGradient
+          key={productKey}
+          id={`fill${productKey}`}
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop offset="5%" stopColor={productConfig.color} stopOpacity={0.3} />
+          <stop
+            offset="95%"
+            stopColor={productConfig.color}
+            stopOpacity={0.1}
+          />
+        </linearGradient>
+      )
+    })
+  }, [selectedBloodProducts])
 
   return (
     <Card className="w-full shadow-none border-none">
       <CardHeader className="flex flex-row justify-between items-center space-y-0 pb-4">
         <div className="min-w-0 flex-1">
-          <SelectDropdown
-            selected={selectedBloodProduct}
-            setSelected={setSelectedBloodProduct}
-            items={bloodProducts}
-            fieldClassName="text-foreground py-2 px-6 justify-between flex border-none text-sm"
+          <MultiSelectDropdown
+            options={bloodProducts}
+            selectedValues={selectedBloodProducts}
+            onSelectionChange={setSelectedBloodProducts}
+            placeholder="Select blood products"
+            className="text-foreground py-2 px-6 justify-between flex border-none text-sm"
           />
         </div>
         <div className="ml-4">
           <DateRangePicker
             dateRange={dateRange}
             onDateRangeChange={setDateRange}
+            onClear={handleClearDateRange}
             placeholder="Select date range"
             className="w-auto"
           />
@@ -109,30 +150,25 @@ export const DashboardChart = memo(() => {
               cursor={false}
               content={<ChartTooltipContent />}
               labelFormatter={(label) => `Date: ${label}`}
-              formatter={(value) => [value, currentProductConfig.label]}
             />
-            <defs>
-              <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor={currentProductConfig.color}
-                  stopOpacity={0.3}
+            <defs>{gradientDefs}</defs>
+            {/* Render multiple Area components for each selected blood product */}
+            {selectedBloodProducts.map((productKey) => {
+              const productConfig =
+                chartConfig[productKey as keyof typeof chartConfig]
+              return (
+                <Area
+                  key={productKey}
+                  dataKey={productKey}
+                  type="natural"
+                  fill={`url(#fill${productKey})`}
+                  fillOpacity={0.4}
+                  stroke={productConfig.color}
+                  strokeWidth={2}
+                  name={productConfig.label}
                 />
-                <stop
-                  offset="95%"
-                  stopColor={currentProductConfig.color}
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <Area
-              dataKey="value"
-              type="natural"
-              fill="url(#fillValue)"
-              fillOpacity={0.4}
-              stroke={currentProductConfig.color}
-              stackId="a"
-            />
+              )
+            })}
           </AreaChart>
         </ChartContainer>
       </CardContent>

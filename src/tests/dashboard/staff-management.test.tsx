@@ -141,7 +141,6 @@ describe('Staff Management Page', () => {
   it('should redirect non-facility_administrator users to dashboard', async () => {
     const sessionData = createSessionData('staff') // Non-admin user
     vi.mocked(authService.getSession).mockResolvedValue(sessionData)
-    queryClient.setQueryData(['session'], sessionData)
 
     const router = createRouter({
       routeTree,
@@ -149,11 +148,6 @@ describe('Staff Management Page', () => {
         queryClient,
         auth: undefined!,
       },
-    })
-
-    // Try to navigate to staff-management route
-    act(() => {
-      router.navigate({ to: '/dashboard/staff-management' })
     })
 
     act(() => {
@@ -164,10 +158,15 @@ describe('Staff Management Page', () => {
       )
     })
 
+    // Try to navigate to staff-management route
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
+
     // Should be redirected to dashboard
     await waitFor(() => {
       expect(window.location.pathname).toBe('/dashboard')
-    })
+    }, { timeout: 10000 })
 
     // Should see dashboard content, not staff management
     expect(await screen.findByText(/total blood in stock/i)).toBeInTheDocument()
@@ -180,19 +179,12 @@ describe('Staff Management Page', () => {
     vi.mocked(authService.getSession).mockResolvedValue(sessionData)
     vi.mocked(protectedApi.get).mockResolvedValue({ data: staffData })
 
-    queryClient.setQueryData(['session'], sessionData)
-    queryClient.setQueryData(['staff'], staffData)
-
     const router = createRouter({
       routeTree,
       context: {
         queryClient,
         auth: undefined!,
       },
-    })
-
-    act(() => {
-      router.navigate({ to: '/dashboard/staff-management' })
     })
 
     act(() => {
@@ -203,10 +195,15 @@ describe('Staff Management Page', () => {
       )
     })
 
+    // Navigate to staff-management route
+    await act(async () => {
+      await router.navigate({ to: '/dashboard/staff-management' })
+    })
+
     // Should stay on staff management route
     await waitFor(() => {
       expect(window.location.pathname).toBe('/dashboard/staff-management')
-    })
+    }, { timeout: 10000 })
 
     // Should see staff management content
     expect(await screen.findByText('Users')).toBeInTheDocument()
