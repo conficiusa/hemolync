@@ -67,6 +67,7 @@ export function DateRangePicker({
             <Button
               id="date-range-picker"
               variant="outline"
+              aria-label="Pick a date range"
               className={cn(
                 'w-full justify-start text-left font-normal',
                 !dateRange.from && 'text-muted-foreground',

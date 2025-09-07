@@ -15,9 +15,9 @@ interface MultiSelectOption {
 }
 
 interface MultiSelectDropdownProps {
-  options: MultiSelectOption[]
-  selectedValues: string[]
-  onSelectionChange: (values: string[]) => void
+  options: Array<MultiSelectOption>
+  selectedValues: Array<string>
+  onSelectionChange: (values: Array<string>) => void
   placeholder?: string
   className?: string
 }
@@ -87,7 +87,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          role="button"
           aria-expanded={open}
           aria-label="Select blood products"
           className={cn(

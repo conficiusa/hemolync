@@ -80,6 +80,7 @@ export const DashboardChart = memo(() => {
   const gradientDefs = useMemo(() => {
     return selectedBloodProducts.map((productKey) => {
       const productConfig = chartConfig[productKey as keyof typeof chartConfig]
+       
       return (
         <linearGradient
           key={productKey}

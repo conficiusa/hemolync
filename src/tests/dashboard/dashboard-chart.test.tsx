@@ -1,35 +1,35 @@
 import '@testing-library/jest-dom/vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import DashboardChart from '@/components/dashboard-chart'
 
 // Mock recharts components
 vi.mock('recharts', () => ({
-  AreaChart: ({ children, ...props }: any) => (
-    <div data-testid="area-chart" {...props}>
+  AreaChart: ({ children }: any) => (
+    <div data-testid="area-chart">
       {children}
     </div>
   ),
   Area: (props: any) => (
-    <div data-testid="area" data-datakey={props.dataKey} {...props} />
+    <div data-testid="area" data-datakey={props.dataKey} />
   ),
-  CartesianGrid: (props: any) => (
-    <div data-testid="cartesian-grid" {...props} />
+  CartesianGrid: () => (
+    <div data-testid="cartesian-grid" />
   ),
-  XAxis: (props: any) => <div data-testid="x-axis" {...props} />,
-  YAxis: (props: any) => <div data-testid="y-axis" {...props} />,
+  XAxis: () => <div data-testid="x-axis" />,
+  YAxis: () => <div data-testid="y-axis" />,
 }))
 
 // Mock chart components
 vi.mock('@/components/ui/chart', () => ({
-  ChartContainer: ({ children, ...props }: any) => (
-    <div data-testid="chart-container" {...props}>
+  ChartContainer: ({ children }: any) => (
+    <div data-testid="chart-container">
       {children}
     </div>
   ),
-  ChartTooltip: (props: any) => <div data-testid="chart-tooltip" {...props} />,
-  ChartTooltipContent: (props: any) => (
-    <div data-testid="chart-tooltip-content" {...props} />
+  ChartTooltip: () => <div data-testid="chart-tooltip" />,
+  ChartTooltipContent: () => (
+    <div data-testid="chart-tooltip-content" />
   ),
 }))
 
