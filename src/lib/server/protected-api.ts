@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { session } from '@/lib/data/queries/auth/refresh'
 import { getContext } from '@/lib/integrations/tanstack-query/root-provider'
+import { RefreshToken } from '@/lib/hooks/useRefreshToken'
 
 const API_URL =
   process.env.NODE_ENV === 'production'
@@ -82,17 +83,16 @@ protectedApi.interceptors.response.use(
 
     try {
       // Refresh the session query which will get a new token
-      const newSession = await queryClient.fetchQuery(session)
+      const access_token = await RefreshToken()
 
-      if (!newSession.access_token) {
-        throw new Error('No access token available after refresh')
+      if (!access_token) {
+        // throw new Error('No access token available after refresh')
       }
 
       // Update authorization header
       protectedApi.defaults.headers.common['Authorization'] =
-        `Bearer ${newSession.access_token}`
-      originalRequest.headers['Authorization'] =
-        `Bearer ${newSession.access_token}`
+        `Bearer ${access_token}`
+      originalRequest.headers['Authorization'] = `Bearer ${access_token}`
 
       // Process queue
       processQueue()
