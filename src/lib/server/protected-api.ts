@@ -86,7 +86,16 @@ protectedApi.interceptors.response.use(
       const access_token = await RefreshToken()
 
       if (!access_token) {
-        // throw new Error('No access token available after refresh')
+        const { router } = await import('@/main')
+        const location = router.parseLocation()
+        queryClient.removeQueries()
+        const redirect = encodeURIComponent(location.href)
+        return router.navigate({
+          to: '/auth/login',
+          search: redirect ? { redirect } : undefined,
+          state: location.state,
+          replace: true,
+        })
       }
 
       // Update authorization header
