@@ -31,6 +31,10 @@ vi.mock('@/components/ui/chart', () => ({
   ChartTooltipContent: () => (
     <div data-testid="chart-tooltip-content" />
   ),
+  ChartLegend: () => <div data-testid="chart-legend" />,
+  ChartLegendContent: () => (
+    <div data-testid="chart-legend-content" />
+  ),
 }))
 
 describe('DashboardChart', () => {
