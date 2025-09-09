@@ -1,4 +1,4 @@
-import { TrendingDown, TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp, Users2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -8,7 +8,6 @@ interface StatCardProps {
   changeType: 'increase' | 'decrease'
   changeText: string
   changeColor?: 'success' | 'destructive' | 'primary'
-  icon?: React.ComponentType<{ size?: number; className?: string }>
 }
 
 export function StatCard({
@@ -16,11 +15,9 @@ export function StatCard({
   value,
   change,
   changeType,
-  icon,
   changeText,
   changeColor = 'success',
 }: StatCardProps) {
-  const Icon = icon
   return (
     <div className="bg-white border rounded-lg p-6 flex justify-between items-start">
       <div>
@@ -53,11 +50,9 @@ export function StatCard({
           <span className="text-xs text-muted-foreground">{changeText}</span>
         </div>
       </div>
-      {Icon && (
-        <div className="w-10 h-10 rounded-full bg-[#f7e1e7] flex items-center justify-center">
-          <Icon size={20} className="text-primary-accent-foreground" />
-        </div>
-      )}
+      <div className="w-10 h-10 rounded-full bg-[#f7e1e7] flex items-center justify-center">
+        <Users2 size={20} className="text-primary-accent-foreground" />
+      </div>
     </div>
   )
 }
