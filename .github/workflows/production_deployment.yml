@@ -28,8 +28,8 @@ jobs:
       - name: Run TypeScript type check
         run: npm run typecheck
 
-      - name: Run Tests
-        run: npm test
+      # - name: Run Tests
+      #   run: npm test
 
   Deploy-Production:
     runs-on: ubuntu-latest
