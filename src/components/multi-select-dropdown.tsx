@@ -17,7 +17,7 @@ interface MultiSelectOption {
 interface MultiSelectDropdownProps {
   options: Array<MultiSelectOption>
   selectedValues: Array<string>
-  onSelectionChange: (values: Array<string>) => void
+  onSelectionChange: (values: Array<any>) => void
   placeholder?: string
   className?: string
 }

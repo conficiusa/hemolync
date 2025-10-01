@@ -6,8 +6,9 @@ import type {
   RequestStatus,
   RequestType,
 } from '@/lib/types/request-management.types'
-import requestService from '@/lib/services/request.service'
+import { RequestService } from '@/lib/services/request.service'
 
+const requestService = new RequestService()
 const fetchRequests = (
   status: RequestStatus | 'all',
   option?: MainTab,
@@ -27,6 +28,9 @@ const fetchRequestById = (id: string) => {
   return queryOptions<RequestType>({
     queryKey: ['request', id],
     queryFn: () => requestService.getRequestById(id),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
+    enabled: !!id,
   })
 }
 

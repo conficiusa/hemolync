@@ -105,7 +105,6 @@ export function DateRangePicker({
           <Button
             variant="secondary"
             size="icon"
-          
             onClick={handleClear}
             aria-label="Clear date range"
             type="button"

@@ -1,10 +1,15 @@
-export const bloodProducts = [
-  { label: 'Whole Blood', value: 'whole_blood' },
-  { label: 'Red Blood Cells', value: 'red_blood_cells' },
-  { label: 'Platelets', value: 'platelets' },
-  { label: 'Fresh Frozen Plasma', value: 'fresh_frozen_plasma' },
-  { label: 'Cryoprecipitate', value: 'cryoprecipitate' },
-  { label: 'Albumin', value: 'albumin' },
+import type { BloodProductType } from '../types/product.types'
+
+export const bloodProducts: Array<{
+  label: BloodProductType
+  value: BloodProductType
+}> = [
+  { label: 'Whole Blood', value: 'Whole Blood' },
+  { label: 'Red Blood Cells', value: 'Red Blood Cells' },
+  { label: 'Platelets', value: 'Platelets' },
+  { label: 'Plasma', value: 'Plasma' },
+  { label: 'Cryoprecipitate', value: 'Cryoprecipitate' },
+  // { label: 'Albumin', value: 'Albumin' },
 ]
 
 export const bloodTypes = [

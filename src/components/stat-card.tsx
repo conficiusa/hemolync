@@ -1,11 +1,11 @@
-import { TrendingDown, TrendingUp } from 'lucide-react'
+import { ArrowRight, TrendingDown, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface StatCardProps {
   title: string
   value: string
   change: number
-  changeType: 'increase' | 'decrease'
+  changeType: 'up' | 'down' | 'neutral' // 'increase' | 'decrease' | 'neutral'
   changeText: string
   changeColor?: 'success' | 'destructive' | 'primary'
   icon?: React.ComponentType<{ size?: number; className?: string }>
@@ -29,7 +29,7 @@ export function StatCard({
         </h3>
         <p className="text-xl font-bold  mb-2">{value}</p>
         <div className="flex items-center gap-1">
-          {changeType === 'increase' ? (
+          {changeType === 'up' ? (
             <TrendingUp
               size={16}
               className={cn(
@@ -38,8 +38,10 @@ export function StatCard({
                 changeColor === 'primary' && 'text-primary',
               )}
             />
-          ) : (
+          ) : changeType === 'down' ? (
             <TrendingDown size={16} className="text-destructive" />
+          ) : (
+            <ArrowRight size={16} className="text-amber-600" />
           )}
           <span
             className={cn(

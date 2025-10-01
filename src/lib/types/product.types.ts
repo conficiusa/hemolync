@@ -1,6 +1,6 @@
 import type { Pagination } from './system-types'
 
-export type BloodType = 'A+' | 'A-' | 'B' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-'
+export type BloodType = 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-'
 
 export type BloodProductType =
   | 'Whole Blood'

@@ -6,7 +6,13 @@ import type {
 } from '@/lib/types/request-management.types'
 import { protectedApi } from '@/lib/server/protected-api'
 
-const RequestServices = {
+type CancelRequestBody = {
+  id: string
+  cancellation_reason: string
+  request_status: RequestState
+  processing_status: RequestStatus
+}
+export class RequestService {
   // Get get requests by status
   /**
    * Get requests by status
@@ -16,11 +22,11 @@ const RequestServices = {
    * @example getRequestsByStatus('pending', 'sent','accepted')
    * @returns
    */
-  getRequestsByStatus: async (
+  async getRequestsByStatus(
     status: RequestStatus | 'all' = 'all',
     option: MainTab | undefined,
     request_status: RequestState | undefined,
-  ) => {
+  ) {
     try {
       // Build query string only including provided non-empty values
       const queryParams = new URLSearchParams()
@@ -45,43 +51,65 @@ const RequestServices = {
     } catch (error: any) {
       throw error.response
     }
-  },
+  }
 
-  getReceivedRequests: async () => {
+  async getReceivedRequests() {
     try {
       const response = await protectedApi.get(`/requests/status/${status}`)
       return response.data
     } catch (error: any) {
       throw error.response
     }
-  },
+  }
 
-  getRequestById: async (id: string) => {
+  async getRequestById(id: string) {
     try {
       const response = await protectedApi.get(`/requests/${id}`)
       return response.data
     } catch (error: any) {
       throw error.response
     }
-  },
+  }
 
   // Add blood distribution
-  addRequest: async (data: newRequestSchemaData) => {
+  async addRequest(data: newRequestSchemaData) {
     const response = await protectedApi.post('/requests/', data)
     return response
-  },
+  }
 
   // Update blood distribution
-  updateRequest: async (data: any) => {
+  async updateRequest(data: any) {
     const response = await protectedApi.patch(`/requests/${data.id}`, data)
     return response
-  },
+  }
 
   // Delete blood distribution
-  deleteRequest: async (id: string) => {
+  async deleteRequest(id: string) {
     const response = await protectedApi.delete(`/requests/${id}`)
     return response
-  },
-}
+  }
 
-export default RequestServices
+  async respondRequest({
+    id,
+    status,
+  }: {
+    id: string
+    status: 'accepted' | 'rejected'
+  }) {
+    const response = await protectedApi.patch(
+      `/requests/facility/${id}/respond`,
+      {
+        request_status: status,
+        processing_status: 'pending',
+        cancellation_reason: null,
+      },
+    )
+    return response
+  }
+
+  async cancelRequest(body: CancelRequestBody) {
+    const { id, ...rest } = body
+    const response = await protectedApi.patch(`/requests/${id}/cancel`, rest)
+    return response
+  }
+}

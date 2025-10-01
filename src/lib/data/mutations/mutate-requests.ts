@@ -1,26 +1,38 @@
 import { useMutation } from '@tanstack/react-query'
-import RequestServices from '@/lib/services/request.service'
+import { RequestService } from '@/lib/services/request.service'
 
-const useMutateRequest = () => {
+const requestService = new RequestService()
+const useMutateRequest = (id?: string) => {
   const addRequestMutation = useMutation({
     mutationKey: ['request'],
-    mutationFn: RequestServices.addRequest,
+    mutationFn: requestService.addRequest,
   })
 
   const updateRequestMutation = useMutation({
-    mutationKey: ['request'],
-    mutationFn: RequestServices.updateRequest,
+    mutationKey: ['request', id],
+    mutationFn: requestService.updateRequest,
   })
 
   const deleteRequestMutation = useMutation({
-    mutationKey: ['request'],
-    mutationFn: RequestServices.deleteRequest,
+    mutationKey: ['request', id],
+    mutationFn: requestService.deleteRequest,
+  })
+
+  const cancelRequestMutation = useMutation({
+    mutationKey: ['request', id],
+    mutationFn: requestService.cancelRequest,
+  })
+  const responseRequestMutation = useMutation({
+    mutationKey: ['request', id],
+    mutationFn: requestService.respondRequest,
   })
 
   return {
     addRequestMutation,
     updateRequestMutation,
     deleteRequestMutation,
+    cancelRequestMutation,
+    responseRequestMutation,
   }
 }
 

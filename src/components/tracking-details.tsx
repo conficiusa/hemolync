@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import { memo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -12,16 +13,36 @@ import type {
 import { cn, getRequestStatusBadgeClass } from '@/lib/utils'
 import { fetchRequestById } from '@/lib/data/queries/requests/fetch-requests'
 // import { Button } from '@/components/ui/button'
+import CancelRequestDialog from '@/components/cancel-request-dialog'
+import useMutateRequest from '@/lib/data/mutations/mutate-requests'
 
 const TrackingDetails = memo(() => {
   const { id } = getRouteApi('/dashboard/request-management/$id').useParams()
+  const {
+    responseRequestMutation: { mutateAsync },
+  } = useMutateRequest()
   const { data } = useSuspenseQuery(fetchRequestById(id))
   const navigate = useNavigate()
   const search = getRouteApi('/dashboard/request-management/$id').useSearch()
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     // Handle accept logic
-    alert('Accepted')
+    await mutateAsync(
+      { id, status: 'accepted' },
+      {
+        onSuccess: () => {
+          toast.success('Request accepted successfully', {
+            description: `Thank you for accepting the request, Kindly follow our guidelines to process the request.`,
+          })
+        },
+        onError: () => {
+          toast.error('Something went wrong, please try again', {
+            description: 'If the issue persists, please contact support',
+          })
+        },
+      },
+    )
+    // redirect to request management page after accepting the request
     navigate({
       to: '/dashboard/request-management',
       search: {
@@ -30,9 +51,24 @@ const TrackingDetails = memo(() => {
     })
   }
 
-  const handleReject = () => {
+  const handleReject = async () => {
     // Handle reject logic
-    alert('Rejected')
+    await mutateAsync(
+      { id, status: 'rejected' },
+      {
+        onSuccess: () => {
+          toast.success('Request rejected successfully', {
+            description: `You have rejected the request. The requester has been notified of your choice.`,
+          })
+        },
+        onError: () => {
+          toast.error('Something went wrong, please try again', {
+            description: 'If the issue persists, please contact support',
+          })
+        },
+      },
+    )
+    // For demo purposes
     navigate({
       to: '/dashboard/request-management',
       search: {
@@ -128,7 +164,14 @@ const TrackingDetails = memo(() => {
         </div>
       </div>
 
-      {getFooter(search.from, handleAccept, handleReject, data.request_status)}
+      {getFooter({
+        search: search.from,
+        handleAccept,
+        handleReject,
+        state: data.request_status,
+        id: data.id,
+        processing_status: data.processing_status,
+      })}
     </div>
   )
 })
@@ -139,45 +182,56 @@ export default TrackingDetails
 
 type Search = z.infer<typeof RequestTabSchema>['from']
 
-const getFooter = (
-  search: Search,
-  handleAccept: () => void,
-  handleReject: () => void,
-  state: RequestState,
-) => {
+interface FooterArgs {
+  search: Search
+  handleAccept: () => void
+  handleReject: () => void
+  state: RequestState
+  id: string
+  processing_status: any
+}
+
+const getFooter = ({
+  search,
+  handleAccept,
+  handleReject,
+  state,
+  id,
+  processing_status,
+}: FooterArgs) => {
   const [tab, _status] = search.split('-') as [MainTab, SubTab]
+
   if (tab === 'sent') {
     return (
-      <div>
-        <div className="flex justify-end gap-4 mt-8">
-          <button className="px-6 py-2 bg-red-500 text-white rounded-lg">
-            Cancel Request
-          </button>
-        </div>
+      <div className="flex justify-end gap-4 mt-8">
+        <CancelRequestDialog
+          id={id}
+          request_status={state}
+          processing_status={processing_status}
+        />
       </div>
     )
-  } else {
-    switch (state) {
-      case 'pending':
-        return (
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              onClick={handleAccept}
-              className="px-6 py-2 bg-green-700 text-white rounded-lg"
-            >
-              Accept
-            </button>
-            <button
-              onClick={handleReject}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg "
-            >
-              Reject
-            </button>
-          </div>
-        )
+  }
 
-      default:
-        break
-    }
+  switch (state) {
+    case 'pending':
+      return (
+        <div className="flex justify-end gap-4 mt-8">
+          <button
+            onClick={handleAccept}
+            className="px-6 py-2 bg-green-700 text-white rounded-lg"
+          >
+            Accept
+          </button>
+          <button
+            onClick={handleReject}
+            className="px-6 py-2 bg-red-600 text-white rounded-lg "
+          >
+            Reject
+          </button>
+        </div>
+      )
+    default:
+      return null
   }
 }

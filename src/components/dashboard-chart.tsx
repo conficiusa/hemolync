@@ -1,9 +1,10 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { memo, useMemo, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { addDays } from 'date-fns'
 import type { ChartConfig } from '@/components/ui/chart'
+import type { BloodProductType } from '@/lib/types/product.types'
 import type { DateRange } from '@/components/date-range-picker'
-import type { ChartDataPoint } from '@/lib/data/mock-chart-data'
+import type { ChartDataPoint } from '@/lib/services/analytics.service'
 
 import {
   ChartContainer,
@@ -17,12 +18,39 @@ import { MultiSelectDropdown } from '@/components/multi-select-dropdown'
 import { DateRangePicker } from '@/components/date-range-picker'
 import { bloodProducts } from '@/lib/constants/blood-products'
 import {
-  filterChartDataByDateRange,
-  getBloodProductChartConfig,
-  mockChartData,
-} from '@/lib/data/mock-chart-data'
+  defaultBloodProducts,
+  defaultBloodTypes,
+  defaultDateRange,
+} from '@/lib/services/analytics.service'
+import { fetchBloodDistribution } from '@/lib/data/queries/dashboard/fetch-distribution'
 
-const chartConfig = getBloodProductChartConfig() satisfies ChartConfig
+// Chart configuration mapping display names to colors
+const chartConfig = {
+  'Whole Blood': {
+    label: 'Whole Blood',
+    color: 'var(--chart-1)',
+  },
+  'Red Blood Cells': {
+    label: 'Red Blood Cells',
+    color: 'var(--chart-2)',
+  },
+  Plasma: {
+    label: 'Plasma',
+    color: 'var(--chart-4)',
+  },
+  Platelets: {
+    label: 'Platelets',
+    color: 'var(--chart-3)',
+  },
+  Cryoprecipitate: {
+    label: 'Cryoprecipitate',
+    color: 'var(--chart-5)',
+  },
+  Albumin: {
+    label: 'Albumin',
+    color: 'var(--chart-6)',
+  },
+} satisfies ChartConfig
 
 /**
  * Dashboard chart component that displays blood product inventory levels over time
@@ -30,63 +58,76 @@ const chartConfig = getBloodProductChartConfig() satisfies ChartConfig
  * Includes date range filtering and multi-product selection
  */
 export const DashboardChart = memo(() => {
-  // Default to first 3 blood products for better initial visualization
-  const defaultSelectedProducts = bloodProducts
-    .slice(0, 3)
-    .map((product) => product.value)
+  const [selectedBloodProducts, setSelectedBloodProducts] =
+    useState<Array<BloodProductType>>(defaultBloodProducts)
 
-  const [selectedBloodProducts, setSelectedBloodProducts] = useState<Array<string>>(
-    defaultSelectedProducts,
-  )
   const [dateRange, setDateRange] = useState<DateRange>({
-    from: addDays(new Date(), -7), // Default to last 7 days
-    to: new Date(),
+    from: new Date(defaultDateRange.startDate),
+    to: new Date(defaultDateRange.endDate),
   })
+
+  // Fetch initial data to populate chart (could be used for further enhancements)
+  const {
+    data: { data },
+  } = useSuspenseQuery(
+    fetchBloodDistribution({
+      products: selectedBloodProducts,
+      bloodType: defaultBloodTypes,
+      endDate: dateRange.to?.toISOString(),
+      startDate: dateRange.from?.toISOString(),
+    }),
+  )
 
   // Handle clearing date range - reset to last 7 days
   const handleClearDateRange = () => {
     setDateRange({
-      from: addDays(new Date(), -7),
-      to: new Date(),
+      from: new Date(defaultDateRange.startDate),
+      to: new Date(defaultDateRange.endDate),
     })
   }
 
-  // Filter and transform data based on selected date range and blood products
+  // // Filter and transform data based on selected date range and blood products
   const chartData = useMemo(() => {
-    const filteredData = filterChartDataByDateRange(
-      mockChartData,
-      dateRange.from,
-      dateRange.to,
-    )
-
+    const filteredData = data.filter((point: ChartDataPoint) => {
+      return selectedBloodProducts.some((dataKey) => {
+        const key = dataKey as keyof Omit<
+          ChartDataPoint,
+          'date' | 'formattedDate'
+        >
+        return point[key] !== null
+      })
+    })
     // Transform data to include all selected blood products
     return filteredData.map((point: ChartDataPoint) => {
+      console.log('point', point)
       const transformedPoint: any = {
         date: point.formattedDate,
       }
 
-      // Add data for each selected blood product
-      selectedBloodProducts.forEach((productKey) => {
-        const key = productKey as keyof Omit<
+      // Add data for each selected blood product using display names as keys
+      selectedBloodProducts.forEach((dataKey) => {
+        const key = dataKey as keyof Omit<
           ChartDataPoint,
           'date' | 'formattedDate'
         >
-        transformedPoint[productKey] = point[key]
+        transformedPoint[dataKey] = point[key]
       })
 
       return transformedPoint
     })
   }, [dateRange.from, dateRange.to, selectedBloodProducts])
 
+  console.log('chartData', chartData)
+
   // Get unique gradients for each selected product
   const gradientDefs = useMemo(() => {
-    return selectedBloodProducts.map((productKey) => {
-      const productConfig = chartConfig[productKey as keyof typeof chartConfig]
-       
+    return selectedBloodProducts.map((dataKey) => {
+      const productConfig = chartConfig[dataKey as keyof typeof chartConfig]
+
       return (
         <linearGradient
-          key={productKey}
-          id={`fill${productKey}`}
+          key={dataKey}
+          id={`fill${dataKey.replace(/\s+/g, '')}`}
           x1="0"
           y1="0"
           x2="0"
@@ -153,18 +194,19 @@ export const DashboardChart = memo(() => {
               cursor={false}
               content={<ChartTooltipContent />}
               labelFormatter={(label) => `Date: ${label}`}
+              animationEasing="linear"
             />
             <defs>{gradientDefs}</defs>
             {/* Render multiple Area components for each selected blood product */}
-            {selectedBloodProducts.map((productKey) => {
+            {selectedBloodProducts.map((dataKey) => {
               const productConfig =
-                chartConfig[productKey as keyof typeof chartConfig]
+                chartConfig[dataKey as keyof typeof chartConfig]
               return (
                 <Area
-                  key={productKey}
-                  dataKey={productKey}
+                  key={dataKey}
+                  dataKey={dataKey}
                   type="natural"
-                  fill={`url(#fill${productKey})`}
+                  fill={`url(#fill${dataKey.replace(/\s+/g, '')})`}
                   fillOpacity={0.4}
                   stroke={productConfig.color}
                   strokeWidth={2}

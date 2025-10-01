@@ -15,6 +15,7 @@ interface Notification {
 
 const NotificationsPanel = memo(() => {
   const [activeTab, setActiveTab] = useState<'unread' | 'all'>('all')
+
   const [notifications, setNotifications] = useState<Array<Notification>>([
     {
       id: 1,

@@ -6,16 +6,10 @@ import DashboardChart from '@/components/dashboard-chart'
 // Mock recharts components
 vi.mock('recharts', () => ({
   AreaChart: ({ children }: any) => (
-    <div data-testid="area-chart">
-      {children}
-    </div>
+    <div data-testid="area-chart">{children}</div>
   ),
-  Area: (props: any) => (
-    <div data-testid="area" data-datakey={props.dataKey} />
-  ),
-  CartesianGrid: () => (
-    <div data-testid="cartesian-grid" />
-  ),
+  Area: (props: any) => <div data-testid="area" data-datakey={props.dataKey} />,
+  CartesianGrid: () => <div data-testid="cartesian-grid" />,
   XAxis: () => <div data-testid="x-axis" />,
   YAxis: () => <div data-testid="y-axis" />,
 }))
@@ -23,18 +17,12 @@ vi.mock('recharts', () => ({
 // Mock chart components
 vi.mock('@/components/ui/chart', () => ({
   ChartContainer: ({ children }: any) => (
-    <div data-testid="chart-container">
-      {children}
-    </div>
+    <div data-testid="chart-container">{children}</div>
   ),
   ChartTooltip: () => <div data-testid="chart-tooltip" />,
-  ChartTooltipContent: () => (
-    <div data-testid="chart-tooltip-content" />
-  ),
+  ChartTooltipContent: () => <div data-testid="chart-tooltip-content" />,
   ChartLegend: () => <div data-testid="chart-legend" />,
-  ChartLegendContent: () => (
-    <div data-testid="chart-legend-content" />
-  ),
+  ChartLegendContent: () => <div data-testid="chart-legend-content" />,
 }))
 
 describe('DashboardChart', () => {
