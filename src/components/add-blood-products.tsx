@@ -44,8 +44,7 @@ const AddBloodDialog = memo(
         blood_product: '',
         expiry_date: '',
         quantity: 0,
-        blood_type: '',
-        added_by: user.first_name + ' ' + user.last_name,
+        blood_type: ''
       },
     })
 
@@ -123,14 +122,6 @@ const AddBloodDialog = memo(
                     />
                   </div>
                 </div>
-                <TextInput
-                  control={control}
-                  name="added_by"
-                  label="Added by"
-                  placeholder="added by"
-                  error={errors.added_by?.message}
-                  disabled
-                />
               </div>
               <DialogFooter className=" flex justify-center sm:justify-center gap-3 px-[24px] py-[20px]">
                 <DialogClose asChild>
