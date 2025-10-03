@@ -51,8 +51,7 @@ const EditProductDialog = memo(
         blood_product: product.blood_product,
         expiry_date: product.expiry_date,
         quantity: product.quantity,
-        blood_type: product.blood_type,
-        added_by: user.first_name + ' ' + user.last_name,
+        blood_type: product.blood_type
       },
     })
 
@@ -125,14 +124,6 @@ const EditProductDialog = memo(
                     error={errors.expiry_date?.message}
                   />
                 </div>
-                <TextInput
-                  control={control}
-                  name="added_by"
-                  label="Added by"
-                  placeholder="added by"
-                  error={errors.added_by?.message}
-                  disabled
-                />
               </div>
               <DialogFooter className=" flex justify-center sm:justify-center gap-3 px-[24px] py-[20px]">
                 <DialogClose asChild>
