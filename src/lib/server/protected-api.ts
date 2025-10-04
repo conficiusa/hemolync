@@ -5,7 +5,7 @@ import { RefreshToken } from '@/lib/hooks/useRefreshToken'
 
 const API_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://backend.donorcom.org/api'
+    ? 'https://apis.donorcom.org/api'
     : 'http://localhost:8000/api'
 // Create axios instance with default config
 export const protectedApi = axios.create({
