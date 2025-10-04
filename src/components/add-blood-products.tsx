@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
@@ -28,8 +27,6 @@ import { NaturalLanguageDatePicker } from '@/components/natural-language-datepic
 type FormData = z.infer<typeof addBloodSchema>
 const AddBloodDialog = memo(
   ({ children }: { children: React.ReactNode }) => {
-    const routeApi = getRouteApi('/dashboard')
-    const { user } = routeApi.useLoaderData()
     const {
       addProductMutation: { mutate: addProduct, isPending },
     } = useMutateProduct()
@@ -44,7 +41,7 @@ const AddBloodDialog = memo(
         blood_product: '',
         expiry_date: '',
         quantity: 0,
-        blood_type: ''
+        blood_type: '',
       },
     })
 

@@ -8,7 +8,7 @@ import DashboardMobileSidebar from '@/components/dashboard-mobile-sidebar'
 
 const DashboardHeader = memo(() => {
   const { data } = useSuspenseQuery(session)
-  const { user } = data
+  const { user,access_token } = data
   const { facility } = user
 
   return (
@@ -34,7 +34,7 @@ const DashboardHeader = memo(() => {
             </div>
           </div>
 
-          <NotificationsPanel />
+          <NotificationsPanel access_token={access_token} />
         </div>
         {/* Mobile sidebar toggle */}
         <DashboardMobileSidebar user={user} />

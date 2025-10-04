@@ -3,9 +3,11 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { fetchDashboardSummary } from '@/lib/data/queries/dashboard/fetch-summary'
 import StatCardHeader from '@/components/stat-card-header'
 import StatCardHeaderSkeleton from '@/components/skeletons/stat-card-header-skeleton'
+import ErrorBoundary from '@/components/error-boundary'
 
 export const Route = createFileRoute('/dashboard/(card-routes)')({
   component: OverviewCardsLayout,
+  errorComponent: ErrorBoundary,
   loader: ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(fetchDashboardSummary()),
 })

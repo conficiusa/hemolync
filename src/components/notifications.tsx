@@ -3,6 +3,7 @@ import { Bell } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useSseClient } from '@/lib/hooks/useSseClient'
 
 interface Notification {
   id: number
@@ -13,20 +14,19 @@ interface Notification {
   isSelected?: boolean
 }
 
-const NotificationsPanel = memo(() => {
+const NotificationsPanel = memo(({ access_token }: { access_token: string }) => {
   const [activeTab, setActiveTab] = useState<'unread' | 'all'>('all')
 
-  const [notifications, setNotifications] = useState<Array<Notification>>([
-    {
-      id: 1,
-      avatar: '/placeholder.svg?height=40&width=40',
-      message:
-        "I have not yet arrived there, I haven't reached where I want to be, I have the feeling of having the best so far though I'm not there yet buh the Bible said it has not yet appeared like what we shall look like",
-      time: '13min ago',
-      isUnread: true,
-      isSelected: true,
-    },
-  ])
+  const [notifications, setNotifications] = useState<Array<Notification>>([])
+  const onMessage = (message: string) => {
+    setNotifications([...notifications, JSON.parse(message)])
+  }
+
+  useSseClient({
+    url: '/notifications/sse/stream',
+    onMessage,
+    access_token,
+  })
 
   const unreadCount = notifications.filter((n) => n.isUnread).length
   const filteredNotifications =

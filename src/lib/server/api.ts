@@ -2,12 +2,12 @@ import axios from 'axios'
 
 export const API_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://backend.donorcom.org/api'
+    ? 'https://apis.donorcom.org/api'
     : 'http://localhost:8000/api'
 
 export const WS_URL =
   process.env.NODE_ENV === 'production'
-    ? 'wss://backend.donorcom.org/api'
+    ? 'wss://apis.donorcom.org/api'
     : 'ws://localhost:8000/api'
 
 /**

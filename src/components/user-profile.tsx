@@ -54,7 +54,7 @@ export const UserProfile = ({ user }: { user: User }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid gap-2 p-4 md:max-w-md w-full bg-background rounded-lg"
+      className="grid gap-6 p-4 md:max-w-md w-full bg-background rounded-lg"
     >
       <h3 className="hidden sm:block font-semibold text-xl mb-4">Profile</h3>
 

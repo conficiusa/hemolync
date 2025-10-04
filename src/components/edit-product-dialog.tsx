@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import type { BloodProduct } from '@/lib/types/product.types'
@@ -35,8 +34,6 @@ const EditProductDialog = memo(
     children: React.ReactNode
     product: BloodProduct
   }) => {
-    const routeApi = getRouteApi('/dashboard')
-    const { user } = routeApi.useLoaderData()
     const {
       updateProductMutation: { mutate: updateProduct },
     } = useMutateProduct()
@@ -51,7 +48,7 @@ const EditProductDialog = memo(
         blood_product: product.blood_product,
         expiry_date: product.expiry_date,
         quantity: product.quantity,
-        blood_type: product.blood_type
+        blood_type: product.blood_type,
       },
     })
 
