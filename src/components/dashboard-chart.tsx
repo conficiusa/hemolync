@@ -71,10 +71,10 @@ export const DashboardChart = memo(() => {
     data: { data },
   } = useSuspenseQuery(
     fetchBloodDistribution({
-      products: selectedBloodProducts,
-      bloodType: defaultBloodTypes,
-      endDate: dateRange.to?.toISOString(),
-      startDate: dateRange.from?.toISOString(),
+      blood_products: selectedBloodProducts,
+      blood_types: defaultBloodTypes,
+      to_date: dateRange.to?.toISOString(),
+      from_date: dateRange.from?.toISOString(),
     }),
   )
 
@@ -99,7 +99,6 @@ export const DashboardChart = memo(() => {
     })
     // Transform data to include all selected blood products
     return filteredData.map((point: ChartDataPoint) => {
-      console.log('point', point)
       const transformedPoint: any = {
         date: point.formattedDate,
       }
@@ -116,8 +115,6 @@ export const DashboardChart = memo(() => {
       return transformedPoint
     })
   }, [dateRange.from, dateRange.to, selectedBloodProducts])
-
-  console.log('chartData', chartData)
 
   // Get unique gradients for each selected product
   const gradientDefs = useMemo(() => {
@@ -152,7 +149,6 @@ export const DashboardChart = memo(() => {
             options={bloodProducts}
             selectedValues={selectedBloodProducts}
             onSelectionChange={setSelectedBloodProducts}
-            placeholder="Select blood products"
             className="text-foreground py-2 px-6 justify-between flex border-none text-sm"
           />
         </div>

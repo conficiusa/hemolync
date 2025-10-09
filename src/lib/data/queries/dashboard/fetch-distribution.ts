@@ -15,23 +15,23 @@ export const fetchBloodDistribution = (
 ) => {
   if (!args) {
     args = {
-      startDate: defaultDateRange.startDate,
-      endDate: defaultDateRange.endDate,
-      products: defaultBloodProducts,
-      bloodType: defaultBloodTypes,
+      from_date: defaultDateRange.startDate,
+      to_date: defaultDateRange.endDate,
+      blood_products: defaultBloodProducts,
+      blood_types: defaultBloodTypes,
     }
   }
 
-  const { startDate, endDate, products, bloodType } = args
+  const { from_date, to_date, blood_products, blood_types } = args
   const analyticsService = new AnalyticsService()
   return queryOptions<DashboardDistributionResponse>({
     queryKey: [
       'dashboard',
       'distribution',
-      startDate,
-      endDate,
-      products,
-      bloodType,
+      from_date,
+      to_date,
+      blood_products,
+      blood_types,
     ],
     queryFn: () => analyticsService.fetchDashboardDistribution(args),
     staleTime: 1000 * 60 * 5, // 5 minutes

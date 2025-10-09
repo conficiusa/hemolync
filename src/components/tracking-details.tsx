@@ -231,6 +231,18 @@ const getFooter = ({
           </button>
         </div>
       )
+    case 'accepted':
+      return (
+        <div className="flex justify-end gap-4 mt-8">
+          <button
+            onClick={handleAccept}
+            className="px-6 py-2 bg-green-700 text-white rounded-lg"
+          >
+            Dispatch
+          </button>
+        </div>
+      )
+
     default:
       return null
   }

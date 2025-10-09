@@ -3,10 +3,10 @@ import type { BloodProductType, BloodType } from '@/lib/types/product.types'
 import { protectedApi } from '@/lib/server/protected-api'
 
 export type FetchDashboardDistributionArgs = {
-  startDate?: string
-  endDate?: string
-  products?: Array<BloodProductType>
-  bloodType?: Array<BloodType>
+  from_date?: string
+  to_date?: string
+  blood_products?: Array<BloodProductType>
+  blood_types?: Array<BloodType>
 }
 export type ChartDataPoint = {
   date: string
@@ -94,28 +94,32 @@ export class AnalyticsService {
   async fetchDashboardDistribution(args?: FetchDashboardDistributionArgs) {
     if (!args) {
       args = {
-        startDate: defaultDateRange.startDate,
-        endDate: defaultDateRange.endDate,
-        products: defaultBloodProducts,
-        bloodType: defaultBloodTypes,
+        from_date: defaultDateRange.startDate,
+        to_date: defaultDateRange.endDate,
+        blood_products: defaultBloodProducts,
+        blood_types: defaultBloodTypes,
       }
     }
     // Extract parameters from arguments
-    const { startDate, endDate, products, bloodType } = args
+    const { from_date, to_date, blood_products, blood_types } = args
 
     // Use defaults if no products or blood types specified
     const finalProducts =
-      !products || products.length === 0 ? defaultBloodProducts : products
+      !blood_products || blood_products.length === 0
+        ? defaultBloodProducts
+        : blood_products
     const finalBloodTypes =
-      !bloodType || bloodType.length === 0 ? defaultBloodTypes : bloodType
+      !blood_types || blood_types.length === 0 ? defaultBloodTypes : blood_types
 
     // Build query parameters
     const queryParams = new URLSearchParams()
-    queryParams.append('start_date', startDate ?? defaultDateRange.startDate)
-    queryParams.append('end_date', endDate ?? defaultDateRange.endDate)
+    queryParams.append('from_date', from_date ?? defaultDateRange.startDate)
+    queryParams.append('to_date', to_date ?? defaultDateRange.endDate)
 
-    finalProducts.forEach((product) => queryParams.append('products', product))
-    finalBloodTypes.forEach((type) => queryParams.append('blood_type', type))
+    finalProducts.forEach((product) =>
+      queryParams.append('blood_products', product),
+    )
+    finalBloodTypes.forEach((type) => queryParams.append('blood_types', type))
 
     // Make API request
     const response = await protectedApi.get('/dashboard/distribution-chart', {

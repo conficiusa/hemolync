@@ -18,7 +18,6 @@ interface MultiSelectDropdownProps {
   options: Array<MultiSelectOption>
   selectedValues: Array<string>
   onSelectionChange: (values: Array<any>) => void
-  placeholder?: string
   className?: string
 }
 
@@ -30,7 +29,6 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   options,
   selectedValues,
   onSelectionChange,
-  placeholder = 'Select options',
   className,
 }) => {
   const [open, setOpen] = React.useState(false)
@@ -60,23 +58,6 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     }
   }, [options, selectedValues, onSelectionChange])
 
-  const displayText = React.useMemo(() => {
-    if (selectedValues.length === 0) {
-      return placeholder
-    }
-
-    if (selectedValues.length === 1) {
-      const option = options.find((opt) => opt.value === selectedValues[0])
-      return option?.label || placeholder
-    }
-
-    if (selectedValues.length === options.length) {
-      return 'All Blood Products'
-    }
-
-    return `${selectedValues.length} Blood Products Selected`
-  }, [selectedValues, options, placeholder])
-
   const allSelected = React.useMemo(
     () => options.length > 0 && selectedValues.length === options.length,
     [options.length, selectedValues.length],
@@ -96,7 +77,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             className,
           )}
         >
-          <span className="truncate">{displayText}</span>
+          <span className="truncate">{'Modify Selection'}</span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

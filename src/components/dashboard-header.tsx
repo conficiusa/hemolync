@@ -8,7 +8,7 @@ import DashboardMobileSidebar from '@/components/dashboard-mobile-sidebar'
 
 const DashboardHeader = memo(() => {
   const { data } = useSuspenseQuery(session)
-  const { user,access_token } = data
+  const { user, access_token } = data
   const { facility } = user
 
   return (
