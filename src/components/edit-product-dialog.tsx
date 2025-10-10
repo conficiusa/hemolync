@@ -55,7 +55,7 @@ const EditProductDialog = memo(
     const onSubmit = handleSubmit((data: FormData) => {
       const toastId = toast.loading('Updating product...')
       updateProduct(
-        { ...data, id: product.id },
+        { ...data},
         {
           onSuccess: () => {
             toast.dismiss(toastId)

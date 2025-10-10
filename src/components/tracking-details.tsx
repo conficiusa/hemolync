@@ -2,7 +2,11 @@ import { toast } from 'sonner'
 import { memo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useNavigate,
+  useRouteContext,
+} from '@tanstack/react-router'
 import type { z } from 'zod'
 import type { RequestTabSchema } from '@/routes/dashboard/request-management/$id'
 import type {
@@ -15,15 +19,23 @@ import { fetchRequestById } from '@/lib/data/queries/requests/fetch-requests'
 // import { Button } from '@/components/ui/button'
 import CancelRequestDialog from '@/components/cancel-request-dialog'
 import useMutateRequest from '@/lib/data/mutations/mutate-requests'
+import useMutateDistribution from '@/lib/data/mutations/mutate-distribution'
 
 const TrackingDetails = memo(() => {
   const { id } = getRouteApi('/dashboard/request-management/$id').useParams()
+  const queryClient = useRouteContext({
+    from: '/dashboard/request-management/$id',
+    select: (search) => search.queryClient,
+  })
   const {
     responseRequestMutation: { mutateAsync },
   } = useMutateRequest()
   const { data } = useSuspenseQuery(fetchRequestById(id))
   const navigate = useNavigate()
   const search = getRouteApi('/dashboard/request-management/$id').useSearch()
+  const {
+    dispatchRequestMutation: { mutateAsync: createDispatch },
+  } = useMutateDistribution()
 
   const handleAccept = async () => {
     // Handle accept logic
@@ -31,6 +43,9 @@ const TrackingDetails = memo(() => {
       { id, status: 'accepted' },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: fetchRequestById(id).queryKey,
+          })
           toast.success('Request accepted successfully', {
             description: `Thank you for accepting the request, Kindly follow our guidelines to process the request.`,
           })
@@ -42,13 +57,6 @@ const TrackingDetails = memo(() => {
         },
       },
     )
-    // redirect to request management page after accepting the request
-    navigate({
-      to: '/dashboard/request-management',
-      search: {
-        tab: search.from,
-      },
-    })
   }
 
   const handleReject = async () => {
@@ -57,6 +65,9 @@ const TrackingDetails = memo(() => {
       { id, status: 'rejected' },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: fetchRequestById(id).queryKey,
+          })
           toast.success('Request rejected successfully', {
             description: `You have rejected the request. The requester has been notified of your choice.`,
           })
@@ -68,13 +79,27 @@ const TrackingDetails = memo(() => {
         },
       },
     )
-    // For demo purposes
-    navigate({
-      to: '/dashboard/request-management',
-      search: {
-        tab: search.from,
+  }
+  const handleCreateDispatch = async () => {
+    await createDispatch(
+      { requestId: id },
+      {
+        onSuccess: () => {
+          toast.success('Request dispatched successfully')
+          navigate({
+            to: '/dashboard/request-management',
+            search: {
+              tab: search.from,
+            },
+          })
+        },
+        onError: () => {
+          toast.error('Something went wrong, please try again', {
+            description: 'If the issue persists, please contact support',
+          })
+        },
       },
-    })
+    )
   }
 
   return (
@@ -171,6 +196,7 @@ const TrackingDetails = memo(() => {
         state: data.request_status,
         id: data.id,
         processing_status: data.processing_status,
+        handleCreateDispatch,
       })}
     </div>
   )
@@ -186,6 +212,7 @@ interface FooterArgs {
   search: Search
   handleAccept: () => void
   handleReject: () => void
+  handleCreateDispatch: () => void
   state: RequestState
   id: string
   processing_status: any
@@ -195,6 +222,7 @@ const getFooter = ({
   search,
   handleAccept,
   handleReject,
+  handleCreateDispatch,
   state,
   id,
   processing_status,
@@ -235,10 +263,10 @@ const getFooter = ({
       return (
         <div className="flex justify-end gap-4 mt-8">
           <button
-            onClick={handleAccept}
+            onClick={handleCreateDispatch}
             className="px-6 py-2 bg-green-700 text-white rounded-lg"
           >
-            Dispatch
+            Ready for dispatch
           </button>
         </div>
       )
