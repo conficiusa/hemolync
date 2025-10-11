@@ -64,11 +64,16 @@ export function useSSE<T = unknown>(
       onMessage: (event: SSEEvent<T>) => {
         setLastMessage(event)
         setMessages((prev) => [...prev, event])
-        console.log('event11', event)
 
-        // we need to filter out the connection_established event from event.data
-        // @ts-expect-error - event.data is of type T
-        if (event.data.type === 'connection_established') return
+        // Filter out connection events - these are handled internally by the SSEClient
+        const data = event.data as any
+        if (
+          data?.type === 'connection_established' ||
+          data?.type === 'connection_terminated'
+        ) {
+          return
+        }
+
         memoizedHandlers.onMessage?.(event)
       },
       onConnect: (info: SSEConnectionInfo) => {

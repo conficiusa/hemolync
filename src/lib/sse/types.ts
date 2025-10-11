@@ -36,6 +36,8 @@ export interface SSEConfig {
   autoConnect?: boolean
   /** Custom event type to listen for (default: 'message') */
   eventType?: string
+  /** Enable automatic token refresh on authorization errors */
+  autoRefreshToken?: boolean
 }
 
 export interface SSEEvent<T = unknown> {
@@ -49,6 +51,17 @@ export interface SSEEvent<T = unknown> {
   retry?: number
   /** Timestamp when event was received */
   timestamp: number
+}
+
+export interface SSEConnectionEvent {
+  /** Connection event type */
+  type: 'connection_established' | 'connection_terminated'
+  /** Reason for termination (if applicable) */
+  reason?: 'authorization_lost' | string
+  /** Human-readable message */
+  message?: string
+  /** Server timestamp */
+  timestamp?: string
 }
 
 export interface SSEConnectionInfo {

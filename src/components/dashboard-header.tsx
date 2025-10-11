@@ -34,7 +34,7 @@ const DashboardHeader = memo(() => {
             </div>
           </div>
 
-          <NotificationsPanel />
+          <NotificationsPanel access_token={data.access_token} />
         </div>
         {/* Mobile sidebar toggle */}
         <DashboardMobileSidebar user={user} />

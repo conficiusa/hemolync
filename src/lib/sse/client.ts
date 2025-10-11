@@ -3,7 +3,6 @@
  * Provides robust, type-safe Server-Sent Events functionality
  */
 
-import { debug } from './debug'
 import type {
   SSEConfig,
   SSEConnectionInfo,
@@ -12,6 +11,12 @@ import type {
   SSEEventHandlers,
   SSEMessageParser,
 } from '@/lib/sse/types'
+import { debug } from '@/lib/sse/debug'
+import {
+  handleSSEAuthError,
+  isAutoRefreshEnabled,
+  shouldHandleAuthError,
+} from '@/lib/sse/auth-interceptor'
 import { SSEError } from '@/lib/sse/types'
 
 export class SSEClient<T = unknown> {
@@ -45,6 +50,7 @@ export class SSEClient<T = unknown> {
       queryParams: {},
       autoConnect: true,
       eventType: 'message',
+      autoRefreshToken: true, // default to true
       ...options.config,
     }
 
@@ -164,7 +170,7 @@ export class SSEClient<T = unknown> {
   /**
    * Handle incoming SSE messages
    */
-  private handleMessage = (event: MessageEvent): void => {
+  private handleMessage = async (event: MessageEvent): Promise<void> => {
     try {
       const parsedData = this.messageParser(event.data)
       const sseEvent: SSEEvent<T> = {
@@ -189,6 +195,43 @@ export class SSEClient<T = unknown> {
         },
       )
 
+      // Check if this is a connection event that should be filtered
+      const data = parsedData as any
+      if (
+        data?.type === 'connection_established' ||
+        data?.type === 'connection_terminated'
+      ) {
+        debug.info('MESSAGE', 'Filtering out connection event', {
+          type: data.type,
+          reason: data.reason,
+          url: this.url,
+        })
+
+        // Handle authorization_lost events if auto-refresh is enabled
+        if (
+          data?.type === 'connection_terminated' &&
+          data?.reason === 'authorization_lost' &&
+          isAutoRefreshEnabled(this.config)
+        ) {
+          debug.info('MESSAGE', 'Handling authorization_lost event')
+          await handleSSEAuthError(this, this.url, this.config)
+        }
+
+        // Don't pass connection events to user handlers
+        return
+      }
+
+      // Check for authorization errors in other message types
+      if (
+        shouldHandleAuthError(sseEvent) &&
+        isAutoRefreshEnabled(this.config)
+      ) {
+        debug.info('MESSAGE', 'Handling authorization error in message')
+        await handleSSEAuthError(this, this.url, this.config)
+        return
+      }
+
+      // Pass non-connection events to user handlers
       this.handlers.onMessage?.(sseEvent)
     } catch (error) {
       debug.error('MESSAGE', 'Failed to parse message', {
@@ -208,7 +251,7 @@ export class SSEClient<T = unknown> {
   /**
    * Handle connection errors
    */
-  private handleError = (event: Event): void => {
+  private handleError = async (event: Event): Promise<void> => {
     const readyState = this.eventSource?.readyState
     const eventSourceId = (this.eventSource as any)?.__sseId
 
@@ -228,6 +271,30 @@ export class SSEClient<T = unknown> {
         'Treating as actual error - connection was open/closed',
         { readyState },
       )
+
+      // Check if this might be a 401 authorization error
+      // Note: EventSource doesn't provide HTTP status codes, but we can try to handle
+      // authorization errors if auto-refresh is enabled
+      if (isAutoRefreshEnabled(this.config)) {
+        debug.info(
+          'ERROR',
+          'Attempting to handle potential authorization error',
+        )
+        const refreshSuccess = await handleSSEAuthError(
+          this,
+          this.url,
+          this.config,
+        )
+
+        if (refreshSuccess) {
+          debug.info(
+            'ERROR',
+            'Token refresh successful, connection should be restored',
+          )
+          return
+        }
+      }
+
       const error = new SSEError(
         'SSE connection error',
         'CONNECTION_ERROR',
